@@ -24,6 +24,7 @@
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.9.3",
     "@headlessui/react": "^1.6.6",
+    "@orbisclub/orbis-sdk": "^0.2.63",
     "@privy-io/privy-browser": "^0.0.2",
     "@privy-io/privy-node": "^0.0.2",
     "@rainbow-me/rainbowkit": "^0.4.2",

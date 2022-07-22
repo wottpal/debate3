@@ -10,7 +10,7 @@ export const useOrbisContext = () => {
   return useContext(OrbisContext)
 }
 
-export const PrivyClientProvider: FC<PropsWithChildren> = ({ children }) => {
+export const OrbisProvider: FC<PropsWithChildren> = ({ children }) => {
   const [orbis, setOrbis] = useState(null)
 
   useEffect(() => {
