@@ -42,6 +42,7 @@ contract Vault is Ownable{
         emit ForumCreated(address(_newForum));
     }
 
+
     function _createClone(address target) internal returns (address result) {
         bytes20 targetBytes = bytes20(target);
         assembly {

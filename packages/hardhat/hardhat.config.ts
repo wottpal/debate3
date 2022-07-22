@@ -72,7 +72,7 @@ module.exports = {
       chainId: 42220,
     },
     gnosisChain: {
-      url: `${process.env.gnosisChain_PROVIDER_URL}`,
+      url: `${process.env.GNOSISCHAIN_PROVIDER_URL}`,
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
@@ -104,13 +104,13 @@ module.exports = {
       ],
       chainId: 0,
     },
-    bsc: {
-      url: `${process.env.BSC_PROVIDER_URL}`,
+    nenonDevnet: {
+      url: `${process.env.NEONDEVNET_PROVIDER_URL}`,  //https://proxy.devnet.neonlabs.org/solana	
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
       ],
-      chainId: 56,
+      chainId: 245022926,
     },
   },
   namedAccounts: {
