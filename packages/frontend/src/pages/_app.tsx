@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import { Layout } from '@components/layout/Layout'
 import { OrbisProvider } from '@components/OrbisProvider'
 import { PrivyClientProvider } from '@components/PrivyClientProvider'
@@ -71,9 +72,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <RainbowKitProvider chains={chains}>
             <PrivyClientProvider>
               <OrbisProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+                <ChakraProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ChakraProvider>
               </OrbisProvider>
             </PrivyClientProvider>
           </RainbowKitProvider>
