@@ -1,5 +1,6 @@
 pragma solidity ^0.8.9;
 import './IMembership.sol';
+import "hardhat/console.sol";
 
 contract Forum {
 
@@ -16,8 +17,7 @@ contract Forum {
         for (uint256 i = 0 ; i < len ; i ++){
             isModerator[_moderators[i]] = true;
         }
-        initialized = true;
-    }
+        initialized = true;    }
 
     function provideMembership(address[] memory users, string [] memory tokenURIs) external {
         require(isModerator[msg.sender],"Caller is not allowed to mint");

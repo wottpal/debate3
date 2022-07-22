@@ -64,7 +64,7 @@ describe('Test', function () {
   it('other moderators can mint', async function () {
     const { cVault, carlos, ykc, peter, user1, user2 } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address, ykc.address])
+    await cVault.connect(carlos)['createForum']('Cohort2', [peter.address, ykc.address])
     const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
     const cMembership = await ethers.getContractAt(
       'Membership',
@@ -76,8 +76,30 @@ describe('Test', function () {
     const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](user1.address, 0)
     const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
 
+    const oldBalance2 = await cMembership['balanceOf'](user2.address)
+    await cMyForum.connect(peter)['provideMembership']([user2.address], ['normal2'])
+    const newBalance2 = await cMembership['balanceOf'](user2.address)
+    const tokenOfOwnerByIndex2 = await cMembership['tokenOfOwnerByIndex'](user2.address, 0)
+    const URI2 = await cMembership['tokenURI'](tokenOfOwnerByIndex2)
+
+    expect(newBalance2 - oldBalance2).to.equal(1)
+    expect(URI2).to.equal('normal2')
     expect(newBalance - oldBalance).to.equal(1)
     expect(URI).to.equal('normal')
+  })
+
+  it('non moderator cannot mint', async function () {
+    const { cVault, carlos, ykc, peter, mehdi } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    await expect(
+      cMyForum.connect(ykc)['provideMembership']([mehdi.address], ['normal'])
+    ).to.be.revertedWith('Caller is not allowed to mint')
   })
 
   // describe('Deployment', function () {

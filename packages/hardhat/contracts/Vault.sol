@@ -5,6 +5,8 @@ import "./Membership.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import '@openzeppelin/contracts/access/Ownable.sol';
+import "hardhat/console.sol";
+
 
 contract Vault is Ownable{
 
@@ -19,11 +21,11 @@ contract Vault is Ownable{
     function createForum (string memory name , address[] memory _moderators) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
-        address[] memory moderators = new address[](len + 1);
-        for(uint256 i = 0 ;i < len - 1;i++){
-            moderators[i] = _moderators[i];
+        address[] memory moderators = new address[](len+1);
+        for(uint256 i = 1 ;i < len + 1;i++){
+            moderators[i] = _moderators[i-1];
         }
-        moderators[len-1] = msg.sender;
+        moderators[0] = msg.sender;
         // contracts are created
         Membership _newMembership = new Membership(name, name);
         Forum _newForum = new Forum(moderators,address(_newMembership));
