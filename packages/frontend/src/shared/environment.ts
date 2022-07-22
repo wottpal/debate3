@@ -11,7 +11,6 @@ export const env = {
 
   rpc: {
     hardhat: process.env.NEXT_PUBLIC_RPC_HARDHAT!,
-    rinkeby: process.env.NEXT_PUBLIC_RPC_RINKEBY!,
-    mainnet: process.env.NEXT_PUBLIC_RPC_MAINNET!,
+    mumbai: process.env.NEXT_PUBLIC_RPC_MUMBAI!,
   },
 }
