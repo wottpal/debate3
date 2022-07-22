@@ -36,9 +36,9 @@ module.exports = {
   },
   networks: {
     hardhat: {
-      accounts: {
-        mnemonic,
-      },
+      // accounts: {
+      //   mnemonic,
+      // },
       chainId: 1337,
       initialBaseFeePerGas: 0,
     },
@@ -105,7 +105,7 @@ module.exports = {
       chainId: 0,
     },
     nenonDevnet: {
-      url: `${process.env.NEONDEVNET_PROVIDER_URL}`,  //https://proxy.devnet.neonlabs.org/solana	
+      url: `${process.env.NEONDEVNET_PROVIDER_URL}`, //https://proxy.devnet.neonlabs.org/solana
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],

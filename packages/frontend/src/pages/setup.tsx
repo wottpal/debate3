@@ -1,3 +1,4 @@
+import Vault from '@artifacts/contracts/Vault.sol/Vault.json'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Button, FormControl, FormHelperText, FormLabel, IconButton, Input } from '@chakra-ui/react'
 import { CenterBody } from '@components/layout/CenterBody'
@@ -5,7 +6,9 @@ import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { env } from '@shared/environment'
+import { useContracts } from '@shared/useContracts'
 import { useIsSSR } from '@shared/useIsSSR'
+import { ethers } from 'ethers'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,9 +18,11 @@ import Dropzone from 'react-dropzone'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import slugify from 'slugify'
+import { Vault as VaultType } from 'src/types/typechain'
+import { ForumCreatedEvent } from 'src/types/typechain/Vault'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
-import { useAccount } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 import welcomeImg from '/src/public/illustrations/welcome_01.svg'
 
 const SetupPage: NextPage = () => {
@@ -38,6 +43,10 @@ const SetupPage: NextPage = () => {
     append: appendModerator,
     remove: removeModerator,
   } = useFieldArray({ control: form.control, name: 'moderators' })
+  const { contracts, contractsChainId } = useContracts()
+  const { data: signer } = useSigner()
+
+  // set default form value
   useEffect(() => {
     form.setValue('moderators', [''])
   }, [form])
@@ -51,12 +60,12 @@ const SetupPage: NextPage = () => {
 
   // call contract and save privy data
   const createForum = async () => {
-    if (!isValid || !logoImage) return
+    if (!isValid || !logoImage || !signer) return
     setIsLoading(true)
 
     try {
       // 0. Authenticate with Privy if not done so
-      if (!privyAuthenticated) {
+      if (!privyAuthenticated || (await session.address()) !== address) {
         await session.authenticate()
         setPrivyAuthenticated(true)
       }
@@ -75,7 +84,23 @@ const SetupPage: NextPage = () => {
       console.log({ metadata })
 
       // 2. Mint Contract(s)
-      // TODO
+      const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
+      let receipt
+      try {
+        const tsx = await contract.createForum(
+          forumName,
+          ['0xbDA5747bFD65F08deb54cb465eB87D40e51B197E'],
+          metadata.url
+        )
+        receipt = await tsx.wait()
+      } catch (e) {
+        console.error(e)
+      }
+      const event = (receipt?.events || []).find(
+        (e: any) => e.event === 'ForumCreated'
+      ) as ForumCreatedEvent
+      const forumAddress = event.args[0]
+      console.log('ForumCreated', event, forumAddress)
 
       // 3. Save Form Content to Privy
       const forumSlug = slugify(forumName, { lower: true, strict: true })
@@ -105,6 +130,18 @@ const SetupPage: NextPage = () => {
     setLogoImage(file)
     setLogoImagePreviewUri(URL.createObjectURL(file))
   }
+
+  // const readForumAddresses = async () => {
+  //   if (!signer || !address) return
+  //   const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
+  //   let addresses
+  //   try {
+  //     addresses = await contract.forumAddresses('1')
+  //   } catch (e) {
+  //     console.error(e)
+  //   }
+  //   console.log({ addresses })
+  // }
 
   if (isSsr) return null
 
