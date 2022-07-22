@@ -1,5 +1,5 @@
 {
-  "name": "@ethathon/frontend",
+  "name": "@debate3/frontend",
   "license": "MIT",
   "version": "0.0.1",
   "babelMacros": {

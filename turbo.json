@@ -3,19 +3,36 @@
   "baseBranch": "origin/main",
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "artifacts/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "artifacts/**"
+      ]
     },
-    "@ethathon/frontend#build": {
-      "dependsOn": ["@ethathon/hardhat#build"],
-      "outputs": [".next/**", "artifacts/**"]
+    "@debate3/frontend#build": {
+      "dependsOn": [
+        "@debate3/hardhat#build"
+      ],
+      "outputs": [
+        ".next/**",
+        "artifacts/**"
+      ]
     },
-    "@ethathon/frontend#dev": {
-      "dependsOn": ["@ethathon/hardhat#build"],
-      "outputs": [".next/**", "artifacts/**"]
+    "@debate3/frontend#dev": {
+      "dependsOn": [
+        "@debate3/hardhat#build"
+      ],
+      "outputs": [
+        ".next/**",
+        "artifacts/**"
+      ]
     },
     "format": {
-      "dependsOn": ["^format"]
+      "dependsOn": [
+        "^format"
+      ]
     }
   },
   "globalDependencies": [
