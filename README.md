@@ -26,9 +26,28 @@ pnpm dev
 ```
 
 
-## Kleros Proof-of-Moderation 
+## Kleros Proof of Moderation 
 
 We are using Kleros library to handle Content Moderation by managing disputes between users and limiting access bots to our Forum by using PoH. 
+
+
+## Policy 
+
+
+
+
+
+
+
+## Contact Information :
+
+- You can contact the team on the address : 
+
+## Video link :
+
+
+
+
 
 
 
