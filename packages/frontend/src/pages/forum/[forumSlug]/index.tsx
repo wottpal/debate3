@@ -37,12 +37,46 @@ export default function ForumPage({ forumData }: ForumPageProps) {
         {user ? (
           <>
             <p>Connected with: {user}</p>
+            <Share />
           </>
         ) : (
           <button onClick={() => connect()}>Connect</button>
         )}
       </div>
     </>
+  )
+}
+
+function Share() {
+  const [loading, setLoading] = useState(false)
+  const [text, setText] = useState<string>()
+  const { orbis } = useOrbisContext()
+
+  /** We are calling the Orbis SDK to share a new post from this user */
+  async function share() {
+    setLoading(true)
+
+    const res = await orbis.createPost({ body: text })
+
+    if (res.status == 200) {
+      console.log('Shared post with stream_id: ', res.doc)
+    } else {
+      console.log('Error sharing post: ', res)
+      alert('Error sharing post.')
+    }
+
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <textarea
+        placeholder="Share your post here..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      {loading ? <button>Loading...</button> : <button onClick={() => share()}>Share</button>}
+    </div>
   )
 }
 
