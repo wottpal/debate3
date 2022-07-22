@@ -53,14 +53,31 @@ module.exports = {
       ],
       chainId: 1,
     },
-    skale: {
-      url: `${process.env.SKALE_PROVIDER_URL}`,
+    cronosTestnet: {
+      url: `${process.env.CRONOS_PROVIDER_URL}`,
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
       ],
-      chainId: 0xafcee83030b95,
+      chainId: 338,
     },
+    celo: {
+      url: `${process.env.CELO_PROVIDER_URL}`,
+      accounts: [
+        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
+        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
+      ],
+      chainId: 42220,
+    },
+    gnosisChain: {
+      url: `${process.env.gnosisChain_PROVIDER_URL}`,
+      accounts: [
+        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
+        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
+      ],
+      chainId: 100,
+    },
+  
     polygonMumbai: {
       url: `${process.env.MUMBAI_PROVIDER_URL}`,
       accounts: [
@@ -77,13 +94,13 @@ module.exports = {
       ],
       chainId: 137,
     },
-    bscTestnet: {
-      url: `${process.env.BSCTEST_PROVIDER_URL}`,
+     Ceramic: {
+      url: `${process.env.CERAMIC_PROVIDER_URL}`,
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
       ],
-      chainId: 97,
+      chainId: 0,
     },
     bsc: {
       url: `${process.env.BSC_PROVIDER_URL}`,
