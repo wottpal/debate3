@@ -157,6 +157,7 @@ importers:
       '@nomiclabs/hardhat-vyper': ^3.0.0
       '@openzeppelin/contracts': ^4.7.1
       '@typechain/ethers-v5': ^10.1.0
+      '@typechain/hardhat': ^6.1.2
       '@types/chai': ^4.3.1
       '@types/mocha': ^9.1.1
       '@types/node': ^16.11.32
@@ -182,6 +183,7 @@ importers:
       '@nomiclabs/hardhat-vyper': 3.0.0_hardhat@2.10.1
       '@openzeppelin/contracts': 4.7.1
       '@typechain/ethers-v5': 10.1.0_3a2z4xo3ofaclmnvqkkolsxa2u
+      '@typechain/hardhat': 6.1.2_hiuzc7rf2hnnjtqpezkxy3qeb4
       '@types/chai': 4.3.1
       '@types/mocha': 9.1.1
       '@types/node': 16.11.45

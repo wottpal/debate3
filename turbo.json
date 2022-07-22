@@ -3,36 +3,19 @@
   "baseBranch": "origin/main",
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        ".next/**",
-        "artifacts/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "artifacts/**"]
     },
     "@debate3/frontend#build": {
-      "dependsOn": [
-        "@debate3/hardhat#build"
-      ],
-      "outputs": [
-        ".next/**",
-        "artifacts/**"
-      ]
+      "dependsOn": ["@debate3/hardhat#build"],
+      "outputs": [".next/**", "artifacts/**", "types/typechain/**"]
     },
     "@debate3/frontend#dev": {
-      "dependsOn": [
-        "@debate3/hardhat#build"
-      ],
-      "outputs": [
-        ".next/**",
-        "artifacts/**"
-      ]
+      "dependsOn": ["@debate3/hardhat#build"],
+      "outputs": [".next/**", "artifacts/**"]
     },
     "format": {
-      "dependsOn": [
-        "^format"
-      ]
+      "dependsOn": ["^format"]
     }
   },
   "globalDependencies": [
