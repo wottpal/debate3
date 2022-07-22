@@ -42,12 +42,42 @@ describe('Test', function () {
     expect(numberOfForums).to.equal(BigInt('1'))
   })
 
-  it('mint nfts for many', async function () {
+  it('can mint nfts', async function () {
     const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
 
     await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
     const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    const oldBalance = await cMembership['balanceOf'](ykc.address)
     await cMyForum.connect(carlos)['provideMembership']([ykc.address], ['normal'])
+    const newBalance = await cMembership['balanceOf'](ykc.address)
+    const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](ykc.address, 0)
+    const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
+
+    expect(newBalance - oldBalance).to.equal(1)
+    expect(URI).to.equal('normal')
+  })
+
+  it('other moderators can mint', async function () {
+    const { cVault, carlos, ykc, peter, user1, user2 } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address, ykc.address])
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    const oldBalance = await cMembership['balanceOf'](user1.address)
+    await cMyForum.connect(ykc)['provideMembership']([user1.address], ['normal'])
+    const newBalance = await cMembership['balanceOf'](user1.address)
+    const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](user1.address, 0)
+    const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
+
+    expect(newBalance - oldBalance).to.equal(1)
+    expect(URI).to.equal('normal')
   })
 
   // describe('Deployment', function () {
