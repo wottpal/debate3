@@ -24,3 +24,12 @@ cp packages/hardhat/.env.example packages/hardhat/.env
 # Generate contract-types & start frontend with turborepo
 pnpm dev
 ```
+
+
+## Kleros Proof-of-Moderation 
+
+We are using Kleros library to handle Content Moderation by managing disputes between users and limiting access bots to our Forum by using PoH. 
+
+
+
+
