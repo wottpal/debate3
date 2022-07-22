@@ -5,7 +5,9 @@
  * @type {import('next').NextConfig}
  **/
 const nextConfig = {
-  /* config options here */
+  images: {
+    dangerouslyAllowSVG: true,
+  },
 }
 
 module.exports = nextConfig

@@ -13,8 +13,9 @@ module.exports = {
         //   discord: '#EB459E',
         // },
       },
-      // fontFamily: {
-      //   display: ['Block Marys', 'Arial', 'serif'],
+      fontFamily: {
+        display: ['Montserrat', 'Arial', 'serif'],
+      },
       //   'display-outline': ['Block Marys Outline', 'Block Marys', 'Arial', 'serif'],
       //   mono: ['Inconsolata', 'Menlo', 'monospace'],
       // },
@@ -25,7 +26,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/typography'),
-    // require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/aspect-ratio'),
     // require('@tailwindcss/forms'),
     // require('@tailwindcss/line-clamp'),
   ],
