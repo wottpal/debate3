@@ -1,29 +1,40 @@
+import Vault from '@artifacts/contracts/Vault.sol/Vault.json'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Button, FormControl, FormHelperText, FormLabel, IconButton, Input } from '@chakra-ui/react'
 import { CenterBody } from '@components/layout/CenterBody'
 import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { env } from '@shared/environment'
+import { useContracts } from '@shared/useContracts'
+import { useIsSSR } from '@shared/useIsSSR'
+import { ethers } from 'ethers'
 import type { NextPage } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { NFTStorage } from 'nft.storage'
 import { useEffect, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import slugify from 'slugify'
+import { Vault as VaultType } from 'src/types/typechain'
+import { ForumCreatedEvent } from 'src/types/typechain/Vault'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
+import { useAccount, useSigner } from 'wagmi'
 import welcomeImg from '/src/public/illustrations/welcome_01.svg'
 
-const HomePage: NextPage = () => {
+const SetupPage: NextPage = () => {
+  const isSsr = useIsSSR()
   const form = useForm({
     mode: 'onChange',
   })
   const forumName = form.watch('forumName')
   const [isLoading, setIsLoading] = useState(false)
+  const { address } = useAccount()
   const { isValid, errors } = form.formState
-  const [address, setAddress] = useState(null)
+  const [privyAuthenticated, setPrivyAuthenticated] = useState(false)
   const { client, session } = usePrivyClientContext()
   const [logoImage, setLogoImage] = useState<File>()
   const [logoImagePreviewUri, setLogoImagePreviewUri] = useState<string>()
@@ -32,42 +43,33 @@ const HomePage: NextPage = () => {
     append: appendModerator,
     remove: removeModerator,
   } = useFieldArray({ control: form.control, name: 'moderators' })
+  const { contracts, contractsChainId } = useContracts()
+  const { data: signer } = useSigner()
+
+  // set default form value
   useEffect(() => {
     form.setValue('moderators', [''])
   }, [form])
 
   // check if already signed-in
   useAsyncEffect(async () => {
-    console.log('here')
     if (await session?.isAuthenticated()) {
-      const address = await session.address()
-      console.log({ address })
-      setAddress(address)
+      setPrivyAuthenticated(true)
     }
   }, [session])
 
-  // sign-in with privy
-  const authenticatePrivy = async () => {
-    setIsLoading(true)
-    try {
-      if (!(await session.isAuthenticated())) {
-        await session.authenticate()
-      }
-      const address = await session.address()
-      setAddress(address)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   // call contract and save privy data
   const createForum = async () => {
-    if (!isValid || !logoImage) return
+    if (!isValid || !logoImage || !signer) return
     setIsLoading(true)
 
     try {
+      // 0. Authenticate with Privy if not done so
+      if (!privyAuthenticated || (await session.address()) !== address) {
+        await session.authenticate()
+        setPrivyAuthenticated(true)
+      }
+
       // 1. Mint Logo NFT
       // const logoImageBuffer = await logoImage.arrayBuffer()
       const nft = {
@@ -82,7 +84,23 @@ const HomePage: NextPage = () => {
       console.log({ metadata })
 
       // 2. Mint Contract(s)
-      // TODO
+      const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
+      let receipt
+      try {
+        const tsx = await contract.createForum(
+          forumName,
+          ['0xbDA5747bFD65F08deb54cb465eB87D40e51B197E'],
+          metadata.url
+        )
+        receipt = await tsx.wait()
+      } catch (e) {
+        console.error(e)
+      }
+      const event = (receipt?.events || []).find(
+        (e: any) => e.event === 'ForumCreated'
+      ) as ForumCreatedEvent
+      const forumAddress = event.args[0]
+      console.log('ForumCreated', event, forumAddress)
 
       // 3. Save Form Content to Privy
       const forumSlug = slugify(forumName, { lower: true, strict: true })
@@ -113,28 +131,45 @@ const HomePage: NextPage = () => {
     setLogoImagePreviewUri(URL.createObjectURL(file))
   }
 
+  // const readForumAddresses = async () => {
+  //   if (!signer || !address) return
+  //   const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
+  //   let addresses
+  //   try {
+  //     addresses = await contract.forumAddresses('1')
+  //   } catch (e) {
+  //     console.error(e)
+  //   }
+  //   console.log({ addresses })
+  // }
+
+  if (isSsr) return null
+
   return (
     <>
       <CenterBody>
         <Wrapper tw="flex flex-col grow">
-          <div tw="grow w-full flex flex-col my-20 items-stretch">
-            <h1 tw="font-display text-5xl font-black">Debate3</h1>
-            <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
+          <div tw="grow w-full flex flex-col my-20">
+            {/* Top Bar */}
+            <div tw="flex justify-between items-center">
+              <div tw="flex flex-col items-start">
+                <Link href="/" passHref>
+                  <h1 tw="font-display text-4xl font-black tracking-tight cursor-pointer">
+                    Debate3.xyz
+                  </h1>
+                </Link>
+                <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
+              </div>
+              <div>{address && !isSsr && <ConnectButton showBalance={false} />}</div>
+            </div>
+
+            {/* Body */}
             <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg p-5 bg-white shadow-2xl shadow-gray-200">
               {/* Authentication with Privy */}
               {!address && (
                 <div tw="flex flex-col items-center justify-center h-full">
                   <Image src={welcomeImg} alt="Welcome" width="250px" height="250px"></Image>
-                  <Button
-                    colorScheme="facebook"
-                    variant="solid"
-                    tw="mt-10"
-                    size="lg"
-                    onClick={authenticatePrivy}
-                    isLoading={isLoading}
-                  >
-                    Sign-in with Wallet
-                  </Button>
+                  <div tw="mt-10">{!isSsr && <ConnectButton label="Connect your Wallet" />}</div>
                 </div>
               )}
 
@@ -258,4 +293,4 @@ const HomePage: NextPage = () => {
   )
 }
 
-export default HomePage
+export default SetupPage

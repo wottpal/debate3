@@ -14,8 +14,8 @@ export const OrbisProvider: FC<PropsWithChildren> = ({ children }) => {
   const [orbis, setOrbis] = useState(null)
 
   useEffect(() => {
-    setOrbis(new Orbis())
-  }, [])
+    if (Orbis) setOrbis(new Orbis())
+  }, [Orbis])
 
   return <OrbisContext.Provider value={{ orbis }}>{children}</OrbisContext.Provider>
 }

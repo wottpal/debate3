@@ -1,16 +1,15 @@
 import '@nomicfoundation/hardhat-toolbox'
 // import '@nomiclabs/hardhat-vyper'
-import * as dotenv from 'dotenv'
-import { HardhatUserConfig } from 'hardhat/config'
-import * as ethers from 'ethers'
 import '@nomiclabs/hardhat-etherscan'
 import '@nomiclabs/hardhat-waffle'
-import 'hardhat-gas-reporter'
-import 'solidity-coverage'
-import 'hardhat-deploy'
-import 'hardhat-contract-sizer'
-import 'hardhat-deploy-ethers'
 import '@openzeppelin/hardhat-upgrades'
+import * as ethers from 'ethers'
+import 'hardhat-contract-sizer'
+import 'hardhat-deploy'
+import 'hardhat-deploy-ethers'
+import 'hardhat-gas-reporter'
+import path from 'path'
+import 'solidity-coverage'
 
 const mnemonic = 'replace hover unaware super where filter stone fine garlic address matrix basic'
 
@@ -32,11 +31,14 @@ module.exports = {
       },
     },
   },
+  paths: {
+    artifacts: path.resolve('../frontend/src/artifacts'),
+  },
   networks: {
     hardhat: {
-      accounts: {
-        mnemonic,
-      },
+      // accounts: {
+      //   mnemonic,
+      // },
       chainId: 1337,
       initialBaseFeePerGas: 0,
     },
@@ -70,7 +72,7 @@ module.exports = {
       chainId: 42220,
     },
     gnosisChain: {
-      url: `${process.env.gnosisChain_PROVIDER_URL}`,
+      url: `${process.env.GNOSISCHAIN_PROVIDER_URL}`,
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
@@ -102,13 +104,13 @@ module.exports = {
       ],
       chainId: 0,
     },
-    bsc: {
-      url: `${process.env.BSC_PROVIDER_URL}`,
+    nenonDevnet: {
+      url: `${process.env.NEONDEVNET_PROVIDER_URL}`, //https://proxy.devnet.neonlabs.org/solana
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
         process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
       ],
-      chainId: 56,
+      chainId: 245022926,
     },
   },
   namedAccounts: {
