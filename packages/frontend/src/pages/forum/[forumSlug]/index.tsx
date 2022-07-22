@@ -3,15 +3,25 @@ import { PrivyClient } from '@privy-io/privy-node'
 import { env } from '@shared/environment'
 import type { GetServerSideProps } from 'next'
 import 'twin.macro'
-import { FC, PropsWithChildren, useEffect, useState } from 'react'
+import { FC, PropsWithChildren, Fragment, useEffect, useState, MouseEvent } from 'react'
 import { useOrbisContext } from '@components/OrbisProvider'
+import {
+  EmojiHappyIcon as EmojiHappyIconOutline,
+  PaperClipIcon,
+  ChatAltIcon,
+  XIcon,
+} from '@heroicons/react/outline'
 
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(' ')
+}
 export interface ForumPageProps {
   forumData: object
 }
 export default function ForumPage({ forumData }: ForumPageProps) {
   const forum = Forum.fromObject(forumData)
   const [user, setUser] = useState()
+  const [openCommentModal, setOpenCommentModal] = useState(true)
   const { orbis } = useOrbisContext()
 
   async function connect() {
@@ -30,24 +40,36 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   return (
     <>
       {/* <div>Deployer Address / Admin: {forum.address}</div> */}
-      <div tw="flex-1 min-w-0 mt-4 ml-4">
-        <h2 className="forum-header">{forum.forumName}</h2>
-      </div>
-      <div className="debates-container">
+      <h2 className="forum-header">{forum.forumName}</h2>
+      <div className="debates-feed">
         <Posts context={forum.forumName} />
       </div>
+      {openCommentModal && (
+        <div className="modal-dim" onClick={() => setOpenCommentModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="close-modal-btn" onClick={() => setOpenCommentModal(false)}>
+              <XIcon className="h-5 w-5" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      )}
       <div className="new-discussion-container">
+        <Share context={forum.forumName} />
         {user ? (
-          <>
-            <Share context={forum.forumName} />
-          </>
+          <button
+            className="orbis-connect-btn"
+            tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-800 focus:outline-none"
+            style={{ cursor: 'auto' }}
+          >
+            Connected
+          </button>
         ) : (
           <button
             className="orbis-connect-btn"
-            tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             onClick={() => connect()}
           >
-            Open your debate
+            Connect
           </button>
         )}
       </div>
@@ -58,10 +80,11 @@ export default function ForumPage({ forumData }: ForumPageProps) {
 
 function Share({ context }: any) {
   const [loading, setLoading] = useState(false)
-  const [text, setText] = useState<string>()
+  const [text, setText] = useState<string>('')
   const { orbis } = useOrbisContext()
 
-  async function share() {
+  async function share(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+    e.preventDefault()
     setLoading(true)
     console.log('Sharing with context ', context)
     const res = await orbis.createPost({
@@ -81,19 +104,58 @@ function Share({ context }: any) {
 
   return (
     <div className="share-container">
-      <textarea
-        placeholder="Start discussion..."
-        className="forum-textarea"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      {loading ? (
-        <button className="share-btn">Loading...</button>
-      ) : (
-        <button className="share-btn" onClick={() => share()}>
-          Share
-        </button>
-      )}
+      <div tw="flex items-start space-x-4">
+        <div tw="flex-shrink-0">
+          <img
+            tw="inline-block h-10 w-10 rounded-full"
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            alt=""
+          />
+        </div>
+        <div tw="min-w-0 flex-1">
+          <form action="#">
+            <div tw="border-b border-gray-200 focus-within:border-indigo-600">
+              <label htmlFor="comment" tw="sr-only">
+                Add your debate
+              </label>
+              <textarea
+                rows={3}
+                name="comment"
+                id="comment"
+                onChange={(e) => setText(e.target.value)}
+                value={text}
+                style={{ padding: '0.5rem', borderRadius: '10px' }}
+                tw="block w-full border-0 border-b border-transparent p-0 pb-2 resize-none focus:ring-0 focus:border-indigo-600 sm:text-sm"
+                placeholder="Comment..."
+                defaultValue={''}
+              />
+            </div>
+            <div className="new-debate-background" tw="pt-2 flex justify-between">
+              <div tw="flex items-center space-x-5">
+                <div tw="flow-root">
+                  <button
+                    type="button"
+                    tw="-m-2 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                  >
+                    <PaperClipIcon tw="h-6 w-6" aria-hidden="true" />
+                    <span tw="sr-only">Attach a file</span>
+                  </button>
+                </div>
+                <div tw="flow-root"></div>
+              </div>
+              <div tw="flex-shrink-0">
+                <button
+                  type="submit"
+                  onClick={(e) => share(e)}
+                  tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Open debate
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }
@@ -133,17 +195,26 @@ export const Posts: FC<PostsProps> = ({ context }) => {
       <>
         {posts.map((post, key) => {
           return (
-            <div key={key} className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container">
+            <div
+              key={key}
+              style={{ cursor: 'auto' }}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container"
+            >
               <div className="debate">
-                <div className="flex-shrink-0">
+                <div tw="flex-shrink-0">
                   {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <a href="#" className="focus:outline-none">
-                    <span className="absolute inset-0" aria-hidden="true" />
+                <div tw="flex-1 min-w-0">
+                  <div tw="focus:outline-none">
+                    <span tw="absolute inset-0" aria-hidden="true" />
                     {/* <p><b>Shared by: {post.creator}</b></p> */}
-                    <p className="text-sm text-gray-500 truncate">{post.content?.body}</p>
-                  </a>
+                    <p tw="text-sm text-gray-900 ">{post.content?.body}</p>
+                  </div>
+                </div>
+                <div tw="flex">
+                  <button>
+                    <ChatAltIcon tw="h-6 w-6 mt-2" aria-hidden="true" />
+                  </button>
                 </div>
               </div>
             </div>

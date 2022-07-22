@@ -18,6 +18,7 @@ import { Toaster } from 'react-hot-toast'
 import { WagmiConfig } from 'wagmi'
 import '../styles/css/forum.css'
 import '../styles/css/main.css'
+import '../styles/css/commentModal.css'
 
 // Router Loading Animation with @tanem/react-nprogress
 Router.events.on('routeChangeStart', () => NProgress.start())
