@@ -1,27 +1,40 @@
-import { AddIcon } from '@chakra-ui/icons'
+import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Button, FormControl, FormHelperText, FormLabel, IconButton, Input } from '@chakra-ui/react'
 import { CenterBody } from '@components/layout/CenterBody'
 import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
+import { env } from '@shared/environment'
 import type { NextPage } from 'next'
 import Image from 'next/image'
-import { useState } from 'react'
+import { NFTStorage } from 'nft.storage'
+import { useEffect, useState } from 'react'
 import Dropzone from 'react-dropzone'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import slugify from 'slugify'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
 import welcomeImg from '/src/public/illustrations/welcome_01.svg'
 
 const HomePage: NextPage = () => {
-  const form = useForm({ mode: 'onChange' })
-  const newForumName = form.watch('newForumName')
-  const newForumSlug = form.watch('newForumSlug')
+  const form = useForm({
+    mode: 'onChange',
+  })
+  const forumName = form.watch('forumName')
   const [isLoading, setIsLoading] = useState(false)
   const { isValid, errors } = form.formState
   const [address, setAddress] = useState(null)
-  const [forumName, setForumName] = useState('')
-  const [forumSlug, setForumSlug] = useState('')
   const { client, session } = usePrivyClientContext()
+  const [logoImage, setLogoImage] = useState<File>()
+  const [logoImagePreviewUri, setLogoImagePreviewUri] = useState<string>()
+  const {
+    fields: moderatorFields,
+    append: appendModerator,
+    remove: removeModerator,
+  } = useFieldArray({ control: form.control, name: 'moderators' })
+  useEffect(() => {
+    form.setValue('moderators', [''])
+  }, [form])
 
   // check if already signed-in
   useAsyncEffect(async () => {
@@ -51,24 +64,53 @@ const HomePage: NextPage = () => {
 
   // call contract and save privy data
   const createForum = async () => {
-    if (!isValid) return
+    if (!isValid || !logoImage) return
     setIsLoading(true)
+
     try {
-      const [forumName, forumSlug] = await client.put(address, [
+      // 1. Mint Logo NFT
+      // const logoImageBuffer = await logoImage.arrayBuffer()
+      const nft = {
+        image: logoImage,
+        name: forumName,
+        description: 'Access-token for Debate3.xyz DAO forum',
+      }
+
+      const nftStorageClient = new NFTStorage({ token: env.nftStorageApiKey })
+      const metadata = await nftStorageClient.store(nft)
+      toast('Minted Logo as NFT successfully')
+      console.log({ metadata })
+
+      // 2. Mint Contract(s)
+      // TODO
+
+      // 3. Save Form Content to Privy
+      const forumSlug = slugify(forumName, { lower: true, strict: true })
+      const [updatedName, updatedSlug] = await client.put(address, [
         {
           field: 'forum-name',
-          value: newForumName,
+          value: forumName,
         },
         {
           field: 'forum-slug',
-          value: newForumSlug,
+          value: forumSlug,
         },
       ])
-      setForumName(forumName.text())
-      setForumSlug(forumSlug.text())
+      console.log({
+        updatedName: updatedName.text(),
+        updatedSlug: updatedSlug.text(),
+      })
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const onFileDrop = async (files: File[]) => {
+    const file = files?.[0]
+    if (!file || !file.type.startsWith('image')) return
+    console.log('file.type', file.type)
+    setLogoImage(file)
+    setLogoImagePreviewUri(URL.createObjectURL(file))
   }
 
   return (
@@ -78,7 +120,7 @@ const HomePage: NextPage = () => {
           <div tw="grow w-full flex flex-col my-20 items-stretch">
             <h1 tw="font-display text-5xl font-black">Debate3</h1>
             <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
-            <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded p-4 bg-white">
+            <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg p-5 bg-white shadow-2xl shadow-gray-200">
               {/* Authentication with Privy */}
               {!address && (
                 <div tw="flex flex-col items-center justify-center h-full">
@@ -100,44 +142,89 @@ const HomePage: NextPage = () => {
               {address && (
                 <>
                   <FormControl tw="flex flex-col grow">
-                    <div tw="flex space-x-6">
-                      <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
-                        {({ getRootProps, getInputProps }) => (
-                          <section tw="w-[300px] h-[300px] flex cursor-pointer hover:(bg-gray-100 border-gray-300) items-center justify-center text-center  bg-gray-50 border-2 text-gray-600 border-gray-200 border-dashed rounded p-4">
-                            <div {...getRootProps()}>
-                              <input {...getInputProps()} />
-                              <p tw="leading-5 text-sm italic">
-                                Drag&apos;n&apos;drop a logo here which is minted as the access
-                                token to the forum.
-                              </p>
-                            </div>
-                          </section>
-                        )}
-                      </Dropzone>
+                    <div tw="flex space-x-5">
+                      <div tw="flex flex-col">
+                        <FormLabel>Logo Image*</FormLabel>
+                        <Dropzone onDrop={onFileDrop}>
+                          {({ getRootProps, getInputProps }) => (
+                            <section tw="relative overflow-hidden w-[300px] h-[300px] flex cursor-pointer hover:(bg-gray-100 border-gray-300) items-center justify-center text-center  bg-gray-50 border-2 border-gray-200 border-dashed rounded p-4">
+                              <div
+                                {...getRootProps()}
+                                tw="flex justify-center items-center z-10 absolute inset-0 p-2"
+                              >
+                                <input {...getInputProps()} />
+                                {logoImagePreviewUri ? (
+                                  <Image
+                                    src={logoImagePreviewUri}
+                                    alt="Logo Image Preview"
+                                    layout="fill"
+                                  />
+                                ) : (
+                                  <FormHelperText>
+                                    Drag&apos;n&apos;drop an image here which is minted as the
+                                    access token to the forum.
+                                  </FormHelperText>
+                                )}
+                              </div>
+                            </section>
+                          )}
+                        </Dropzone>
+                      </div>
 
                       <div tw="flex flex-col grow space-y-4 justify-start">
                         <div tw="flex flex-col">
-                          <FormLabel>Forum Name</FormLabel>
+                          <FormLabel>Forum Name*</FormLabel>
                           <Input
                             placeholder="WAGMI DAO"
                             size="lg"
-                            width="auto"
-                            {...form.register('newForumName', { required: true })}
+                            isInvalid={!!errors?.forumName}
+                            {...form.register('forumName', { required: true })}
                           />
+                          <FormHelperText>
+                            {forumName &&
+                              `New Forum-URL: ${env.url}/forum/${slugify(
+                                slugify(forumName, { lower: true, strict: true })
+                              )}`}
+                          </FormHelperText>
                         </div>
                         <div tw="flex flex-col">
                           <FormLabel>Moderator Addresses</FormLabel>
-                          <Input
-                            placeholder="0x…"
-                            size="lg"
-                            width="auto"
-                            {...form.register('newForumSlug', { required: true })}
-                          />
+                          <div tw="flex flex-col space-y-2">
+                            {moderatorFields.map((item, index) => {
+                              return (
+                                <div key={item.id} tw="flex">
+                                  <Input
+                                    placeholder="0x…"
+                                    size="lg"
+                                    tw="grow"
+                                    isInvalid={!!errors?.moderators?.[index]}
+                                    {...form.register(`moderators.${index}`, {
+                                      pattern: {
+                                        value: /^0x[a-fA-F0-9]{40}$/,
+                                        message: 'Please enter a valid address',
+                                      },
+                                    })}
+                                  />
+                                  <IconButton
+                                    aria-label="Delete moderator address"
+                                    size="lg"
+                                    tw="ml-2"
+                                    icon={<DeleteIcon />}
+                                    onClick={() => {
+                                      removeModerator(index)
+                                    }}
+                                  />
+                                </div>
+                              )
+                            })}
+                          </div>
                           <IconButton
                             aria-label="Add moderator address"
-                            size="sm"
                             tw="mt-2"
                             icon={<AddIcon />}
+                            onClick={() => {
+                              appendModerator('')
+                            }}
                           />
                           <FormHelperText>
                             Define up to 5 moderators that are allowed to award reputation NFTs.
@@ -152,6 +239,7 @@ const HomePage: NextPage = () => {
                         colorScheme="facebook"
                         variant="solid"
                         tw="mt-10"
+                        disabled={!isValid || !logoImage || isLoading}
                         size="lg"
                         onClick={createForum}
                         isLoading={isLoading}

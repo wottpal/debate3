@@ -43,6 +43,7 @@
     "next": "^12.2.2",
     "next-seo": "^5.4.0",
     "next-themes": "^0.2.0",
+    "nft.storage": "^6.4.1",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -52,6 +53,7 @@
     "react-icons": "^4.4.0",
     "react-tippy": "^1.4.0",
     "sharp": "^0.30.7",
+    "slugify": "^1.6.5",
     "use-async-effect": "^2.2.6",
     "wagmi": "^0.5.10"
   },

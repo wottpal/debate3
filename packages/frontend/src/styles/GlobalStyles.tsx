@@ -8,7 +8,7 @@ const customStyles = css`
     scroll-behavior: smooth;
   }
   body {
-    ${tw`antialiased font-sans bg-gray-50`}
+    ${tw`antialiased font-sans`}
     ${tw`min-h-screen h-screen relative`}
   }
   #__next,
