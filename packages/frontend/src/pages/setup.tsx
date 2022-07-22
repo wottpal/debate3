@@ -1,7 +1,9 @@
 import { CenterBody } from '@components/layout/CenterBody'
+import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
 import type { NextPage } from 'next'
 import { useState } from 'react'
+import Dropzone from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import 'twin.macro'
 
@@ -55,47 +57,66 @@ const HomePage: NextPage = () => {
   return (
     <>
       <CenterBody>
-        {/* Authentication with Privy */}
-        {!address && (
-          <button
-            tw="bg-gray-500 rounded-sm p-2"
-            onClick={() => {
-              testAction()
-            }}
-          >
-            Authenticate Privy
-          </button>
-        )}
+        <Wrapper tw="flex flex-col grow">
+          <div tw="grow w-full flex flex-col my-20 items-stretch">
+            <h1 tw="font-display text-5xl font-black">Debate3</h1>
+            <p tw="text-gray-600 text-lg mt-1 mb-2">Setup your new forum ✨</p>
+            <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-md p-2">
+              {/* Authentication with Privy */}
+              {!address && (
+                <button
+                  tw="bg-gray-500 rounded-sm p-2"
+                  onClick={() => {
+                    testAction()
+                  }}
+                >
+                  Authenticate Privy
+                </button>
+              )}
 
-        {/* Create Forum */}
-        {address && (
-          <>
-            <div>Address: {address}</div>
+              {/* Create Forum */}
+              {address && (
+                <>
+                  <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                    {({ getRootProps, getInputProps }) => (
+                      <section tw="bg-gray-100 border-2 border-gray-300 border-dashed rounded-sm p-4">
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>Drag n drop some files here, or click to select files</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
 
-            <input
-              type="text"
-              placeholder="New Forum Name"
-              {...form.register('newForumName', { required: true })}
-            />
-            <input
-              type="text"
-              placeholder="New Forum Slug"
-              {...form.register('newForumSlug', { required: true })}
-            />
+                  <div>Address: {address}</div>
 
-            <button
-              tw="bg-gray-500 rounded-sm p-2"
-              onClick={() => {
-                saveData()
-              }}
-            >
-              Set Forum Data
-            </button>
+                  <input
+                    type="text"
+                    placeholder="New Forum Name"
+                    {...form.register('newForumName', { required: true })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="New Forum Slug"
+                    {...form.register('newForumSlug', { required: true })}
+                  />
 
-            <div>Forum Name: {forumName}</div>
-            <div>Forum Slug: {forumSlug}</div>
-          </>
-        )}
+                  <button
+                    tw="bg-gray-500 rounded-sm p-2"
+                    onClick={() => {
+                      saveData()
+                    }}
+                  >
+                    Set Forum Data
+                  </button>
+
+                  <div>Forum Name: {forumName}</div>
+                  <div>Forum Slug: {forumSlug}</div>
+                </>
+              )}
+            </main>
+          </div>
+        </Wrapper>
       </CenterBody>
     </>
   )

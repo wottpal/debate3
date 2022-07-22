@@ -5,8 +5,10 @@ import { cache } from '@emotion/css'
 import { CacheProvider } from '@emotion/react'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
+import { env } from '@shared/environment'
 import { chains, wagmiClient } from '@shared/wagmiClient'
 import GlobalStyles from '@styles/GlobalStyles'
+import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Router from 'next/router'
@@ -23,29 +25,29 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       {/* SEO TODO */}
-      {/* <DefaultSeo
+      <DefaultSeo
         dangerouslySetAllPagesToNoFollow={!env.isProduction}
         dangerouslySetAllPagesToNoIndex={!env.isProduction}
-        defaultTitle="TODO"
-        titleTemplate="%s | TODO"
-        description="TODO"
+        defaultTitle="Debate3.xyz"
+        titleTemplate="%s | Debate3"
+        description="Decentralized, token-gated discussion platform for DAOs"
         openGraph={{
           type: 'website',
           locale: 'en',
           url: env.url,
-          site_name: 'TODO',
-          images: [
-            {
-              url: `${env.url}/og/TODO.jpg`,
-              width: 1200,
-              height: 670,
-            },
-          ],
+          site_name: 'Debate3.xyz',
+          // images: [
+          //   {
+          //     url: `${env.url}/og/TODO.jpg`,
+          //     width: 1200,
+          //     height: 670,
+          //   },
+          // ],
         }}
-        twitter={{
-          handle: '@TODO',
-        }}
-      /> */}
+        // twitter={{
+        //   handle: '@TODO',
+        // }}
+      />
 
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
