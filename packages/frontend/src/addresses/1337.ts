@@ -1,3 +1,3 @@
 export const ContractAddresses_1337 = {
-  Lock: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+  Vault: '0x20E0c5F61124D184101a0A8d9afaeA69F5dAB907',
 }

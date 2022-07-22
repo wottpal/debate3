@@ -1,16 +1,15 @@
 import '@nomicfoundation/hardhat-toolbox'
 // import '@nomiclabs/hardhat-vyper'
-import * as dotenv from 'dotenv'
-import { HardhatUserConfig } from 'hardhat/config'
-import * as ethers from 'ethers'
 import '@nomiclabs/hardhat-etherscan'
 import '@nomiclabs/hardhat-waffle'
-import 'hardhat-gas-reporter'
-import 'solidity-coverage'
-import 'hardhat-deploy'
-import 'hardhat-contract-sizer'
-import 'hardhat-deploy-ethers'
 import '@openzeppelin/hardhat-upgrades'
+import * as ethers from 'ethers'
+import 'hardhat-contract-sizer'
+import 'hardhat-deploy'
+import 'hardhat-deploy-ethers'
+import 'hardhat-gas-reporter'
+import path from 'path'
+import 'solidity-coverage'
 
 const mnemonic = 'replace hover unaware super where filter stone fine garlic address matrix basic'
 
@@ -31,6 +30,9 @@ module.exports = {
         enabled: true,
       },
     },
+  },
+  paths: {
+    artifacts: path.resolve('../frontend/src/artifacts'),
   },
   networks: {
     hardhat: {
