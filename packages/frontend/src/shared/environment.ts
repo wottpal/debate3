@@ -18,4 +18,6 @@ export const env = {
     apiKey: process.env.NEXT_PUBLIC_PRIVY_API_KEY!,
     apiSecret: process.env.PRIVY_API_SECRET,
   },
+
+  nftStorageApiKey: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY!,
 }
