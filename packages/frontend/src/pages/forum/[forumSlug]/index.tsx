@@ -39,15 +39,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const forum = forums.find((f) => f.forumSlug === slug)
   if (!forum) return { notFound: true }
 
-  // const res = await fetch(`https://.../data`)
-  // const data = await res.json()
-
-  // if (!data) {
-  //   return {
-  //     notFound: true,
-  //   }
-  // }
-
   return {
     props: {
       forumData: forum.toJson(),
