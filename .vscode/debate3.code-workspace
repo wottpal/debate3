@@ -23,7 +23,9 @@
       "**/.yarn": true,
       "**/.turbo": true,
       "**/.next": true,
-      "packages/hardhat/cache": true
+      "**/artifacts": true,
+      "**/types/typechain": true,
+      "**/cache": true
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,

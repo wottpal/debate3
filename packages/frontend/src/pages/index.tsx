@@ -7,6 +7,7 @@ const HomePage: NextPage = () => {
   return (
     <>
       <CenterBody>
+        <h1 tw="text-3xl mb-6">debate3.xyz</h1>
         <ConnectButton />
       </CenterBody>
     </>
