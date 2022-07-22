@@ -12,6 +12,7 @@
     "format": "turbo run format",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:start": "pnpm --filter frontend start",
+    "frontend:build": "pnpm --filter frontend build",
     "prepare": "husky install"
   },
   "devDependencies": {

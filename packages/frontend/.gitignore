@@ -36,5 +36,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 # typechain
-src/artifacts
-src/types/typechain/**
+# src/artifacts
+# src/types/typechain/**

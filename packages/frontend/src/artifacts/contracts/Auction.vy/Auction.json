@@ -1,0 +1,140 @@
+{
+  "_format": "hh-vyper-artifact-1",
+  "contractName": "Auction",
+  "sourceName": "contracts/Auction.vy",
+  "abi": [
+    {
+      "stateMutability": "nonpayable",
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "_beneficiary",
+          "type": "address"
+        },
+        {
+          "name": "_auction_start",
+          "type": "uint256"
+        },
+        {
+          "name": "_bidding_time",
+          "type": "uint256"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "stateMutability": "payable",
+      "type": "function",
+      "name": "bid",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "name": "withdraw",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "name": "endAuction",
+      "inputs": [],
+      "outputs": []
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "beneficiary",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "auctionStart",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "auctionEnd",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "highestBidder",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "highestBid",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "ended",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "stateMutability": "view",
+      "type": "function",
+      "name": "pendingReturns",
+      "inputs": [
+        {
+          "name": "arg0",
+          "type": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ]
+    }
+  ],
+  "bytecode": "0x602061022b6000396000518060a01c61022657604052604051600055602061024b600039600051600155600154602061026b60003960005181818301106102265780820190509050600255600254421015610226576101b861006d6300000000396101b86000016300000000f3600436101561000d576101ad565b60003560e01c631998aeef811861006d5760015442106101b3576002544210156101b3576004543411156101b35760066003546020526000526040600020805460045481818301106101b357808201905090508155503360035534600455005b346101b357633ccfd60b81186100b65760063360205260005260406000205460405260006006336020526000526040600020556000600060006000604051336000f1156101b357005b63fe67a54b81186100ee5760025442106101b3576005546101b357600160055560006000600060006004546000546000f1156101b357005b6338af3eed81186101055760005460405260206040f35b634f245ef7811861011c5760015460405260206040f35b632a24f46c81186101335760025460405260206040f35b6391f90157811861014a5760035460405260206040f35b63d57bde7981186101615760045460405260206040f35b6312fa6feb81186101785760055460405260206040f35b6326b387bb81186101ab576004358060a01c6101b357604052600660405160205260005260406000205460605260206060f35b505b60006000fd5b600080fd005b600080fd",
+  "deployedBytecode": "0x600436101561000d576101ad565b60003560e01c631998aeef811861006d5760015442106101b3576002544210156101b3576004543411156101b35760066003546020526000526040600020805460045481818301106101b357808201905090508155503360035534600455005b346101b357633ccfd60b81186100b65760063360205260005260406000205460405260006006336020526000526040600020556000600060006000604051336000f1156101b357005b63fe67a54b81186100ee5760025442106101b3576005546101b357600160055560006000600060006004546000546000f1156101b357005b6338af3eed81186101055760005460405260206040f35b634f245ef7811861011c5760015460405260206040f35b632a24f46c81186101335760025460405260206040f35b6391f90157811861014a5760035460405260206040f35b63d57bde7981186101615760045460405260206040f35b6312fa6feb81186101785760055460405260206040f35b6326b387bb81186101ab576004358060a01c6101b357604052600660405160205260005260406000205460605260206060f35b505b60006000fd5b600080fd",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
