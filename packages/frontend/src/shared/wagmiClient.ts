@@ -12,8 +12,7 @@ export const rpcsByChainId: {
   [chainId: number]: string
 } = {
   [1337]: env.rpc.hardhat,
-  [chain.rinkeby.id]: env.rpc.rinkeby,
-  [chain.mainnet.id]: env.rpc.mainnet,
+  [chain.polygonMumbai.id]: env.rpc.mumbai,
 }
 
 export const defaultChain: Chain = allChains.filter((chain) => env.defaultChain === chain.id)[0]
