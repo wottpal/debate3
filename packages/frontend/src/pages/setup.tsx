@@ -3,7 +3,9 @@ import { Button, FormControl, FormHelperText, FormLabel, IconButton, Input } fro
 import { CenterBody } from '@components/layout/CenterBody'
 import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { env } from '@shared/environment'
+import { useIsSSR } from '@shared/useIsSSR'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,16 +17,19 @@ import toast from 'react-hot-toast'
 import slugify from 'slugify'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
+import { useAccount } from 'wagmi'
 import welcomeImg from '/src/public/illustrations/welcome_01.svg'
 
-const HomePage: NextPage = () => {
+const SetupPage: NextPage = () => {
+  const isSsr = useIsSSR()
   const form = useForm({
     mode: 'onChange',
   })
   const forumName = form.watch('forumName')
   const [isLoading, setIsLoading] = useState(false)
+  const { address } = useAccount()
   const { isValid, errors } = form.formState
-  const [address, setAddress] = useState(null)
+  const [privyAuthenticated, setPrivyAuthenticated] = useState(false)
   const { client, session } = usePrivyClientContext()
   const [logoImage, setLogoImage] = useState<File>()
   const [logoImagePreviewUri, setLogoImagePreviewUri] = useState<string>()
@@ -39,29 +44,10 @@ const HomePage: NextPage = () => {
 
   // check if already signed-in
   useAsyncEffect(async () => {
-    console.log('here')
     if (await session?.isAuthenticated()) {
-      const address = await session.address()
-      console.log({ address })
-      setAddress(address)
+      setPrivyAuthenticated(true)
     }
   }, [session])
-
-  // sign-in with privy
-  const authenticatePrivy = async () => {
-    setIsLoading(true)
-    try {
-      if (!(await session.isAuthenticated())) {
-        await session.authenticate()
-      }
-      const address = await session.address()
-      setAddress(address)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   // call contract and save privy data
   const createForum = async () => {
@@ -69,6 +55,12 @@ const HomePage: NextPage = () => {
     setIsLoading(true)
 
     try {
+      // 0. Authenticate with Privy if not done so
+      if (!privyAuthenticated) {
+        await session.authenticate()
+        setPrivyAuthenticated(true)
+      }
+
       // 1. Mint Logo NFT
       // const logoImageBuffer = await logoImage.arrayBuffer()
       const nft = {
@@ -114,32 +106,33 @@ const HomePage: NextPage = () => {
     setLogoImagePreviewUri(URL.createObjectURL(file))
   }
 
+  if (isSsr) return null
+
   return (
     <>
       <CenterBody>
         <Wrapper tw="flex flex-col grow">
-          <div tw="grow w-full flex flex-col my-20 items-stretch">
-            <Link href="/" passHref>
-              <h1 tw="font-display text-4xl font-black tracking-tight cursor-pointer">
-                Debate3.xyz
-              </h1>
-            </Link>
-            <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
+          <div tw="grow w-full flex flex-col my-20">
+            {/* Top Bar */}
+            <div tw="flex justify-between items-center">
+              <div tw="flex flex-col items-start">
+                <Link href="/" passHref>
+                  <h1 tw="font-display text-4xl font-black tracking-tight cursor-pointer">
+                    Debate3.xyz
+                  </h1>
+                </Link>
+                <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
+              </div>
+              <div>{address && !isSsr && <ConnectButton showBalance={false} />}</div>
+            </div>
+
+            {/* Body */}
             <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg p-5 bg-white shadow-2xl shadow-gray-200">
               {/* Authentication with Privy */}
               {!address && (
                 <div tw="flex flex-col items-center justify-center h-full">
                   <Image src={welcomeImg} alt="Welcome" width="250px" height="250px"></Image>
-                  <Button
-                    colorScheme="facebook"
-                    variant="solid"
-                    tw="mt-10"
-                    size="lg"
-                    onClick={authenticatePrivy}
-                    isLoading={isLoading}
-                  >
-                    Sign-in with Wallet
-                  </Button>
+                  <div tw="mt-10">{!isSsr && <ConnectButton label="Connect your Wallet" />}</div>
                 </div>
               )}
 
@@ -263,4 +256,4 @@ const HomePage: NextPage = () => {
   )
 }
 
-export default HomePage
+export default SetupPage

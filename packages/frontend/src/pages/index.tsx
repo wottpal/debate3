@@ -36,9 +36,9 @@ const HomePage: NextPage = () => {
           <br />
           discussions for DAOs
         </h1>
-        <p tw="mx-auto mt-6 max-w-2xl tracking-tight text-slate-700">
-          A token-gated, decentralized discussion platform with inbuilt reputation systems and
-          moderation.
+        <p tw="mx-auto mt-6 max-w-2xl text-xl tracking-tight text-slate-700">
+          A token-gated, decentralized discussion platform with an <br />
+          inbuilt reputation system and moderation.
         </p>
         <Link href="/setup" passHref>
           <Button tw="mt-10" colorScheme="facebook" variant="solid" size="lg">
