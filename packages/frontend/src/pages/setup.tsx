@@ -6,6 +6,7 @@ import { usePrivyClientContext } from '@components/PrivyClientProvider'
 import { env } from '@shared/environment'
 import type { NextPage } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { NFTStorage } from 'nft.storage'
 import { useEffect, useState } from 'react'
 import Dropzone from 'react-dropzone'
@@ -118,7 +119,11 @@ const HomePage: NextPage = () => {
       <CenterBody>
         <Wrapper tw="flex flex-col grow">
           <div tw="grow w-full flex flex-col my-20 items-stretch">
-            <h1 tw="font-display text-5xl font-black">Debate3</h1>
+            <Link href="/" passHref>
+              <h1 tw="font-display text-4xl font-black tracking-tight cursor-pointer">
+                Debate3.xyz
+              </h1>
+            </Link>
             <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
             <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg p-5 bg-white shadow-2xl shadow-gray-200">
               {/* Authentication with Privy */}
