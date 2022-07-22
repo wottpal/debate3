@@ -1,4 +1,5 @@
 import { Layout } from '@components/layout/Layout'
+import { PrivyClientProvider } from '@components/PrivyClientProvider'
 import { cache } from '@emotion/css'
 import { CacheProvider } from '@emotion/react'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
@@ -65,9 +66,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider chains={chains}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <PrivyClientProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </PrivyClientProvider>
           </RainbowKitProvider>
         </WagmiConfig>
 

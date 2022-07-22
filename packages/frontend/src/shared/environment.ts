@@ -13,4 +13,9 @@ export const env = {
     hardhat: process.env.NEXT_PUBLIC_RPC_HARDHAT!,
     mumbai: process.env.NEXT_PUBLIC_RPC_MUMBAI!,
   },
+
+  privy: {
+    apiKey: process.env.NEXT_PUBLIC_PRIVY_API_KEY!,
+    apiSecret: process.env.PRIVY_API_SECRET,
+  },
 }
