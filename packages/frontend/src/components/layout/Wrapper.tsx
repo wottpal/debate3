@@ -1,7 +1,7 @@
 import tw, { styled } from 'twin.macro'
 
 export const Wrapper = styled.div({
-  ...tw`relative mx-auto w-full max-w-[1200px] px-4 py-4 sm:(px-8 py-6) lg:py-8`,
+  ...tw`relative mx-auto w-full max-w-[1100px] px-4 py-4 sm:(px-8 py-6) lg:py-8`,
   variants: {
     noVerticalPadding: {
       true: tw`py-0!`,

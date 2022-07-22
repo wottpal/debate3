@@ -1,5 +1,5 @@
 import '@nomicfoundation/hardhat-toolbox'
-import '@nomiclabs/hardhat-vyper'
+// import '@nomiclabs/hardhat-vyper'
 import * as dotenv from 'dotenv'
 import { HardhatUserConfig } from 'hardhat/config'
 import * as ethers from 'ethers'
@@ -77,7 +77,7 @@ module.exports = {
       ],
       chainId: 100,
     },
-  
+
     polygonMumbai: {
       url: `${process.env.MUMBAI_PROVIDER_URL}`,
       accounts: [
@@ -94,7 +94,7 @@ module.exports = {
       ],
       chainId: 137,
     },
-     Ceramic: {
+    Ceramic: {
       url: `${process.env.CERAMIC_PROVIDER_URL}`,
       accounts: [
         process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],

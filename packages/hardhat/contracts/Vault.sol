@@ -1,28 +1,44 @@
 pragma solidity ^0.8.9;
 
 import "./Forum.sol";
+import "./Membership.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import '@openzeppelin/contracts/access/Ownable.sol';
+import "hardhat/console.sol";
 
-contract Vault {
 
-    address public immutable owner;
-    address internal immutable forumTemplate;
+contract Vault is Ownable{
+
+    using SafeMath for uint256;
+    using Counters for Counters.Counter;
+
+    Counters.Counter public forumCounter;
+    address[] public MembershipAddresses;
+    address[] public forumAddresses;
+    string[] public nftURIs;
+    //moderators can have up to 3 forums
+    uint256 private maxNumberOfForums;
 
     event ForumCreated ( address );
+    
 
-    constructor(address _forumTemplate){
-        owner = msg.sender;
-        forumTemplate = _forumTemplate;
-    }
-
-    function createForum (string memory _ForumDetails , address[] memory _moderators, string memory _NFTMetadata) external {
+    function createForum (string memory name , address[] memory _moderators, string memory tokenURI) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
-        address[] memory moderators = new address[](len + 1);
-        for(uint256 i = 0 ;i < len - 1;i++){
-            moderators[i] = _moderators[i];
+        address[] memory moderators = new address[](len+1);
+        for(uint256 i = 1 ;i < len + 1;i++){
+            moderators[i] = _moderators[i-1];
         }
-        moderators[len-1] = msg.sender;
-        Forum _newForum = Forum(_createClone(forumTemplate));
+        moderators[0] = msg.sender;
+        // contracts are created
+        Membership _newMembership = new Membership(name, name);
+        Forum _newForum = new Forum(moderators,address(_newMembership),tokenURI);
+        MembershipAddresses.push(address(_newMembership));
+        forumAddresses.push(address(_newForum));
+        nftURIs.push(tokenURI);
+        _newMembership.transferOwnership(address(_newForum));
+        forumCounter.increment();
         emit ForumCreated(address(_newForum));
     }
 
