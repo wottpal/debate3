@@ -47,7 +47,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
       {openCommentModal && (
         <div className="modal-dim" onClick={() => setOpenCommentModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="close-modal-btn" onClick={() => setOpenCommentModal(false)}>
+            <div className="close-comments-btn" onClick={() => setOpenCommentModal(false)}>
               <XIcon className="h-5 w-5" aria-hidden="true" />
             </div>
           </div>

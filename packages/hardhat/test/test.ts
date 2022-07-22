@@ -2,6 +2,7 @@ import { time, loadFixture } from '@nomicfoundation/hardhat-network-helpers'
 import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs'
 import { expect } from 'chai'
 import { ethers } from 'hardhat'
+import { formatUnits, parseEther, parseUnits } from 'ethers/lib/utils'
 
 describe('Test', function () {
   // We define a fixture to reuse the same setup in every test.
@@ -11,11 +12,18 @@ describe('Test', function () {
   async function baseFixture() {
     const [sDeployer, mehdi, peter, ykc, carlos, user1, user2, user3, user4] =
       await ethers.getSigners()
+    const units = parseUnits('100', 18)
 
     const cfVault = await ethers.getContractFactory('Vault')
-    const cVault = await cfVault.deploy()
+    const cVault = await cfVault.deploy(units)
 
-    return { cVault, sDeployer, mehdi, peter, ykc, carlos, user1, user2, user3, user4 }
+    const cfBadges = await ethers.getContractFactory('Badges')
+    const cBadges = await cfBadges.deploy()
+
+    await cVault['setBadgesAddr'](cBadges.address)
+    await cBadges['transferOwnership'](cVault.address)
+
+    return { cVault, sDeployer, cBadges, mehdi, peter, ykc, carlos, user1, user2, user3, user4 }
   }
 
   it('can create forums', async function () {
@@ -108,6 +116,95 @@ describe('Test', function () {
     await cMyForum.connect(peter)['revokeMembership']([ykc.address])
     const newBalance2 = await cMembership['balanceOf'](ykc.address)
     expect(newBalance2).to.equal(0)
+  })
+
+  it('can deploy up to 3 forums', async function () {
+    const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial5')
+    const forumBalance = await cVault['getForumsForAddress'](peter.address)
+    // console.log(forumBalance);
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial5')
+    const forumBalance2 = await cVault['getForumsForAddress'](peter.address)
+    // console.log(forumBalance2);
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial5')
+    const forumBalance3 = await cVault['getForumsForAddress'](peter.address)
+    // console.log(forumBalance3);
+    await expect(
+      cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial5')
+    ).to.be.revertedWith('One of the addresses have reached the maximum limit of 3')
+  })
+
+  it('can give badges', async function () {
+    const { cVault, cBadges, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseEther('10'),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+
+    const balanceBronze = await cBadges['balanceOf'](ykc.address, 0)
+    expect(balanceBronze).to.equal(parseEther('10'))
+  })
+
+  it('cant give more badges than max', async function () {
+    const { cVault, cBadges, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+    const initialBalance = await cVault['initialBalanceOfBadges']()
+    await expect(
+      cVault
+        .connect(carlos)
+        ['giveBronze'](
+          ykc.address,
+          parseUnits('102', 18),
+          (
+            await cVault['getForumsForAddress'](carlos.address)
+          )[0]
+        )
+    ).to.be.revertedWith('this forum has no balance until next month')
+  })
+
+  it('cant give more badges than max', async function () {
+    const { cVault, cBadges, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+    const initialBalance = await cVault['initialBalanceOfBadges']()
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseUnits('50', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveSilver'](
+        ykc.address,
+        parseUnits('10', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await expect(
+      cVault
+        .connect(carlos)
+        ['giveGold'](
+          ykc.address,
+          parseUnits('11', 18),
+          (
+            await cVault['getForumsForAddress'](carlos.address)
+          )[0]
+        )
+    ).to.be.revertedWith('this forum has no balance until next month')
   })
 
   // describe('Deployment', function () {

@@ -12,6 +12,9 @@ export const env = {
   rpc: {
     hardhat: process.env.NEXT_PUBLIC_RPC_HARDHAT!,
     mumbai: process.env.NEXT_PUBLIC_RPC_MUMBAI!,
+    sokol: process.env.NEXT_PUBLIC_RPC_SOKOL!,
+    cronosTestnet: process.env.NEXT_PUBLIC_RPC_CRONOS_TESTNET!,
+    celoTestnet: process.env.NEXT_PUBLIC_RPC_CELO_TESTNET!,
   },
 
   privy: {

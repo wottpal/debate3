@@ -4,7 +4,7 @@ import { OrbisProvider } from '@components/OrbisProvider'
 import { PrivyClientProvider } from '@components/PrivyClientProvider'
 import { cache } from '@emotion/css'
 import { CacheProvider } from '@emotion/react'
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { lightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import { env } from '@shared/environment'
 import { chains, wagmiClient } from '@shared/wagmiClient'
@@ -15,6 +15,7 @@ import Head from 'next/head'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import { Toaster } from 'react-hot-toast'
+import { theme } from 'twin.macro'
 import { WagmiConfig } from 'wagmi'
 import '../styles/css/forum.css'
 import '../styles/css/main.css'
@@ -72,7 +73,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <GlobalStyles />
 
         <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider chains={chains}>
+          <RainbowKitProvider
+            chains={chains}
+            theme={lightTheme({
+              accentColor: theme`colors.brandblue`,
+              borderRadius: 'medium',
+            })}
+          >
             <PrivyClientProvider>
               <OrbisProvider>
                 <ChakraProvider>
@@ -85,7 +92,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           </RainbowKitProvider>
         </WagmiConfig>
 
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            style: {
+              fontWeight: '600',
+            },
+          }}
+        />
       </CacheProvider>
     </>
   )
