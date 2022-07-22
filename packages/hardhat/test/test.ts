@@ -7,21 +7,6 @@ describe('Test', function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshopt in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60
-    const ONE_GWEI = 1_000_000_000
-
-    const lockedAmount = ONE_GWEI
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS
-
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners()
-
-    const Lock = await ethers.getContractFactory('Lock')
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount })
-
-    return { lock, unlockTime, lockedAmount, owner, otherAccount }
-  }
 
   async function baseFixture() {
     const [sDeployer, mehdi, peter, ykc, carlos, user1, user2, user3, user4] =
@@ -36,7 +21,7 @@ describe('Test', function () {
   it('can create forums', async function () {
     const { cVault, carlos, peter } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial1')
     const numberOfForums = await cVault['forumCounter']()
 
     expect(numberOfForums).to.equal(BigInt('1'))
@@ -45,7 +30,7 @@ describe('Test', function () {
   it('can mint nfts', async function () {
     const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial2')
     const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
     const cMembership = await ethers.getContractAt(
       'Membership',
@@ -64,7 +49,7 @@ describe('Test', function () {
   it('other moderators can mint', async function () {
     const { cVault, carlos, ykc, peter, user1, user2 } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort2', [peter.address, ykc.address])
+    await cVault.connect(carlos)['createForum']('Cohort2', [peter.address, ykc.address], 'trial3')
     const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
     const cMembership = await ethers.getContractAt(
       'Membership',
@@ -91,7 +76,7 @@ describe('Test', function () {
   it('non moderator cannot mint', async function () {
     const { cVault, carlos, ykc, peter, mehdi } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial4')
     const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
     const cMembership = await ethers.getContractAt(
       'Membership',
@@ -100,6 +85,29 @@ describe('Test', function () {
     await expect(
       cMyForum.connect(ykc)['provideMembership']([mehdi.address], ['normal'])
     ).to.be.revertedWith('Caller is not allowed to mint')
+  })
+
+  it('can revoke memberships', async function () {
+    const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial5')
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    const oldBalance = await cMembership['balanceOf'](ykc.address)
+    await cMyForum.connect(carlos)['provideMembership']([ykc.address], ['normal'])
+    const newBalance = await cMembership['balanceOf'](ykc.address)
+    const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](ykc.address, 0)
+    const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
+
+    expect(newBalance - oldBalance).to.equal(1)
+    expect(URI).to.equal('normal')
+
+    await cMyForum.connect(peter)['revokeMembership']([ykc.address])
+    const newBalance2 = await cMembership['balanceOf'](ykc.address)
+    expect(newBalance2).to.equal(0)
   })
 
   // describe('Deployment', function () {

@@ -15,6 +15,7 @@ contract Membership is ERC721, ERC721Enumerable, ERC721URIStorage, IERC1155Recei
     Counters.Counter private _tokenIds;
 
     constructor (string memory name , string memory symbol) ERC721 (name,symbol) {
+
     }
 
     function initialize() onlyOwner external {
@@ -30,7 +31,16 @@ contract Membership is ERC721, ERC721Enumerable, ERC721URIStorage, IERC1155Recei
             _mint(users[i], id);
             _setTokenURI(id,tokenURIs[i]);
         }
-    }   
+    } 
+    function revokeMembership(address [] memory users) external {
+        uint256 len = users.length;
+        for(uint256 i = 0; i<len; i++){
+            require(balanceOf(users[i]) > 0, "user doesnt have membership");
+            _tokenIds.decrement();
+            uint256 id = tokenOfOwnerByIndex(users[i], 0);
+            _burn(id);
+        }
+    }  
     function _beforeTokenTransfer(
         address from,
         address to,

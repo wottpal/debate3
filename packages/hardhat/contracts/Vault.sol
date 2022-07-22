@@ -16,9 +16,14 @@ contract Vault is Ownable{
     Counters.Counter public forumCounter;
     address[] public MembershipAddresses;
     address[] public forumAddresses;
-    event ForumCreated ( address );
+    string[] public nftURIs;
+    //moderators can have up to 3 forums
+    uint256 private maxNumberOfForums;
 
-    function createForum (string memory name , address[] memory _moderators) external {
+    event ForumCreated ( address );
+    
+
+    function createForum (string memory name , address[] memory _moderators, string memory tokenURI) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
         address[] memory moderators = new address[](len+1);
@@ -28,9 +33,10 @@ contract Vault is Ownable{
         moderators[0] = msg.sender;
         // contracts are created
         Membership _newMembership = new Membership(name, name);
-        Forum _newForum = new Forum(moderators,address(_newMembership));
+        Forum _newForum = new Forum(moderators,address(_newMembership),tokenURI);
         MembershipAddresses.push(address(_newMembership));
         forumAddresses.push(address(_newForum));
+        nftURIs.push(tokenURI);
         _newMembership.transferOwnership(address(_newForum));
         forumCounter.increment();
         emit ForumCreated(address(_newForum));
