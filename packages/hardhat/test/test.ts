@@ -3,7 +3,7 @@ import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs'
 import { expect } from 'chai'
 import { ethers } from 'hardhat'
 
-describe('Lock', function () {
+describe('Test', function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshopt in every test.
@@ -24,17 +24,30 @@ describe('Lock', function () {
   }
 
   async function baseFixture() {
+    const [sDeployer, mehdi, peter, ykc, carlos, user1, user2, user3, user4] =
+      await ethers.getSigners()
+
     const cfVault = await ethers.getContractFactory('Vault')
     const cVault = await cfVault.deploy()
-    return { cVault }
+
+    return { cVault, sDeployer, mehdi, peter, ykc, carlos, user1, user2, user3, user4 }
   }
 
-  describe('Vault', async function () {
-    const { cVault } = await loadFixture(baseFixture)
+  it('can create forums', async function () {
+    const { cVault, carlos, peter } = await loadFixture(baseFixture)
 
-    // it('Can deploy DAOs from contract', async function () {
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    const numberOfForums = await cVault['forumCounter']()
 
-    // })
+    expect(numberOfForums).to.equal(BigInt('1'))
+  })
+
+  it('mint nfts for many', async function () {
+    const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address])
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    await cMyForum.connect(carlos)['provideMembership']([ykc.address], ['normal'])
   })
 
   // describe('Deployment', function () {

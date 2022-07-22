@@ -1,20 +1,22 @@
 pragma solidity ^0.8.9;
 
 import "./Forum.sol";
+import "./Membership.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import '@openzeppelin/contracts/access/Ownable.sol';
 
-contract Vault {
+contract Vault is Ownable{
 
-    address public immutable owner;
-    address internal immutable forumTemplate;
+    using SafeMath for uint256;
+    using Counters for Counters.Counter;
 
+    Counters.Counter public forumCounter;
+    address[] public MembershipAddresses;
+    address[] public forumAddresses;
     event ForumCreated ( address );
 
-    constructor(address _forumTemplate){
-        owner = msg.sender;
-        forumTemplate = _forumTemplate;
-    }
-
-    function createForum (string memory _ForumDetails , address[] memory _moderators, string memory _NFTMetadata) external {
+    function createForum (string memory name , address[] memory _moderators) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
         address[] memory moderators = new address[](len + 1);
@@ -22,7 +24,13 @@ contract Vault {
             moderators[i] = _moderators[i];
         }
         moderators[len-1] = msg.sender;
-        Forum _newForum = Forum(_createClone(forumTemplate));
+        // contracts are created
+        Membership _newMembership = new Membership(name, name);
+        Forum _newForum = new Forum(moderators,address(_newMembership));
+        MembershipAddresses.push(address(_newMembership));
+        forumAddresses.push(address(_newForum));
+        _newMembership.transferOwnership(address(_newForum));
+        forumCounter.increment();
         emit ForumCreated(address(_newForum));
     }
 
