@@ -74,12 +74,14 @@ SUPPORTED_INTERFACES: constant(bytes4[2]) = [
     0x80ac58cd,
 ]
 
+
 @external
 def __init__():
     """
     @dev Contract constructor.
     """
     self.minter = msg.sender
+    
 
 
 @pure
@@ -356,3 +358,14 @@ def burn(_tokenId: uint256):
     self._clearApproval(owner, _tokenId)
     self._removeTokenFrom(owner, _tokenId)
     log Transfer(owner, ZERO_ADDRESS, _tokenId)
+
+
+# @external 
+# def create_from_blueprint(BLUEPRINT: address, name: String[10], symbol: uint256, code_offset: uint256) -> address:
+    
+
+
+# @external
+# def create_new_erc721Membership(name: String[32], symbol: String[32]) -> bool:
+#     membership: address = create_from_blueprint(BLUEPRINT, name, symbol, code_offset=3)
+#     mint(membership, 2)
