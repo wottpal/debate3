@@ -396,4 +396,23 @@ describe('Test', function () {
     // expect(contributors[0][1]).to.equal(mehdi.address)
     // expect(contributors[0][2]).to.equal(user1.address)
   })
+
+  it('can mint nfts with empty array', async function () {
+    const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial2')
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    const oldBalance = await cMembership['balanceOf'](ykc.address)
+    await cMyForum.connect(carlos)['provideMembership']([ykc.address], [])
+    const newBalance = await cMembership['balanceOf'](ykc.address)
+    const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](ykc.address, 0)
+    const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
+
+    expect(newBalance - oldBalance).to.equal(1)
+    expect(URI).to.equal('trial2')
+  })
 })
