@@ -1,5 +1,5 @@
 /* eslint-disable */
-const colors = require('tailwindcss/colors')
+// const colors = require('tailwindcss/colors')
 
 module.exports = {
   content: [`./src/pages/**/*.{js,ts,jsx,tsx}`, `./src/components/**/*.{js,ts,jsx,tsx}`],
@@ -27,7 +27,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
+    // require('@tailwindcss/aspect-ratio'),
     // require('@tailwindcss/forms'),
     // require('@tailwindcss/line-clamp'),
   ],

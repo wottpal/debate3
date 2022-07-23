@@ -1,12 +1,22 @@
 import { Button } from '@chakra-ui/react'
 import { Wrapper } from '@components/layout/Wrapper'
-import type { NextPage } from 'next'
+import { Forum } from '@models/Forum.model'
+import { AllForumsProps, getAllForums } from '@shared/getAllForums'
+import type { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import 'twin.macro'
 import cronosImg from '/src/public/partners/cronos.svg'
 
-const HomePage: NextPage = () => {
+interface HomePageProps extends AllForumsProps {}
+export default function HomePage({ forumsData }: HomePageProps) {
+  const [allForums, setAllForums] = useState<Forum[]>([])
+  useEffect(() => {
+    const forums = (forumsData || []).map((f) => Forum.fromObject(f)).filter(Boolean) as Forum[]
+    setAllForums(forums)
+  }, forumsData)
+
   return (
     <>
       {/* Navbar */}
@@ -86,6 +96,17 @@ const HomePage: NextPage = () => {
         </div>
       </Wrapper>
 
+      {/* All Forums */}
+      {/* TODO */}
+      <Wrapper>
+        <p tw="font-bold text-xl tracking-tight mb-8">List of all Forums:</p>
+        <div tw="flex flex-col space-y-4">
+          {allForums.map((f) => (
+            <div key={f.forumAddress}>Forum Name: {f.forumName}</div>
+          ))}
+        </div>
+      </Wrapper>
+
       {/* Footer */}
       <Wrapper>
         <nav tw="flex items-center justify-center whitespace-pre-wrap mt-16">
@@ -102,4 +123,4 @@ const HomePage: NextPage = () => {
   )
 }
 
-export default HomePage
+export const getServerSideProps: GetServerSideProps = getAllForums

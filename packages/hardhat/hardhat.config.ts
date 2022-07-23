@@ -1,7 +1,6 @@
 import '@nomicfoundation/hardhat-toolbox'
 // import '@nomiclabs/hardhat-vyper'
 import '@nomiclabs/hardhat-etherscan'
-import '@nomiclabs/hardhat-waffle'
 import '@openzeppelin/hardhat-upgrades'
 import * as ethers from 'ethers'
 import 'hardhat-contract-sizer'

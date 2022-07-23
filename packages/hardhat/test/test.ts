@@ -207,6 +207,121 @@ describe('Test', function () {
     ).to.be.revertedWith('this forum has no balance until next month')
   })
 
+  it('badges update user score', async function () {
+    const { cVault, cBadges, carlos, ykc, peter } = await loadFixture(baseFixture)
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseUnits('10', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveSilver'](
+        ykc.address,
+        parseUnits('20', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+
+    const cForum = await ethers.getContractAt(
+      'Forum',
+      (
+        await cVault['getForumsForAddress'](carlos.address)
+      )[0]
+    )
+
+    const balance = await cForum['contributionScore'](ykc.address)
+
+    // console.log(balance.toString());
+    expect(balance).to.equal(parseUnits('250', 18))
+  })
+
+  it('user can claim upgrade', async function () {
+    const { cVault, cBadges, carlos, ykc, peter } = await loadFixture(baseFixture)
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseUnits('5', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveSilver'](
+        ykc.address,
+        parseUnits('5', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault.connect(ykc)['claimUpgrade'](0, 1)
+    await cVault.connect(ykc)['claimUpgrade'](1, 2)
+
+    const balance0 = await cBadges['balanceOf'](ykc.address, 0)
+    const balance1 = await cBadges['balanceOf'](ykc.address, 1)
+    const balance2 = await cBadges['balanceOf'](ykc.address, 2)
+
+    expect(balance0).to.equal(parseUnits('0', 18))
+    expect(balance1).to.equal(parseUnits('1', 18))
+    expect(balance2).to.equal(parseUnits('1', 18))
+  })
+
+  it('can track contributors list and scores', async function () {
+    const { cVault, cBadges, carlos, ykc, peter, mehdi, user1 } = await loadFixture(baseFixture)
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseUnits('1', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        mehdi.address,
+        parseUnits('2', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        user1.address,
+        parseUnits('3', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+
+    const cForum = await ethers.getContractAt(
+      'Forum',
+      (
+        await cVault['getForumsForAddress'](carlos.address)
+      )[0]
+    )
+
+    const contributors = await cForum['getContributors']()
+    expect(contributors[0][0]).to.equal(ykc.address)
+    expect(contributors[0][1]).to.equal(mehdi.address)
+    expect(contributors[0][2]).to.equal(user1.address)
+  })
+
   // describe('Deployment', function () {
   //   it('Should set the right unlockTime', async function () {
   //     const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture)

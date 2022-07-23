@@ -1,6 +1,7 @@
 import Vault from '@artifacts/contracts/Vault.sol/Vault.json'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Button, FormControl, FormHelperText, FormLabel, IconButton, Input } from '@chakra-ui/react'
+import { Confetti } from '@components/Confetti'
 import { CenterBody } from '@components/layout/CenterBody'
 import { Wrapper } from '@components/layout/Wrapper'
 import { usePrivyClientContext } from '@components/PrivyClientProvider'
@@ -12,6 +13,7 @@ import { ethers } from 'ethers'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { NFTStorage } from 'nft.storage'
 import { useEffect, useState } from 'react'
 import Dropzone from 'react-dropzone'
@@ -30,9 +32,11 @@ const SetupPage: NextPage = () => {
   const form = useForm({
     mode: 'onChange',
   })
+
   const forumName = form.watch('forumName')
   const [isLoading, setIsLoading] = useState(false)
-  const { address } = useAccount()
+  const [isSuccess, setIsSuccess] = useState(false)
+  const router = useRouter()
   const { isValid, errors } = form.formState
   const [privyAuthenticated, setPrivyAuthenticated] = useState(false)
   const { client, session } = usePrivyClientContext()
@@ -45,6 +49,7 @@ const SetupPage: NextPage = () => {
   } = useFieldArray({ control: form.control, name: 'moderators' })
   const { contracts, contractsChainId } = useContracts()
   const { data: signer } = useSigner()
+  const { address } = useAccount()
 
   // set default form value
   useEffect(() => {
@@ -58,10 +63,22 @@ const SetupPage: NextPage = () => {
     }
   }, [session])
 
+  // listens on file-drops
+  const onFileDrop = async (files: File[]) => {
+    const file = files?.[0]
+    if (!file || !file.type.startsWith('image')) return
+    setLogoImage(file)
+    setLogoImagePreviewUri(URL.createObjectURL(file))
+  }
+
   // call contract and save privy data
   const createForum = async () => {
     if (!isValid || !logoImage || !signer) return
     setIsLoading(true)
+    setIsSuccess(false)
+
+    const forumSlug = slugify(forumName, { lower: true, strict: true })
+    const forumModerators = (form.getValues('moderators') || []).filter(Boolean) as string[]
 
     try {
       // 0. Authenticate with Privy if not done so
@@ -71,27 +88,20 @@ const SetupPage: NextPage = () => {
       }
 
       // 1. Mint Logo NFT
-      // const logoImageBuffer = await logoImage.arrayBuffer()
-      const nft = {
+      const nftStorageClient = new NFTStorage({ token: env.nftStorageApiKey })
+      const nftMetadata = await nftStorageClient.store({
         image: logoImage,
         name: forumName,
         description: 'Access-token for Debate3.xyz DAO forum',
-      }
-
-      const nftStorageClient = new NFTStorage({ token: env.nftStorageApiKey })
-      const metadata = await nftStorageClient.store(nft)
-      toast('Minted Logo as NFT successfully')
-      console.log({ metadata })
+      })
+      toast.success('Logo-NFT minted successfully')
+      console.log({ nftMetadata })
 
       // 2. Mint Contract(s)
       const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
       let receipt
       try {
-        const tsx = await contract.createForum(
-          forumName,
-          ['0xbDA5747bFD65F08deb54cb465eB87D40e51B197E'],
-          metadata.url
-        )
+        const tsx = await contract.createForum(forumName, forumModerators, nftMetadata.url)
         receipt = await tsx.wait()
       } catch (e) {
         console.error(e)
@@ -100,11 +110,9 @@ const SetupPage: NextPage = () => {
         (e: any) => e.event === 'ForumCreated'
       ) as ForumCreatedEvent
       const forumAddress = event.args[0]
-      console.log('ForumCreated', event, forumAddress)
 
       // 3. Save Form Content to Privy
-      const forumSlug = slugify(forumName, { lower: true, strict: true })
-      const [updatedName, updatedSlug] = await client.put(address, [
+      const privyData = [
         {
           field: 'forum-name',
           value: forumName,
@@ -113,24 +121,35 @@ const SetupPage: NextPage = () => {
           field: 'forum-slug',
           value: forumSlug,
         },
-      ])
-      console.log({
-        updatedName: updatedName.text(),
-        updatedSlug: updatedSlug.text(),
-      })
+        {
+          field: 'forum-address',
+          value: forumAddress,
+        },
+        {
+          field: 'forum-chain',
+          value: contractsChainId,
+        },
+        {
+          field: 'forum-logo-uri',
+          value: nftMetadata.url,
+        },
+      ]
+      console.log({ privyData })
+      await client.put(address, privyData)
+
+      // SUCCESS – Confetti & Forward to Forum
+      setIsSuccess(true)
+      toast.success('Forum created successfully. Forwarding…')
+      setTimeout(() => {
+        router.push(`/forum/${forumSlug}`)
+      }, 1500)
+    } catch (e) {
+      console.error('Error while creating forum:', e)
+      toast.error('There was an error while creating the forum. Please try again!')
     } finally {
       setIsLoading(false)
     }
   }
-
-  const onFileDrop = async (files: File[]) => {
-    const file = files?.[0]
-    if (!file || !file.type.startsWith('image')) return
-    console.log('file.type', file.type)
-    setLogoImage(file)
-    setLogoImagePreviewUri(URL.createObjectURL(file))
-  }
-
   // const readForumAddresses = async () => {
   //   if (!signer || !address) return
   //   const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
@@ -143,7 +162,7 @@ const SetupPage: NextPage = () => {
   //   console.log({ addresses })
   // }
 
-  if (isSsr) return null
+  // if (isSsr) return null
 
   return (
     <>
@@ -160,21 +179,23 @@ const SetupPage: NextPage = () => {
                 </Link>
                 <p tw="text-gray-600 text-lg mt-1 mb-3">Setup your new forum ✨</p>
               </div>
-              <div>{address && !isSsr && <ConnectButton showBalance={false} />}</div>
+              {!isSsr && <div>{address && <ConnectButton showBalance={false} />}</div>}
             </div>
 
             {/* Body */}
             <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg p-5 bg-white shadow-2xl shadow-gray-200">
-              {/* Authentication with Privy */}
-              {!address && (
+              {/* Wallet Authentication */}
+              {!address && !isSsr && (
                 <div tw="flex flex-col items-center justify-center h-full">
                   <Image src={welcomeImg} alt="Welcome" width="250px" height="250px"></Image>
-                  <div tw="mt-10">{!isSsr && <ConnectButton label="Connect your Wallet" />}</div>
+                  <div tw="mt-10">
+                    <ConnectButton label="Connect your Wallet" />
+                  </div>
                 </div>
               )}
 
               {/* Setup Form */}
-              {address && (
+              {address && !isSsr && (
                 <>
                   <FormControl tw="flex flex-col grow">
                     <div tw="flex space-x-5">
@@ -288,6 +309,7 @@ const SetupPage: NextPage = () => {
             </main>
           </div>
         </Wrapper>
+        {isSuccess && <Confetti />}
       </CenterBody>
     </>
   )

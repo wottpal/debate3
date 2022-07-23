@@ -8,6 +8,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import '@openzeppelin/contracts/access/Ownable.sol';
 import "hardhat/console.sol";
 
+interface IForum {
+    function addContribution(address user, uint256 score) external;
+    function isModerator(address user) external view returns (bool);
+}
+
 
 contract Vault is Ownable{
 
@@ -50,7 +55,7 @@ contract Vault is Ownable{
         initialBalanceOfBadges = _initialBalanceOfBadges;
     }
 
-    function createForum (string memory name , address[] memory _moderators, string memory tokenURI) external {
+    function createForum(string memory name , address[] memory _moderators, string memory tokenURI) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
         address[] memory moderators = new address[](len+1);
@@ -93,20 +98,28 @@ contract Vault is Ownable{
         IBadges(BadgesAddr).mint(user, 0, qty);
         // require(balanceOfForum[forum] > qty * 1);
         balanceOfForum[forum] = balanceOfForum[forum]-(qty * 1);
-
+        require(IForum(forum).isModerator(msg.sender),"caller is not a moderator of this forum");
+        IForum(forum).addContribution(user, 5*qty);
 
     }
     function giveSilver (address user,uint256 qty, address forum) isModerator hasBalance(forum, qty*2) external {
         IBadges(BadgesAddr).mint(user, 1, qty);
         // require(balanceOfForum[forum] > qty * 2);
         balanceOfForum[forum] = balanceOfForum[forum]-(qty * 2);
+        IForum(forum).addContribution(user, 10*qty);
 
     }
     function giveGold (address user,uint256 qty, address forum ) isModerator hasBalance(forum, qty*3)  external{
         IBadges(BadgesAddr).mint(user, 2, qty);
         // require(balanceOfForum[forum] > qty * 3);
         balanceOfForum[forum] = balanceOfForum[forum]-(qty * 3);
+        IForum(forum).addContribution(user, 15*qty);
 
+    }
+    function claimUpgrade(uint256 from_id, uint256 to_id) external {
+        require(to_id == from_id + 1, "can only upgrade one level up");
+        require(IBadges(BadgesAddr).balanceOf(msg.sender,from_id) > 5,"User doesnt have enough badges to upgrade");
+        IBadges(BadgesAddr).upgrade(from_id, to_id, msg.sender);
     }
 
     function _createClone(address target) internal returns (address result) {

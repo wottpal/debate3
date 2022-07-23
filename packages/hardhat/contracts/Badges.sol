@@ -24,4 +24,8 @@ contract Badges is ERC1155, Ownable {
   function mint(address receiver, uint256 id, uint256 amount) onlyOwner external {
     _mint(receiver, id, amount, '');
   }
+  function upgrade(uint256 from_id, uint256 to_id, address _from) onlyOwner external {
+    _burn(_from, from_id, 5 * 10 ** 18);
+    _mint(_from, to_id, 1 * 10 ** 18, '');
+  }
 }

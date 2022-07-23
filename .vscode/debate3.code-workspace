@@ -11,6 +11,10 @@
     {
       "name": "Hardhat",
       "path": "../packages/hardhat"
+    },
+    {
+      "name": "Truffle",
+      "path": "../packages/truffle"
     }
   ],
   "settings": {

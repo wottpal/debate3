@@ -1,24 +1,11 @@
+import { useOrbisContext } from '@components/OrbisProvider'
+import { ChatAltIcon, PaperClipIcon, XIcon } from '@heroicons/react/outline'
 import { Forum } from '@models/Forum.model'
 import { PrivyClient } from '@privy-io/privy-node'
 import { env } from '@shared/environment'
 import type { GetServerSideProps } from 'next'
+import { FC, MouseEvent, useEffect, useState, SetStateAction } from 'react'
 import 'twin.macro'
-import {
-  FC,
-  PropsWithChildren,
-  Fragment,
-  useEffect,
-  useState,
-  MouseEvent,
-  SetStateAction,
-} from 'react'
-import { useOrbisContext } from '@components/OrbisProvider'
-import {
-  EmojiHappyIcon as EmojiHappyIconOutline,
-  PaperClipIcon,
-  ChatAltIcon,
-  XIcon,
-} from '@heroicons/react/outline'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -40,6 +27,18 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   useEffect(() => {
     loadPosts()
   }, [orbis])
+
+  useEffect(() => {
+    const loadComments = async () => {
+      setLoading(true)
+      if (selectedDebateId) {
+        const { data } = await orbis.getPosts({ context: selectedDebateId })
+        setComments(data)
+        setLoading(false)
+      }
+    }
+    loadComments()
+  }, [selectedDebateId])
 
   async function loadPosts() {
     setLoading(true)
@@ -69,14 +68,6 @@ export default function ForumPage({ forumData }: ForumPageProps) {
     setOpenCommentModal(true)
     setSelectedDebateContent(debate)
     setSelectedDebateId(id)
-    if (selectedDebateId && orbis) {
-      const { data } = await orbis.getPosts({ context: selectedDebateId })
-      console.log(data)
-      console.log(orbis)
-      if (data && orbis) {
-        setComments(data)
-      }
-    }
   }
 
   if (!forum) return null
@@ -335,13 +326,18 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // Fetch all forums / deployer users
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const client = new PrivyClient(env.privy.apiKey, env.privy.apiSecret!)
-  const { next_cursor_id, users } = await client.getBatch(['forum-name', 'forum-slug'], {
-    limit: 50,
-  })
+  const { next_cursor_id, users } = await client.getBatch(
+    ['forum-name', 'forum-slug', 'forum-address', 'forum-chain', 'forum-logo-uri'],
+    {
+      limit: 50,
+    }
+  )
 
+  console.log({ users })
   const forums = (users || [])
     .map((u) => Forum.fromPrivyInstance(u) || null)
     .filter(Boolean) as Forum[]
+  console.log({ forums })
 
   const forum = forums.find((f) => f.forumSlug === slug)
   if (!forum) return { notFound: true }
