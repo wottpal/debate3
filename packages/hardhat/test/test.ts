@@ -419,12 +419,7 @@ describe('Test', function () {
   it('provide membership', async function () {
     const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
 
-    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial2')
-    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
-    const cMembership = await ethers.getContractAt(
-      'Membership',
-      await cVault['MembershipAddresses'](0)
-    )
+    await cVault.connect(carlos)['createForum']('Cohort1', [], 'trial2')
     const cForum = await ethers.getContractAt(
       'Forum',
       (
@@ -434,7 +429,7 @@ describe('Test', function () {
 
     const isAllowed = await cForum.connect(ykc)['allowedForCaller']()
     expect(isAllowed).to.equal(false)
-    await cMyForum.connect(carlos)['provideMembership']([ykc.address], [])
+    await cForum.connect(carlos)['provideMembership']([ykc.address], [])
     const isAllowedNew = await cForum.connect(ykc)['allowedForCaller']()
     expect(isAllowedNew).to.equal(true)
     // const newBalance = await cMembership['balanceOf'](ykc.address)
