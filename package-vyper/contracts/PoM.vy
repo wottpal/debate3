@@ -115,14 +115,18 @@ def tokenURI(tokenId: uint256) -> String[66]:
 def adding(x: uint256, y: uint256) -> uint256:
     return unsafe_add(x, y)
 
+
 # @dev Minting the NFT as proof of Membership 
+# We are creating an incrementation with the adding function 
+# This incrementation returns a currentTokenId 
 @external
-def provideMembership(users: address[10], tokenURIs: String[100], _tokenId: uint256):
+def provideMembership(users: DynArray[address, 100], tokenURIs: String[100], _tokenId: uint256, ids: DynArray[uint256, 100]):
+    assert len(users) == len(ids)
     assert msg.sender == self.owner
-    for i in range(11):
+    for i in range(10):
+        Incrementation: uint256 = self.adding(_tokenId, 1)
         self.mint(users[i], _tokenId)
-        self.adding(_tokenId, 1)
-    self.tokenURI(_tokenId)
+        self.tokenURI(Incrementation)
 
 
 @internal
