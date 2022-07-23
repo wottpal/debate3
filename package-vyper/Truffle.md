@@ -25,10 +25,10 @@
 
 1. In the ``` truffle-config.js ``` use this template : 
 
-const HDWalletProvider = require('@truffle/hdwallet-provider');
+``` const HDWalletProvider = require('@truffle/hdwallet-provider');
 require("dotenv").config();
 
-``` module.exports = {
+module.exports = {
     //contracts_directory : "./contracts",
     networks: {
       development: {
