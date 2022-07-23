@@ -47,7 +47,7 @@ module.exports = {
 ``` 
 ## Deployed contracts on Goerli : 
 
-------- USING ``` truffle migrate --network goerli ``` ---------- 
+### Truflle usage 1 :   ``` truffle migrate --network goerli ``` :
 
 #### Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
 
@@ -56,5 +56,15 @@ module.exports = {
 #### Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x853fcAEDff1650F8FC2E9810BC22B055F167d921)
 
 
+### Truffle usage 2 :
+
+1. run : ``` truffle dashboard ```
+2. Open on your browser : ``` http://localhost:24012/ ``` 
+3. run : ``` truffle migrate --network dashboard ``` 
+
+
+#### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0x5420Ad5a0D61312f9DC531810E7961ea2643A36C)
+#### Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0x882cb75E2f4391E835Ecb998e8c5901F70E89A0F)
+#### Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x1fdB4294da88B9F9bAc1D7B109ACa8b1B89CF429)
 
 
