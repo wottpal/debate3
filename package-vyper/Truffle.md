@@ -64,11 +64,12 @@ module.exports = {
 2. open on your browser : ``` http://localhost:24012/ ``` 
 3. Add on the ``` truffle-config.js ``` : 
 
-``` dashboard: {
+``` 
+dashboard: {
         host: "localhost",
         port: 24012,
-      } 
- ``` 
+      }
+```
 
 4. run : ``` truffle migrate --network dashboard ``` 
 
