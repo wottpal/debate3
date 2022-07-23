@@ -14,6 +14,8 @@ import polygonImg from '/src/public/partners/polygon.svg'
 import orbisImg from '/src/public/partners/orbis.svg'
 import vyperImg from '/src/public/partners/vyper.svg'
 import truffleImg from '/src/public/partners/truffle.svg'
+import infuraImg from '/src/public/partners/infura.svg'
+import privyImg from '/src/public/partners/privy.svg'
 import background from '/src/public/bg/landing_bg.svg'
 import neonImg from '/src/public/partners/neon.svg'
 import { LockClosedIcon, RefreshIcon, BadgeCheckIcon } from '@heroicons/react/outline'
@@ -65,7 +67,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
       {/* Hero */}
       <div tw="flex flex-col justify-center items-center text-center mt-28">
         <h1 tw="mx-auto max-w-4xl font-display font-semibold text-6xl leading-[1.2] tracking-tight text-slate-900 z-10">
-          <span tw="relative whitespace-nowrap text-brandblue">
+          <span tw="relative whitespace-nowrap" style={{ color: '#2F43FF' }}>
             <svg
               aria-hidden="true"
               viewBox="0 0 418 42"
@@ -87,7 +89,12 @@ export default function HomePage({ forumsData }: HomePageProps) {
           inbuilt reputation system and moderation.
         </p>
         <Link href="/setup" prefetch={true} passHref>
-          <Button tw="mt-10" colorScheme="facebook" variant="solid" size="lg">
+          <Button
+            tw="mt-10"
+            variant="solid"
+            size="lg"
+            style={{ backgroundColor: '#2F43FF', color: 'white' }}
+          >
             Create a Forum
           </Button>
         </Link>
@@ -129,6 +136,13 @@ export default function HomePage({ forumsData }: HomePageProps) {
               <Image src={polygonImg} width={150} height={75} alt="Polygon" />
             </a>
             <a
+              href="https://www.privy.io/"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+            >
+              <Image src={privyImg} width={150} height={75} alt="Privy" />
+            </a>
+            <a
               href="https://orbis.club/"
               target="_blank"
               tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
@@ -138,23 +152,30 @@ export default function HomePage({ forumsData }: HomePageProps) {
             <a
               href="https://vyper.readthedocs.io/en/stable/toctree.html#"
               target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
             >
               <Image src={vyperImg} width={100} height={75} alt="Vyper" />
             </a>
             <a
               href="https://trufflesuite.com/"
               target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) "
             >
               <Image src={truffleImg} width={100} height={75} alt="Truffle" />
             </a>
             <a
               href="https://neon-labs.org/"
               target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
             >
               <Image src={neonImg} width={150} height={75} alt="Neon" />
+            </a>
+            <a
+              href="https://infura.io/"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+            >
+              <Image src={infuraImg} width={150} height={75} alt="Infura" />
             </a>
           </div>
         </div>
@@ -179,7 +200,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
                         <div>
                           <span
                             tw="inline-flex items-center justify-center rounded-md p-3 shadow-lg"
-                            style={{ backgroundColor: '#385897' }}
+                            style={{ backgroundColor: '#2F43FF' }}
                           >
                             <feature.icon tw="h-6 w-6 text-white" aria-hidden="true" />
                           </span>
@@ -216,7 +237,12 @@ export default function HomePage({ forumsData }: HomePageProps) {
                   <p onClick={() => console.log(f)} tw="text-2xl font-bold mt-4">
                     {f.forumName}
                   </p>
-                  <button className="join-forum">Join</button>
+                  <button
+                    style={{ backgroundColor: '#2F43FF', color: 'white' }}
+                    className="join-forum"
+                  >
+                    Join
+                  </button>
                 </div>
               </a>
             ))}
