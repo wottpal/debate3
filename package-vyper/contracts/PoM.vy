@@ -1,20 +1,17 @@
 # --------------------------------- Usable with Version 0.3.3 ---------------------------------
 
 # @dev Implementation of a Proof Of Membership for access to a Forum 
-# by menting an NFT : ERC721 
+# by minting an NFT ERC721 
 
 
 # @dev Address of minter, who can mint a token 
 minter: address
-
 
 MembershipAddresses : public(address[10]) 
 forumAddresses : public(address[10])
 owner: public(address)
 baseURI: public(String[56]) 
 TokenId: immutable(uint256)
-
-
 
 # --------------------------------- Mappings ---------------------------------------------------
 # @dev Mapping from owner address to count of his tokens.
@@ -23,6 +20,13 @@ ownerToNFTokenCount: HashMap[address, uint256]
 
 # @dev Mapping from NFT ID to the address that owns it.
 idToOwner: HashMap[uint256, address]
+
+
+# @dev Mapping from owner address to mapping of operator addresses.
+ownerToOperators: HashMap[address, HashMap[address, bool]]
+
+# @dev Mapping from NFT ID to approved address.
+idToApprovals: HashMap[uint256, address]
 
 # @dev This emits when the Forum is created
 event ForumCreated:
@@ -38,8 +42,6 @@ event Transfer:
 
 
 #Constructor
-
-
 @external 
 def __init__(_tokenId: uint256):
     TokenId = _tokenId 
@@ -75,8 +77,6 @@ def mint(_to: address, _tokenId: uint256) -> bool:
     self._addTokenTo(_to, _tokenId)
     log Transfer(ZERO_ADDRESS, _to, _tokenId)
     return True
-
-# Minting the NFT as proof of Membership 
 
 
 @pure                                            
@@ -115,6 +115,7 @@ def tokenURI(tokenId: uint256) -> String[66]:
 def adding(x: uint256, y: uint256) -> uint256:
     return unsafe_add(x, y)
 
+# @dev Minting the NFT as proof of Membership 
 @external
 def provideMembership(users: address[10], tokenURIs: String[100], _tokenId: uint256):
     assert msg.sender == self.owner
@@ -124,5 +125,83 @@ def provideMembership(users: address[10], tokenURIs: String[100], _tokenId: uint
     self.tokenURI(_tokenId)
 
 
+@internal
+def _removeTokenFrom(_from: address, _tokenId: uint256):
+    """
+    @dev Remove a NFT from a given address
+         Throws if `_from` is not the current owner.
+    """
+    # Throws if `_from` is not the current owner
+    assert self.idToOwner[_tokenId] == _from
+    # Change the owner
+    self.idToOwner[_tokenId] = ZERO_ADDRESS
+    # Change count tracking
+    self.ownerToNFTokenCount[_from] -= 1
+
+
+
+@internal
+def _clearApproval(_owner: address, _tokenId: uint256):
+    """
+    @dev Clear an approval of a given address
+         Throws if `_owner` is not the current owner.
+    """
+    # Throws if `_owner` is not the current owner
+    assert self.idToOwner[_tokenId] == _owner
+    if self.idToApprovals[_tokenId] != ZERO_ADDRESS:
+        # Reset approvals
+        self.idToApprovals[_tokenId] = ZERO_ADDRESS
+
+@view
+@internal
+def balanceOf(_owner: address) -> uint256:
+    """
+    @dev Returns the number of NFTs owned by `_owner`.
+         Throws if `_owner` is the zero address. NFTs assigned to the zero address are considered invalid.
+    @param _owner Address for whom to query the balance.
+    """
+    assert _owner != ZERO_ADDRESS
+    return self.ownerToNFTokenCount[_owner]
+
+@view
+@internal
+def _isApprovedOrOwner(_spender: address, _tokenId: uint256) -> bool:
+    """
+    @dev Returns whether the given spender can transfer a given token ID
+    @param spender address of the spender to query
+    @param tokenId uint256 ID of the token to be transferred
+    @return bool whether the msg.sender is approved for the given token ID,
+        is an operator of the owner, or is the owner of the token
+    """
+    owner: address = self.idToOwner[_tokenId]
+    spenderIsOwner: bool = owner == _spender
+    spenderIsApproved: bool = _spender == self.idToApprovals[_tokenId]
+    spenderIsApprovedForAll: bool = (self.ownerToOperators[owner])[_spender]
+    return (spenderIsOwner or spenderIsApproved) or spenderIsApprovedForAll
+
+@internal
+def burn(_tokenId: uint256):
+    """
+    @dev Burns a specific ERC721 token.
+         Throws unless `msg.sender` is the current owner, an authorized operator, or the approved
+         address for this NFT.
+         Throws if `_tokenId` is not a valid NFT.
+    @param _tokenId uint256 id of the ERC721 token to be burned.
+    """
+    # Check requirements
+    assert self._isApprovedOrOwner(msg.sender, _tokenId)
+    owner: address = self.idToOwner[_tokenId]
+    # Throws if `_tokenId` is not a valid NFT
+    assert owner != ZERO_ADDRESS
+    self._clearApproval(owner, _tokenId)
+    self._removeTokenFrom(owner, _tokenId)
+    log Transfer(owner, ZERO_ADDRESS, _tokenId)
+
+
+@external 
+def revokeMembership(users: address[10], _tokenId: uint256):
+    for i in range(11):
+        assert self.balanceOf(users[i]) >= 1
+        self.burn(_tokenId)
 
 
