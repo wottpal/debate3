@@ -15,6 +15,7 @@ export const env = {
     sokol: process.env.NEXT_PUBLIC_RPC_SOKOL!,
     cronosTestnet: process.env.NEXT_PUBLIC_RPC_CRONOS_TESTNET!,
     celoTestnet: process.env.NEXT_PUBLIC_RPC_CELO_TESTNET!,
+    neonTestnet: process.env.NEXT_PUBLIC_RPC_NEON_TESTNET!,
   },
 
   privy: {

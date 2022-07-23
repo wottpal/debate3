@@ -1,8 +1,7 @@
 import '@nomicfoundation/hardhat-toolbox'
-import { ethers, getNamedAccounts } from 'hardhat'
+import { parseUnits } from 'ethers/lib/utils'
+import { ethers } from 'hardhat'
 import { saveFrontendAddressFiles } from '../shared/saveFrontendAddressFiles'
-import { formatUnits, parseEther, parseUnits } from 'ethers/lib/utils'
-import { deploy } from '@openzeppelin/hardhat-upgrades/dist/utils'
 
 async function main() {
   // const {deployerAddr, governorAddr} = await getNamedAccounts();

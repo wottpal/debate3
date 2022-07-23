@@ -59,6 +59,23 @@ const customChains: Chain[] = [
     },
     testnet: true,
   },
+  {
+    id: 245022926,
+    network: 'neon_testnet',
+    name: 'Neon Testnet',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'NEON',
+      symbol: 'NEON',
+    },
+    rpcUrls: {
+      default: 'https://proxy.devnet.neonlabs.org/solana',
+    },
+    blockExplorers: {
+      default: { name: 'Neon', url: 'https://devnet.explorer.neon-labs.org' },
+    },
+    testnet: true,
+  },
 ]
 
 /**
@@ -73,6 +90,7 @@ export const rpcsByChainId: {
   [77]: env.rpc.sokol,
   [338]: env.rpc.cronosTestnet,
   [44787]: env.rpc.celoTestnet,
+  [245022926]: env.rpc.neonTestnet,
 }
 
 export const defaultChain: Chain = [...allChains, ...customChains].filter(

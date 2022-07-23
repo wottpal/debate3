@@ -2,6 +2,7 @@ import '@nomicfoundation/hardhat-toolbox'
 // import '@nomiclabs/hardhat-vyper'
 import '@nomiclabs/hardhat-etherscan'
 import '@openzeppelin/hardhat-upgrades'
+import * as dotenv from 'dotenv'
 import * as ethers from 'ethers'
 import 'hardhat-contract-sizer'
 import 'hardhat-deploy'
@@ -9,7 +10,7 @@ import 'hardhat-deploy-ethers'
 import 'hardhat-gas-reporter'
 import path from 'path'
 import 'solidity-coverage'
-// require("dotenv").config();
+dotenv.config()
 
 const mnemonic = 'replace hover unaware super where filter stone fine garlic address matrix basic'
 
@@ -49,69 +50,29 @@ module.exports = {
       chainId: 1337,
       timeout: 6000000,
     },
-    mainnet: {
-      url: `${process.env.MAINNET_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 1,
-    },
-    cronosTestnet: {
-      url: `${process.env.CRONOS_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 338,
-    },
-    celo: {
-      url: `${process.env.CELO_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 42220,
-    },
-    gnosisChain: {
-      url: `${process.env.GNOSISCHAIN_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 100,
-    },
-
     polygonMumbai: {
-      url: `${process.env.MUMBAI_PROVIDER_URL}`,
-      accounts: [
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[2],
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[1],
-      ],
+      url: `${process.env.RPC_MUMBAI}`,
+      accounts: [...(process.env.PRIVATE_KEY_01 ? [`${process.env.PRIVATE_KEY_01}`] : [])],
       chainId: 80001,
     },
-    polygon: {
-      url: `${process.env.POLYGON_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 137,
+    cronosTestnet: {
+      url: `${process.env.RPC_CRONOS_TESTNET}`,
+      accounts: [...(process.env.PRIVATE_KEY_01 ? [`${process.env.PRIVATE_KEY_01}`] : [])],
+      chainId: 338,
     },
-    Ceramic: {
-      url: `${process.env.CERAMIC_PROVIDER_URL}`,
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
-      chainId: 0,
+    sokol: {
+      url: `${process.env.RPC_SOKOL}`,
+      accounts: [...(process.env.PRIVATE_KEY_01 ? [`${process.env.PRIVATE_KEY_01}`] : [])],
+      chainId: 77,
     },
-    nenonDevnet: {
-      url: `${process.env.NEONDEVNET_PROVIDER_URL}`, //https://proxy.devnet.neonlabs.org/solana
-      accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
-      ],
+    celoTestnet: {
+      url: `${process.env.CELO_TESTNET}`,
+      accounts: [...(process.env.PRIVATE_KEY_01 ? [`${process.env.PRIVATE_KEY_01}`] : [])],
+      chainId: 44787,
+    },
+    neonTestnet: {
+      url: `${process.env.NEON_TESTNET}`,
+      accounts: [...(process.env.PRIVATE_KEY_01 ? [`${process.env.PRIVATE_KEY_01}`] : [])],
       chainId: 245022926,
     },
   },
