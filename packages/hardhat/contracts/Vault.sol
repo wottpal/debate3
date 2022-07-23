@@ -50,7 +50,7 @@ contract Vault is Ownable{
         initialBalanceOfBadges = _initialBalanceOfBadges;
     }
 
-    function createForum (string memory name , address[] memory _moderators, string memory tokenURI) external {
+    function createForum(string memory name , address[] memory _moderators, string memory tokenURI) external {
         // address[] memory moderators = _moderators;
         uint256 len = _moderators.length;
         address[] memory moderators = new address[](len+1);

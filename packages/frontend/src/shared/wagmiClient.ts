@@ -96,8 +96,8 @@ export const { chains, provider } = configureChains(
   ]
 )
 
-const { connectors } = getDefaultWallets({
-  appName: 'TODO',
+export const { connectors } = getDefaultWallets({
+  appName: 'Debate3.xyz',
   chains,
 })
 
