@@ -16,7 +16,8 @@
 
 `truffle compile / migrate`
 
----
+------
+
 
 ### Vyper ABI & Bytecode :
 
@@ -27,3 +28,7 @@
 Output : `ABI ; BYTECODE`
 
 2. Create in the `dir` a file `X.json` and fill it with : ` {[ ABI, BYTECODE ]}`
+
+------------------------------------------------------------------------------------------------------
+
+### How to use the ERC721 & ERC1155 contracts on Vyper 
