@@ -19,32 +19,62 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrVal
 
 export interface VaultInterface extends utils.Interface {
   functions: {
+    'BadgesAddr()': FunctionFragment
     'MembershipAddresses(uint256)': FunctionFragment
+    'addressForumCounter(address)': FunctionFragment
+    'balanceOfForum(address)': FunctionFragment
     'createForum(string,address[],string)': FunctionFragment
     'forumAddresses(uint256)': FunctionFragment
     'forumCounter()': FunctionFragment
+    'forumsOfAddress(address,uint256)': FunctionFragment
+    'getForumsForAddress(address)': FunctionFragment
+    'giveBronze(address,uint256,address)': FunctionFragment
+    'giveGold(address,uint256,address)': FunctionFragment
+    'giveSilver(address,uint256,address)': FunctionFragment
+    'initialBalanceOfBadges()': FunctionFragment
+    'isForum(address)': FunctionFragment
+    'lastUpdated(address)': FunctionFragment
     'nftURIs(uint256)': FunctionFragment
     'owner()': FunctionFragment
     'renounceOwnership()': FunctionFragment
+    'setBadgesAddr(address)': FunctionFragment
     'transferOwnership(address)': FunctionFragment
   }
 
   getFunction(
     nameOrSignatureOrTopic:
+      | 'BadgesAddr'
       | 'MembershipAddresses'
+      | 'addressForumCounter'
+      | 'balanceOfForum'
       | 'createForum'
       | 'forumAddresses'
       | 'forumCounter'
+      | 'forumsOfAddress'
+      | 'getForumsForAddress'
+      | 'giveBronze'
+      | 'giveGold'
+      | 'giveSilver'
+      | 'initialBalanceOfBadges'
+      | 'isForum'
+      | 'lastUpdated'
       | 'nftURIs'
       | 'owner'
       | 'renounceOwnership'
+      | 'setBadgesAddr'
       | 'transferOwnership'
   ): FunctionFragment
 
+  encodeFunctionData(functionFragment: 'BadgesAddr', values?: undefined): string
   encodeFunctionData(
     functionFragment: 'MembershipAddresses',
     values: [PromiseOrValue<BigNumberish>]
   ): string
+  encodeFunctionData(
+    functionFragment: 'addressForumCounter',
+    values: [PromiseOrValue<string>]
+  ): string
+  encodeFunctionData(functionFragment: 'balanceOfForum', values: [PromiseOrValue<string>]): string
   encodeFunctionData(
     functionFragment: 'createForum',
     values: [PromiseOrValue<string>, PromiseOrValue<string>[], PromiseOrValue<string>]
@@ -54,21 +84,57 @@ export interface VaultInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string
   encodeFunctionData(functionFragment: 'forumCounter', values?: undefined): string
+  encodeFunctionData(
+    functionFragment: 'forumsOfAddress',
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string
+  encodeFunctionData(
+    functionFragment: 'getForumsForAddress',
+    values: [PromiseOrValue<string>]
+  ): string
+  encodeFunctionData(
+    functionFragment: 'giveBronze',
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string
+  encodeFunctionData(
+    functionFragment: 'giveGold',
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string
+  encodeFunctionData(
+    functionFragment: 'giveSilver',
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string
+  encodeFunctionData(functionFragment: 'initialBalanceOfBadges', values?: undefined): string
+  encodeFunctionData(functionFragment: 'isForum', values: [PromiseOrValue<string>]): string
+  encodeFunctionData(functionFragment: 'lastUpdated', values: [PromiseOrValue<string>]): string
   encodeFunctionData(functionFragment: 'nftURIs', values: [PromiseOrValue<BigNumberish>]): string
   encodeFunctionData(functionFragment: 'owner', values?: undefined): string
   encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string
+  encodeFunctionData(functionFragment: 'setBadgesAddr', values: [PromiseOrValue<string>]): string
   encodeFunctionData(
     functionFragment: 'transferOwnership',
     values: [PromiseOrValue<string>]
   ): string
 
+  decodeFunctionResult(functionFragment: 'BadgesAddr', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'MembershipAddresses', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'addressForumCounter', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'balanceOfForum', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'createForum', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'forumAddresses', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'forumCounter', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'forumsOfAddress', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'getForumsForAddress', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'giveBronze', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'giveGold', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'giveSilver', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'initialBalanceOfBadges', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'isForum', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'lastUpdated', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'nftURIs', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: 'setBadgesAddr', data: BytesLike): Result
   decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result
 
   events: {
@@ -123,10 +189,19 @@ export interface Vault extends BaseContract {
   removeListener: OnEvent<this>
 
   functions: {
+    BadgesAddr(overrides?: CallOverrides): Promise<[string]>
+
     MembershipAddresses(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>
+
+    addressForumCounter(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _value: BigNumber }>
+
+    balanceOfForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>
 
     createForum(
       name: PromiseOrValue<string>,
@@ -139,11 +214,54 @@ export interface Vault extends BaseContract {
 
     forumCounter(overrides?: CallOverrides): Promise<[BigNumber] & { _value: BigNumber }>
 
+    forumsOfAddress(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>
+
+    getForumsForAddress(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string]>
+
+    giveBronze(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>
+
+    giveGold(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>
+
+    giveSilver(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>
+
+    initialBalanceOfBadges(overrides?: CallOverrides): Promise<[BigNumber]>
+
+    isForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>
+
+    lastUpdated(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>
+
     nftURIs(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[string]>
 
     owner(overrides?: CallOverrides): Promise<[string]>
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>
+
+    setBadgesAddr(
+      _addr: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>
 
@@ -153,10 +271,16 @@ export interface Vault extends BaseContract {
     ): Promise<ContractTransaction>
   }
 
+  BadgesAddr(overrides?: CallOverrides): Promise<string>
+
   MembershipAddresses(
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>
+
+  addressForumCounter(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
+  balanceOfForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
 
   createForum(
     name: PromiseOrValue<string>,
@@ -169,11 +293,54 @@ export interface Vault extends BaseContract {
 
   forumCounter(overrides?: CallOverrides): Promise<BigNumber>
 
+  forumsOfAddress(
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>
+
+  getForumsForAddress(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<[string, string, string]>
+
+  giveBronze(
+    user: PromiseOrValue<string>,
+    qty: PromiseOrValue<BigNumberish>,
+    forum: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>
+
+  giveGold(
+    user: PromiseOrValue<string>,
+    qty: PromiseOrValue<BigNumberish>,
+    forum: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>
+
+  giveSilver(
+    user: PromiseOrValue<string>,
+    qty: PromiseOrValue<BigNumberish>,
+    forum: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>
+
+  initialBalanceOfBadges(overrides?: CallOverrides): Promise<BigNumber>
+
+  isForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>
+
+  lastUpdated(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
   nftURIs(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>
 
   owner(overrides?: CallOverrides): Promise<string>
 
   renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>
+
+  setBadgesAddr(
+    _addr: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>
 
@@ -183,10 +350,16 @@ export interface Vault extends BaseContract {
   ): Promise<ContractTransaction>
 
   callStatic: {
+    BadgesAddr(overrides?: CallOverrides): Promise<string>
+
     MembershipAddresses(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>
+
+    addressForumCounter(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
+    balanceOfForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
 
     createForum(
       name: PromiseOrValue<string>,
@@ -199,11 +372,51 @@ export interface Vault extends BaseContract {
 
     forumCounter(overrides?: CallOverrides): Promise<BigNumber>
 
+    forumsOfAddress(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>
+
+    getForumsForAddress(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string]>
+
+    giveBronze(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>
+
+    giveGold(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>
+
+    giveSilver(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>
+
+    initialBalanceOfBadges(overrides?: CallOverrides): Promise<BigNumber>
+
+    isForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>
+
+    lastUpdated(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
     nftURIs(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>
 
     owner(overrides?: CallOverrides): Promise<string>
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>
+
+    setBadgesAddr(_addr: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>
 
     transferOwnership(newOwner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>
   }
@@ -223,10 +436,16 @@ export interface Vault extends BaseContract {
   }
 
   estimateGas: {
+    BadgesAddr(overrides?: CallOverrides): Promise<BigNumber>
+
     MembershipAddresses(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>
+
+    addressForumCounter(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
+    balanceOfForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
 
     createForum(
       name: PromiseOrValue<string>,
@@ -242,11 +461,51 @@ export interface Vault extends BaseContract {
 
     forumCounter(overrides?: CallOverrides): Promise<BigNumber>
 
+    forumsOfAddress(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>
+
+    getForumsForAddress(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
+    giveBronze(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>
+
+    giveGold(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>
+
+    giveSilver(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>
+
+    initialBalanceOfBadges(overrides?: CallOverrides): Promise<BigNumber>
+
+    isForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
+    lastUpdated(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>
+
     nftURIs(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>
 
     owner(overrides?: CallOverrides): Promise<BigNumber>
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>
+
+    setBadgesAddr(
+      _addr: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
@@ -255,8 +514,20 @@ export interface Vault extends BaseContract {
   }
 
   populateTransaction: {
+    BadgesAddr(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
     MembershipAddresses(
       arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
+    addressForumCounter(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
+    balanceOfForum(
+      arg0: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>
 
@@ -274,6 +545,47 @@ export interface Vault extends BaseContract {
 
     forumCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
+    forumsOfAddress(
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
+    getForumsForAddress(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
+    giveBronze(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>
+
+    giveGold(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>
+
+    giveSilver(
+      user: PromiseOrValue<string>,
+      qty: PromiseOrValue<BigNumberish>,
+      forum: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>
+
+    initialBalanceOfBadges(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    isForum(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    lastUpdated(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>
+
     nftURIs(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -282,6 +594,11 @@ export interface Vault extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>
+
+    setBadgesAddr(
+      _addr: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>
 
