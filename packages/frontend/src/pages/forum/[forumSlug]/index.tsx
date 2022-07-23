@@ -1,5 +1,5 @@
 import Forum from '@artifacts/contracts/Forum.sol/Forum.json'
-import { ChatIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { ChatIcon, ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -12,10 +12,12 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  ModalHeader,
   Textarea,
 } from '@chakra-ui/react'
 import { BlockiesAvatar } from '@components/BlockiesAvatar'
 import { AwardBadgeDialog } from '@components/forum/AwardBadgeDialog'
+import { AwardsShowcase } from '@components/forum/AwardsShowcase'
 import { ProvideMembershipDialog } from '@components/forum/ProvideMembershipDialog'
 import { RevokeMembershipDialog } from '@components/forum/RevokeMembershipDialog'
 import { Wrapper } from '@components/layout/Wrapper'
@@ -31,7 +33,8 @@ import { ethers } from 'ethers'
 import type { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MouseEvent, SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { Forum as ForumType } from 'src/types/typechain'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
@@ -46,8 +49,6 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   const forum = ForumModel.fromObject(forumData)
   const [orbisUser, setOrbisUser] = useState()
   const [openCommentModal, setOpenCommentModal] = useState(false)
-  const [selectedDebateContent, setSelectedDebateContent] = useState('')
-  const [selectedDebateId, setSelectedDebateId] = useState('')
   const [loading, setLoading] = useState(false)
   const [posts, setPosts] = useState<any[]>([])
   const [comments, setComments] = useState<any[]>([])
@@ -58,8 +59,9 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   const [accessIsAllowed, setAccessIsAllowed] = useState(false)
   const [provideMembershipDialogIsOpen, setProvideMembershipDialogIsOpen] = useState(false)
   const [revokeMembershipDialogIsOpen, setRevokeMembershipDialogIsOpen] = useState(false)
-  const [awardBadgeDialogIsOpen, setAwardBadgeDialogIsOpen] = useState(false)
+  const [awardBadgeDialogData, setAwardBadgeDialogData] = useState<any>({ isOpen: false })
   const [nftLogoUrl, setNftLogoUrl] = useState<string | null>(null)
+  const [selectedPost, setSelectedPost] = useState<any>(null)
 
   // fetch nft logo
   useAsyncEffect(async () => {
@@ -108,15 +110,15 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   }, [signer, address, forum])
 
   // fetch orbis posts
-  async function loadPosts() {
-    setLoading(true)
+  const loadPosts = async () => {
     if (orbis) {
+      setLoading(true)
       const { data, error, status } = await orbis.getPosts({ context: forum?.forumName })
 
       if (data && orbis) {
         setPosts(data)
-        setLoading(false)
       }
+      setLoading(false)
     }
   }
   useEffect(() => {
@@ -137,24 +139,14 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   }
 
   // fetch orbis comments for selected comment
-  useEffect(() => {
-    const loadComments = async () => {
-      setLoading(true)
-      if (selectedDebateId) {
-        const { data } = await orbis.getPosts({ context: selectedDebateId })
-        setComments(data)
-        setLoading(false)
-      }
-    }
-    loadComments()
-  }, [selectedDebateId])
-
-  // open comment drawer
-  const openComments = async (debate: SetStateAction<string>, id: SetStateAction<string>) => {
-    setOpenCommentModal(true)
-    setSelectedDebateContent(debate)
-    setSelectedDebateId(id)
+  const refetchComments = async () => {
+    if (!selectedPost?.stream_id) return
+    const { data } = await orbis.getPosts({ context: selectedPost.stream_id })
+    setComments(data)
   }
+  useEffect(() => {
+    refetchComments()
+  }, [selectedPost])
 
   if (!forum) return null
   return (
@@ -162,7 +154,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
       <Wrapper tw="flex flex-col grow relative">
         <div tw="grow w-full flex flex-col my-20">
           {/* Top Bar */}
-          <div tw="flex justify-between items-center mb-4">
+          <div tw="flex justify-between items-center mb-5">
             {/* Logo & Name */}
             <div tw="flex items-center">
               {nftLogoUrl && (
@@ -253,7 +245,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
                       tw="w-[2.5rem] h-[2.5rem] shrink-0 mr-3 overflow-hidden rounded-full bg-gray-200"
                     />
                     <div tw="flex flex-col">
-                      <div tw="font-semibold">{post.content?.body}</div>
+                      <div tw="font-semibold break-all">{post.content?.body}</div>
                       <div
                         tw="text-sm text-gray-700"
                         title={post.creator_details?.metadata?.address}
@@ -263,14 +255,33 @@ export default function ForumPage({ forumData }: ForumPageProps) {
                           truncateHash(post.creator_details?.metadata?.address)}
                       </div>
                     </div>
-                    <Button
-                      leftIcon={<ChatIcon />}
-                      size="sm"
-                      onClick={() => openComments(post.content?.body, post.stream_id)}
-                      tw="ml-auto"
-                    >
-                      Full Thread
-                    </Button>
+
+                    <div tw="ml-auto space-x-2">
+                      {isModerator && (
+                        <Button
+                          leftIcon={<StarIcon />}
+                          size="sm"
+                          onClick={() => {
+                            setAwardBadgeDialogData({
+                              isOpen: true,
+                              address: post.creator_details?.metadata?.address,
+                            })
+                          }}
+                          colorScheme="yellow"
+                        >
+                          Award Badge
+                        </Button>
+                      )}
+                      <Button
+                        leftIcon={<ChatIcon />}
+                        size="sm"
+                        onClick={() => {
+                          setSelectedPost(post)
+                        }}
+                      >
+                        Full Thread
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -279,13 +290,16 @@ export default function ForumPage({ forumData }: ForumPageProps) {
 
           {/* Share new Post */}
           {accessIsAllowed && (
-            <div tw="mt-2 flex flex-col w-full border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
-              <Share
-                context={forum.forumName}
-                orbisUser={orbisUser}
-                connectOrbis={connectOrbis}
-                refetchPosts={loadPosts}
-              />
+            <div tw="mt-2 flex w-full space-x-2">
+              <div tw="grow w-2/3 flex flex-col border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
+                <Share
+                  context={forum.forumName}
+                  orbisUser={orbisUser}
+                  connectOrbis={connectOrbis}
+                  refetchPosts={loadPosts}
+                />
+              </div>
+              <AwardsShowcase forum={forum} />
             </div>
           )}
         </div>
@@ -293,44 +307,79 @@ export default function ForumPage({ forumData }: ForumPageProps) {
 
       {/* Thread Modal/Dialog */}
       <Drawer
-        isOpen={openCommentModal}
+        isOpen={!!selectedPost}
         onClose={() => {
-          setOpenCommentModal(false)
+          setSelectedPost(null)
         }}
         size="lg"
       >
         <DrawerOverlay />
         <DrawerContent>
-          {/* <ModalHeader>Post Details</ModalHeader> */}
+          <ModalHeader>
+            Full Thread
+            <p tw="text-sm text-gray-500">
+              Shared by{' '}
+              {selectedPost?.creator_details?.metadata?.ensName ||
+                truncateHash(selectedPost?.creator_details?.metadata?.address)}
+            </p>
+          </ModalHeader>
           <DrawerCloseButton />
-          <DrawerBody>
-            <div className="comments-debate">{selectedDebateContent}</div>
-            <div>
-              {comments.map((comment, key) => {
-                return (
-                  <div
-                    key={key}
-                    style={{ cursor: 'auto' }}
-                    className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container"
-                  >
-                    <div className="debate">
-                      <div tw="flex-shrink-0">
-                        {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
-                      </div>
-                      <div tw="flex-1 min-w-0">
-                        <div tw="focus:outline-none">
-                          <span tw="absolute inset-0" aria-hidden="true" />
-                          {/* <p><b>Shared by: {post.creator}</b></p> */}
-                          <p tw="text-sm text-gray-900 ">{comment.content?.body}</p>
+          {selectedPost && (
+            <DrawerBody>
+              <div tw="h-full grow flex flex-col">
+                <div tw="grow flex flex-col divide-y-2 divide-gray-200 -mx-5">
+                  {[selectedPost, ...comments].map((post, key) => (
+                    <div
+                      key={key}
+                      tw="flex items-center py-5 px-5 last:(border-b-2 border-gray-200) first:(border-t-2 border-gray-200)"
+                    >
+                      <BlockiesAvatar
+                        address={post.creator_details?.metadata?.address}
+                        tw="w-[2.5rem] h-[2.5rem] shrink-0 mr-3 overflow-hidden rounded-full bg-gray-200"
+                      />
+                      <div tw="flex flex-col">
+                        <div tw="font-semibold break-all">{post.content?.body}</div>
+                        <div
+                          tw="text-xs text-gray-500"
+                          title={post.creator_details?.metadata?.address}
+                        >
+                          Shared by{' '}
+                          {post.creator_details?.metadata?.ensName ||
+                            truncateHash(post.creator_details?.metadata?.address)}
                         </div>
                       </div>
+                      <div tw="ml-auto space-x-2">
+                        {isModerator && (
+                          <Button
+                            leftIcon={<StarIcon />}
+                            size="sm"
+                            onClick={() => {
+                              setAwardBadgeDialogData({
+                                isOpen: true,
+                                address: post.creator_details?.metadata?.address,
+                              })
+                            }}
+                            colorScheme="yellow"
+                          >
+                            Award Badge
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
-            <ShareComment context={selectedDebateId} />
-          </DrawerBody>
+                  ))}
+                </div>
+
+                <Share
+                  context={selectedPost?.stream_id}
+                  orbisUser={orbisUser}
+                  connectOrbis={connectOrbis}
+                  refetchPosts={() => {
+                    refetchComments()
+                  }}
+                />
+              </div>
+            </DrawerBody>
+          )}
         </DrawerContent>
       </Drawer>
 
@@ -350,19 +399,18 @@ export default function ForumPage({ forumData }: ForumPageProps) {
         forum={forum}
       />
       <AwardBadgeDialog
-        isOpen={awardBadgeDialogIsOpen}
         onClose={() => {
-          setAwardBadgeDialogIsOpen(false)
+          setAwardBadgeDialogData({ isOpen: false })
         }}
         forum={forum}
+        {...awardBadgeDialogData}
       />
     </>
   )
 }
 
-function Share({ context, orbisUser, connectOrbis, refetchPosts }: any) {
+function Share({ context, orbisUser, connectOrbis, refetchPosts, ...props }: any) {
   const [loading, setLoading] = useState(false)
-  const { address } = useAccount()
   const { orbis } = useOrbisContext()
   const [value, setValue] = useState('')
 
@@ -382,93 +430,27 @@ function Share({ context, orbisUser, connectOrbis, refetchPosts }: any) {
 
     if (res.status == 200) {
       console.log('Shared post with stream_id: ', res.doc)
+      toast.success('Successfully shared post!')
     } else {
       console.log('Error sharing post: ', res)
+      toast.error('Error while sharing posts. Please try again!')
       alert('Error sharing post.')
     }
 
-    await refetchPosts()
     setLoading(false)
     setValue('')
+    setTimeout(() => {
+      refetchPosts()
+    }, 1000)
   }
 
   return (
-    <div tw="flex items-start py-5 px-5">
-      {/* <BlockiesAvatar
-        address={address}
-        tw="w-[3rem] h-[3rem] shrink-0 mr-3 overflow-hidden rounded-full bg-gray-200"
-      /> */}
+    <div tw="flex items-start py-5 px-5" {...props}>
       <div tw="flex flex-col grow">
         <Textarea value={value} onChange={handleInputChange} rows={2} placeholder="gm world ☀️" />
         <Button onClick={share} tw="mt-2" size="sm" disabled={!value} isLoading={loading}>
           Share Post
         </Button>
-      </div>
-    </div>
-  )
-}
-
-function ShareComment({ context }: any) {
-  const [loading, setLoading] = useState(false)
-  const [text, setText] = useState<string>('')
-  const { orbis } = useOrbisContext()
-
-  async function share(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
-    e.preventDefault()
-    setLoading(true)
-    const res = await orbis.createPost({
-      body: text,
-      context: context,
-    })
-
-    if (res.status == 200) {
-      console.log('Shared post with stream_id: ', res.doc)
-    } else {
-      console.log('Error sharing post: ', res)
-      console.log(context)
-      alert('Error sharing post.')
-    }
-    setLoading(false)
-  }
-
-  return (
-    <div className="share-container comment-share-container" style={{ zIndex: '2' }}>
-      <div tw="flex items-start space-x-4">
-        <div tw="flex-shrink-0">
-          <img
-            tw="inline-block h-10 w-10 rounded-full"
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            alt=""
-          />
-        </div>
-        <div tw="min-w-0 flex-1">
-          <form action="#">
-            <div tw="border-b border-gray-200 focus-within:border-indigo-600">
-              <textarea
-                rows={3}
-                name="comment"
-                id="comment"
-                onChange={(e) => setText(e.target.value)}
-                value={text}
-                style={{ padding: '0.5rem', borderRadius: '10px' }}
-                tw="block w-full border-0 border-b border-transparent p-0 pb-2 resize-none focus:ring-0 focus:border-indigo-600 sm:text-sm"
-                placeholder="Comment..."
-                defaultValue={''}
-              />
-            </div>
-            <div className="new-debate-background" tw="pt-2 flex justify-between">
-              <div tw="flex-shrink-0">
-                <button
-                  type="submit"
-                  onClick={(e) => share(e)}
-                  tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Comment
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
   )

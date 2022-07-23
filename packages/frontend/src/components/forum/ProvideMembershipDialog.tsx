@@ -43,10 +43,11 @@ export const ProvideMembershipDialog: FC<ProvideMembershipDialogProps> = ({
     if (!signer || !address || !isValid) return
     setIsLoading(true)
 
-    const forumContract = new ethers.Contract(forum.address, Forum.abi, signer) as ForumType
     let receipt
     try {
-      const tsx = await forumContract.provideMembership([newMemberAddress], [])
+      const forumContract = new ethers.Contract(forum.forumAddress, Forum.abi, signer) as ForumType
+      const normalizedMemberAddress = ethers.utils.getAddress(newMemberAddress)
+      const tsx = await forumContract.provideMembership([normalizedMemberAddress], [])
       receipt = await tsx.wait()
     } catch (e) {
       console.error(e)

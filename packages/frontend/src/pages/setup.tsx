@@ -140,9 +140,7 @@ const SetupPage: NextPage = () => {
       // SUCCESS – Confetti & Forward to Forum
       setIsSuccess(true)
       toast.success('Forum created successfully. Forwarding…')
-      setTimeout(() => {
-        router.push(`/forum/${forumSlug}`)
-      }, 1500)
+      router.push(`/forum/${forumSlug}`)
     } catch (e) {
       console.error('Error while creating forum:', e)
       toast.error('There was an error while creating the forum. Please try again!')

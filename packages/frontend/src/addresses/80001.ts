@@ -1,0 +1,4 @@
+export const ContractAddresses_80001 = {
+  Vault: '0x5b6980E1Cd7195B245aC699528A99f4780C3E820',
+  cBadges: '0x9D1dCAa74F220b941f9b3048F8eAc854068648d7',
+}
