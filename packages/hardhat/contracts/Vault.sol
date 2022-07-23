@@ -11,6 +11,7 @@ import "hardhat/console.sol";
 interface IForum {
     function addContribution(address user, uint256 score) external;
     function isModerator(address user) external view returns (bool);
+    function updateScores() external;
 }
 
 
@@ -28,11 +29,13 @@ contract Vault is Ownable{
     uint256 private maxNumberOfForums = 3;
     uint256 public initialBalanceOfBadges;
     mapping (address => uint256) public balanceOfForum;
-    mapping (address => uint256) public lastUpdated;
+    mapping (address => uint256) public lastUpdatedBalance;
+    mapping (address => uint256) public lastUpdatedScores;
     mapping(address => mapping(uint256 => address)) public forumsOfAddress;
     mapping(address => Counters.Counter) public addressForumCounter;
     mapping(address => bool) public isForum;
-    uint256 updateThreshold = 2592000;
+    uint256 updateBalanceThreshold = 2592000; // one month
+    uint256 updateScoresThreshold = 86400; // one day
 
     event ForumCreated ( address );
 
@@ -42,8 +45,8 @@ contract Vault is Ownable{
     }
 
     modifier hasBalance(address forum, uint256 amount){
-        if(block.timestamp - lastUpdated[forum] > updateThreshold){
-            lastUpdated[forum] = block.timestamp;
+        if(block.timestamp - lastUpdatedBalance[forum] > updateBalanceThreshold){
+            lastUpdatedBalance[forum] = block.timestamp;
             balanceOfForum[forum] = initialBalanceOfBadges;
         }
         require(isForum[forum],"this is not a forum");
@@ -94,12 +97,30 @@ contract Vault is Ownable{
         return;
     }
 
+    function _needsUpdateScore(address _forum) view internal returns (bool){
+
+        if(lastUpdatedScores[_forum]==0) return false;
+        else{
+            if(block.timestamp - lastUpdatedScores[_forum] >= updateScoresThreshold){
+                return true;
+            }else{
+                return false;
+            }
+            
+        }
+    }
+
     function giveBronze (address user, uint256 qty, address forum) isModerator hasBalance(forum, qty) external {
         IBadges(BadgesAddr).mint(user, 0, qty);
         // require(balanceOfForum[forum] > qty * 1);
         balanceOfForum[forum] = balanceOfForum[forum]-(qty * 1);
         require(IForum(forum).isModerator(msg.sender),"caller is not a moderator of this forum");
         IForum(forum).addContribution(user, 5*qty);
+        // bool flagsUpdate = _needsUpdateScore(forum);
+        // if(flagsUpdate){
+        //     IForum(forum).updateScores();
+        //     lastUpdatedScores[forum] = block.timestamp;
+        // }
 
     }
     function giveSilver (address user,uint256 qty, address forum) isModerator hasBalance(forum, qty*2) external {
@@ -138,6 +159,7 @@ contract Vault is Ownable{
         return(forumsOfAddress[user][0],forumsOfAddress[user][1],forumsOfAddress[user][2]);
 
     }
+
 
     function setBadgesAddr(address _addr) onlyOwner external{
         BadgesAddr  = _addr;

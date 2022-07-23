@@ -1,6 +1,6 @@
 #Implementation of IPFS baseURI stored on IPFS + TokenId with Vyper Syntax 
 
-baseURI: public(String[56])  
+baseURI: public(String[56]) 
 
 @pure                                            
 @internal                                                         
@@ -32,3 +32,5 @@ def _tokenIdToString(tokenId: uint256) -> String[4]:
 @external                                                                                      
 def tokenURI(tokenId: uint256) -> String[66]:                                                       
     return concat(self.baseURI, "/", self._tokenIdToString(tokenId), ".json")  
+
+

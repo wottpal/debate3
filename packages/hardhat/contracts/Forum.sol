@@ -2,6 +2,7 @@ pragma solidity ^0.8.9;
 import './IMembership.sol';
 import "hardhat/console.sol";
 import '@openzeppelin/contracts/access/Ownable.sol';
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 
@@ -9,7 +10,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract Forum is Ownable{
 
     using Counters for Counters.Counter;
-
+    using SafeMath for uint256;
     uint256  public moderatorsCount;
     bool public initialized;
     address immutable membershipNFT;
@@ -17,7 +18,12 @@ contract Forum is Ownable{
     mapping (address => bool) _isModerator;
     mapping (address => uint256) public contributionScore;
     mapping (uint256 => address) public _contributorByIndex;
+    mapping (address => uint256) public lastInteractionUser;
     Counters.Counter public _contributorCounter;
+
+    uint256 public TWODAY = 172800; // 2 days
+    uint256 public DAY = 86400; // one day
+    uint256 public MONTH = TWODAY * 15; //one month
 
     modifier onlyModerator(){
         require(_isModerator[msg.sender],"Caller is not allowed to mint");
@@ -48,6 +54,7 @@ contract Forum is Ownable{
             _contributorCounter.increment();
             _contributorByIndex[currIdx] = user;
         }
+        lastInteractionUser[user] = block.timestamp;
         contributionScore[user] = contributionScore[user]+score;
     }
     function isModerator(address _moderator) external view returns(bool){
@@ -60,9 +67,31 @@ contract Forum is Ownable{
 
         for(uint256 i = 0; i < currIdx ; i++){
             users[i] = _contributorByIndex[i];
-            scores[i] = contributionScore[_contributorByIndex[i]];
+            scores[i] = getScore(_contributorByIndex[i]);
         }
         return(users,scores);
+    }
+    function getScore(address user) view public returns(uint256){
+        uint256 unweightedScore = contributionScore[user];
+        uint256 mulIndex;
+        if(block.timestamp - lastInteractionUser[user] < TWODAY ){
+            mulIndex = 10000;
+        }else if(block.timestamp - lastInteractionUser[user] > MONTH){
+            mulIndex = 0;
+        }else {
+            mulIndex = (block.timestamp - lastInteractionUser[user]).mul(10000);
+            mulIndex = (mulIndex.div(TWODAY).sub(10)).div(15);
+            mulIndex = 10000 - mulIndex;
+        }
+        // console.log('printing stamp',block.timestamp, mulIndex);
+        uint256 weightedScore = unweightedScore.mul(mulIndex).div(10000);
+        return weightedScore;
+    }
+    function dumyCall() external {
+    }
+    function allowedForCaller() external view returns(bool){
+        uint256 curr_balance = IMembership(membershipNFT).balanceOf(msg.sender);
+        return(curr_balance > 0 || _isModerator[msg.sender]);
     }
 
 }

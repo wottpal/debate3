@@ -32,17 +32,13 @@ body {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.315);
 }
 .landing-forum-card {
-  width: 25vw;
+  width: 17vw;
+  height: 20vw;
   margin: 1vw 2vw 0 2vw;
   padding: 0.7vw;
   border-radius: 10px;
   border: 2px rgb(234, 234, 234) solid;
-  box-shadow: 2px 2px 30px rgb(232, 232, 232);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  gap: 0px 0px;
-  grid-template-areas: 'forum-image forum-content';
+  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.14);
   transition: all 0.5s ease;
   cursor: pointer;
 }
@@ -52,7 +48,7 @@ body {
 .forum-image {
   grid-area: forum-image;
   border-radius: 5px;
-  width: 8vw;
+  width: 100%;
   height: 8vw;
 }
 .forum-content {
@@ -67,8 +63,8 @@ body {
   padding: 0.3vw 2.5vw 0.3vw 2.5vw;
   transition: all 0.5s ease;
   width: 10vw;
-  bottom: 4.4vw;
-  margin-left: 1vw;
+  bottom: 3.4vw;
+  margin-left: 5vw;
 }
 .join-forum:hover {
   transform: scale(1.05);

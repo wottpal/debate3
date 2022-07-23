@@ -201,9 +201,9 @@ export default function HomePage({ forumsData }: HomePageProps) {
       {/* All Forums */}
       {/* TODO */}
       <Wrapper>
-        <div tw="relative bg-white py-12 sm:py-16 lg:py-12">
+        <div tw="relative bg-white py-8 sm:py-16 lg:py-8">
           <h1 tw="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
-            Join a Forum
+            Join Forum Now
           </h1>
           <div className="forums-container">
             {allForums.map((f) => (
@@ -213,7 +213,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
                   className="forum-image"
                 ></img>
                 <div className="forum-content">
-                  <p onClick={() => console.log(f)} tw="text-2xl font-bold">
+                  <p onClick={() => console.log(f)} tw="text-2xl font-bold mt-4">
                     {f.forumName}
                   </p>
                   <button className="join-forum">Join</button>
