@@ -77,20 +77,21 @@ contract Forum is Ownable{
         if(block.timestamp - lastInteractionUser[user] < TWODAY ){
             mulIndex = 10000;
         }else if(block.timestamp - lastInteractionUser[user] > MONTH){
-            mulIndex = 1;
+            mulIndex = 0;
         }else {
             mulIndex = (block.timestamp - lastInteractionUser[user]).mul(10000);
-            mulIndex = mulIndex.div(TWODAY).div(15);
+            mulIndex = (mulIndex.div(TWODAY).sub(10)).div(15);
             mulIndex = 10000 - mulIndex;
         }
-        console.log('printing stamp',block.timestamp, mulIndex);
+        // console.log('printing stamp',block.timestamp, mulIndex);
         uint256 weightedScore = unweightedScore.mul(mulIndex).div(10000);
         return weightedScore;
     }
     function dumyCall() external {
     }
-    // function updateScores() onlyOwner external {
-
-    // }
+    function allowedForCaller() external view returns(bool){
+        uint256 curr_balance = IMembership(membershipNFT).balanceOf(msg.sender);
+        return(curr_balance > 0);
+    }
 
 }

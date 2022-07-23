@@ -343,10 +343,57 @@ describe('Test', function () {
     )
 
     const balance0 = await cForum['getScore'](ykc.address)
-    console.log(balance0.toString())
-    await ethers.provider.send('evm_increaseTime', [172800 * 14])
+    // console.log(balance0.toString())
+    await ethers.provider.send('evm_increaseTime', [172800 * 13])
     await cForum['dumyCall']()
     const balance1 = await cForum['getScore'](ykc.address)
-    console.log(balance1.toString())
+    // console.log(balance1.toString())
+  })
+  it('reads right uri', async function () {
+    const { cVault, cBadges, carlos, ykc, peter, mehdi, user1 } = await loadFixture(baseFixture)
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial6')
+
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        ykc.address,
+        parseUnits('1', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        mehdi.address,
+        parseUnits('2', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+    await cVault
+      .connect(carlos)
+      ['giveBronze'](
+        user1.address,
+        parseUnits('3', 18),
+        (
+          await cVault['getForumsForAddress'](carlos.address)
+        )[0]
+      )
+
+    const cForum = await ethers.getContractAt(
+      'Forum',
+      (
+        await cVault['getForumsForAddress'](carlos.address)
+      )[0]
+    )
+    const token_uri = await cBadges['uri'](1)
+
+    console.log(token_uri)
+
+    // const contributors = await cForum['getContributors']()
+    // expect(contributors[0][0]).to.equal(ykc.address)
+    // expect(contributors[0][1]).to.equal(mehdi.address)
+    // expect(contributors[0][2]).to.equal(user1.address)
   })
 })
