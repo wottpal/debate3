@@ -62,8 +62,15 @@ module.exports = {
 
 1. run : ``` truffle dashboard ```
 2. open on your browser : ``` http://localhost:24012/ ``` 
-3. run : ``` truffle migrate --network dashboard ``` 
+3. Add on the ``` truffle-config.js ``` : 
 
+``` dashboard: {
+        host: "localhost",
+        port: 24012,
+      } 
+ ``` 
+
+4. run : ``` truffle migrate --network dashboard ``` 
 
 #### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0x5420Ad5a0D61312f9DC531810E7961ea2643A36C)
 #### Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0x882cb75E2f4391E835Ecb998e8c5901F70E89A0F)
