@@ -41,8 +41,19 @@ contract Forum is Ownable{
     }
 
     function provideMembership(address[] memory users, string [] memory tokenURIs) onlyModerator external {
-        
-        IMembership(membershipNFT).provideMembership(users, tokenURIs);
+
+        uint256 lenOfUser = users.length;
+        string[] memory newURIs = new string[](lenOfUser);
+
+        if(tokenURIs.length == 0){
+            for(uint256 i=0;i<lenOfUser;i++){
+                newURIs[i] = baseURI;
+            }
+            IMembership(membershipNFT).provideMembership(users, newURIs);
+        }else{
+            IMembership(membershipNFT).provideMembership(users, tokenURIs);
+
+        }
     }
 
     function revokeMembership(address[] memory users) onlyModerator external  {
