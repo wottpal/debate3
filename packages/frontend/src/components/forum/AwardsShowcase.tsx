@@ -54,7 +54,7 @@ export const AwardsShowcase: FC<AwardsShowcaseProps> = ({ forum }) => {
 
   return (
     <>
-      <div tw="flex flex-col border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 p-4 overflow-hidden">
+      <div tw="flex flex-col border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 px-2 py-4 overflow-hidden">
         <div tw="grid grid-cols-4">
           <div tw="flex flex-col justify-center items-center">
             <div tw="shrink-0">
@@ -74,7 +74,7 @@ export const AwardsShowcase: FC<AwardsShowcaseProps> = ({ forum }) => {
             </div>
             <div tw="text-lg font-bold">{amountGoldAwards}</div>
           </div>
-          <div tw="flex flex-col items-center justify-center text-center border-l-2 border-gray-200">
+          <div tw="flex flex-col items-center justify-center text-center border-l-2 border-gray-200 pl-1">
             <div tw="font-bold text-2xl mb-1">{score}</div>
             <div tw="text-gray-600 text-sm">Reputation Score</div>
           </div>
