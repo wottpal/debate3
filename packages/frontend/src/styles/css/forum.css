@@ -2,17 +2,23 @@
   font-size: 4vw;
   font-weight: 900;
   position: fixed;
+  top: 0;
+  left: 2rem;
+  background-color: rgba(255, 255, 255, 0.211);
+  backdrop-filter: blur(5px);
+  width: 100%;
 }
 
 .posts-container {
   margin: 1.5rem 0 0 5rem;
   border-radius: 10px;
   width: 60rem;
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.219);
-  border: solid 2px rgb(232, 232, 232);
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.189);
+  border: solid 1px rgb(232, 232, 232);
 }
-.debates-container {
+.debates-feed {
   margin-top: 7.5rem;
+  padding-bottom: 15rem;
 }
 .debate {
   width: 100%;
@@ -20,14 +26,19 @@
   padding: 1rem;
   margin: 0;
 }
-
+.new-debate-background {
+  background-color: rgba(255, 255, 255, 0.097);
+  backdrop-filter: blur(15px);
+}
 .orbis-connect-btn {
-  width: 15rem;
   display: flex;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   bottom: 5rem;
-  left: 5rem;
+  right: 3.5rem;
+  width: 10rem;
+  cursor: pointer;
+  z-index: 100;
 }
 .forum-textarea {
   width: 40rem;
@@ -37,11 +48,14 @@
   border-radius: 15px;
 }
 .share-container {
-  display: flex;
-  position: absolute;
+  position: fixed;
   align-items: center;
-  bottom: 3rem;
-  left: 5rem;
+  bottom: 0;
+  left: 0;
+  width: 75vw;
+  padding: 1rem 5rem 1.5rem 6rem;
+  background-color: rgba(255, 255, 255, 0.097);
+  backdrop-filter: blur(15px);
 }
 .share-btn {
   width: 10rem;

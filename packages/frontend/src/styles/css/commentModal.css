@@ -1,0 +1,53 @@
+.modal-dim {
+  background-color: rgba(27, 23, 68, 0.136);
+  backdrop-filter: blur(3px);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  cursor: pointer;
+  position: fixed;
+}
+.modal {
+  margin-top: 7rem;
+  width: 85vw;
+  height: 60vh;
+  position: fixed;
+  z-index: 100;
+  left: 7.5vw;
+  overflow-y: scroll;
+  background-color: rgb(255, 255, 255);
+  border: 3px rgb(238, 238, 238) solid;
+  box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.25);
+  padding: 5vw;
+  border-radius: 15px;
+  cursor: auto;
+}
+.close-comments-btn {
+  position: fixed;
+  right: 14vw;
+  margin-top: -2vw;
+  border-radius: 50%;
+  background-color: #4749e0;
+  padding: 1.5vw;
+  color: white;
+  cursor: pointer;
+}
+@media screen and (min-width: 1200px) {
+  .modal {
+    width: 70vw;
+    height: 70vh;
+    left: 15vw;
+  }
+  .close-comments-btn {
+    right: 17vw;
+    margin-top: -4vw;
+    transition: all 0.5s ease;
+    padding: 1vw;
+  }
+  .close-comments-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.292);
+  }
+}
