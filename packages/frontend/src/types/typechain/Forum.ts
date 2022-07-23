@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -11,163 +12,642 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers'
-import type { FunctionFragment, Result } from '@ethersproject/abi'
-import type { Listener, Provider } from '@ethersproject/providers'
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common'
+} from "ethers";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
+  TypedListener,
+  OnEvent,
+  PromiseOrValue,
+} from "./common";
 
 export interface ForumInterface extends utils.Interface {
   functions: {
-    'baseURI()': FunctionFragment
-    'initialized()': FunctionFragment
-    'moderatorsCount()': FunctionFragment
-    'provideMembership(address[],string[])': FunctionFragment
-    'revokeMembership(address[])': FunctionFragment
-  }
+    "DAY()": FunctionFragment;
+    "MONTH()": FunctionFragment;
+    "TWODAY()": FunctionFragment;
+    "_contributorByIndex(uint256)": FunctionFragment;
+    "_contributorCounter()": FunctionFragment;
+    "addContribution(address,uint256)": FunctionFragment;
+    "allowedForCaller()": FunctionFragment;
+    "baseURI()": FunctionFragment;
+    "contributionScore(address)": FunctionFragment;
+    "dumyCall()": FunctionFragment;
+    "getContributors()": FunctionFragment;
+    "getScore(address)": FunctionFragment;
+    "initialized()": FunctionFragment;
+    "isModerator(address)": FunctionFragment;
+    "lastInteractionUser(address)": FunctionFragment;
+    "moderatorsCount()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "provideMembership(address[],string[])": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "revokeMembership(address[])": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+  };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'baseURI'
-      | 'initialized'
-      | 'moderatorsCount'
-      | 'provideMembership'
-      | 'revokeMembership'
-  ): FunctionFragment
+      | "DAY"
+      | "MONTH"
+      | "TWODAY"
+      | "_contributorByIndex"
+      | "_contributorCounter"
+      | "addContribution"
+      | "allowedForCaller"
+      | "baseURI"
+      | "contributionScore"
+      | "dumyCall"
+      | "getContributors"
+      | "getScore"
+      | "initialized"
+      | "isModerator"
+      | "lastInteractionUser"
+      | "moderatorsCount"
+      | "owner"
+      | "provideMembership"
+      | "renounceOwnership"
+      | "revokeMembership"
+      | "transferOwnership"
+  ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'baseURI', values?: undefined): string
-  encodeFunctionData(functionFragment: 'initialized', values?: undefined): string
-  encodeFunctionData(functionFragment: 'moderatorsCount', values?: undefined): string
+  encodeFunctionData(functionFragment: "DAY", values?: undefined): string;
+  encodeFunctionData(functionFragment: "MONTH", values?: undefined): string;
+  encodeFunctionData(functionFragment: "TWODAY", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'provideMembership',
+    functionFragment: "_contributorByIndex",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_contributorCounter",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addContribution",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allowedForCaller",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "contributionScore",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(functionFragment: "dumyCall", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getContributors",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getScore",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialized",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isModerator",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lastInteractionUser",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "moderatorsCount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "provideMembership",
     values: [PromiseOrValue<string>[], PromiseOrValue<string>[]]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'revokeMembership',
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeMembership",
     values: [PromiseOrValue<string>[]]
-  ): string
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'baseURI', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'initialized', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'moderatorsCount', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'provideMembership', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'revokeMembership', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "DAY", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "MONTH", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "TWODAY", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "_contributorByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_contributorCounter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addContribution",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "allowedForCaller",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "contributionScore",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "dumyCall", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getContributors",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "initialized",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isModerator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lastInteractionUser",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "moderatorsCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "provideMembership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "revokeMembership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
-  events: {}
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
 
-export interface Forum extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
 
-  interface: ForumInterface
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface Forum extends BaseContract {
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
+
+  interface: ForumInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
-  removeAllListeners<TEvent extends TypedEvent>(eventFilter: TypedEventFilter<TEvent>): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
+  removeAllListeners<TEvent extends TypedEvent>(
+    eventFilter: TypedEventFilter<TEvent>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
-    baseURI(overrides?: CallOverrides): Promise<[string]>
+    DAY(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    initialized(overrides?: CallOverrides): Promise<[boolean]>
+    MONTH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    moderatorsCount(overrides?: CallOverrides): Promise<[BigNumber]>
+    TWODAY(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    _contributorByIndex(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    _contributorCounter(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _value: BigNumber }>;
+
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    allowedForCaller(overrides?: CallOverrides): Promise<[boolean]>;
+
+    baseURI(overrides?: CallOverrides): Promise<[string]>;
+
+    contributionScore(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    dumyCall(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    getContributors(
+      overrides?: CallOverrides
+    ): Promise<[string[], BigNumber[]]>;
+
+    getScore(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    initialized(overrides?: CallOverrides): Promise<[boolean]>;
+
+    isModerator(
+      _moderator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    lastInteractionUser(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    moderatorsCount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     provideMembership(
       users: PromiseOrValue<string>[],
       tokenURIs: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     revokeMembership(
       users: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
-  }
+    ): Promise<ContractTransaction>;
 
-  baseURI(overrides?: CallOverrides): Promise<string>
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+  };
 
-  initialized(overrides?: CallOverrides): Promise<boolean>
+  DAY(overrides?: CallOverrides): Promise<BigNumber>;
 
-  moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>
+  MONTH(overrides?: CallOverrides): Promise<BigNumber>;
+
+  TWODAY(overrides?: CallOverrides): Promise<BigNumber>;
+
+  _contributorByIndex(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  _contributorCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+  addContribution(
+    user: PromiseOrValue<string>,
+    score: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  allowedForCaller(overrides?: CallOverrides): Promise<boolean>;
+
+  baseURI(overrides?: CallOverrides): Promise<string>;
+
+  contributionScore(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  dumyCall(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getContributors(overrides?: CallOverrides): Promise<[string[], BigNumber[]]>;
+
+  getScore(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  initialized(overrides?: CallOverrides): Promise<boolean>;
+
+  isModerator(
+    _moderator: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  lastInteractionUser(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
 
   provideMembership(
     users: PromiseOrValue<string>[],
     tokenURIs: PromiseOrValue<string>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   revokeMembership(
     users: PromiseOrValue<string>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
-    baseURI(overrides?: CallOverrides): Promise<string>
+    DAY(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialized(overrides?: CallOverrides): Promise<boolean>
+    MONTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>
+    TWODAY(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _contributorByIndex(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    _contributorCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    allowedForCaller(overrides?: CallOverrides): Promise<boolean>;
+
+    baseURI(overrides?: CallOverrides): Promise<string>;
+
+    contributionScore(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    dumyCall(overrides?: CallOverrides): Promise<void>;
+
+    getContributors(
+      overrides?: CallOverrides
+    ): Promise<[string[], BigNumber[]]>;
+
+    getScore(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialized(overrides?: CallOverrides): Promise<boolean>;
+
+    isModerator(
+      _moderator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    lastInteractionUser(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
 
     provideMembership(
       users: PromiseOrValue<string>[],
       tokenURIs: PromiseOrValue<string>[],
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
-    revokeMembership(users: PromiseOrValue<string>[], overrides?: CallOverrides): Promise<void>
-  }
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-  filters: {}
+    revokeMembership(
+      users: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+  };
+
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
-    baseURI(overrides?: CallOverrides): Promise<BigNumber>
+    DAY(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialized(overrides?: CallOverrides): Promise<BigNumber>
+    MONTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>
+    TWODAY(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _contributorByIndex(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    _contributorCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    allowedForCaller(overrides?: CallOverrides): Promise<BigNumber>;
+
+    baseURI(overrides?: CallOverrides): Promise<BigNumber>;
+
+    contributionScore(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    dumyCall(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getContributors(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getScore(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialized(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isModerator(
+      _moderator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lastInteractionUser(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    moderatorsCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     provideMembership(
       users: PromiseOrValue<string>[],
       tokenURIs: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     revokeMembership(
       users: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-  }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+  };
 
   populateTransaction: {
-    baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    DAY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    initialized(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    MONTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    moderatorsCount(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    TWODAY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _contributorByIndex(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    _contributorCounter(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    allowedForCaller(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    contributionScore(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    dumyCall(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getContributors(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getScore(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialized(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isModerator(
+      _moderator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lastInteractionUser(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    moderatorsCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     provideMembership(
       users: PromiseOrValue<string>[],
       tokenURIs: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     revokeMembership(
       users: PromiseOrValue<string>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
-  }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+  };
 }

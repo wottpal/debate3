@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -20,54 +21,54 @@ import type {
   TypedListener,
   OnEvent,
   PromiseOrValue,
-} from "./common";
+} from "../common";
 
-export interface IMembershipInterface extends utils.Interface {
+export interface IForumInterface extends utils.Interface {
   functions: {
-    "balanceOf(address)": FunctionFragment;
-    "provideMembership(address[],string[])": FunctionFragment;
-    "revokeMembership(address[])": FunctionFragment;
+    "addContribution(address,uint256)": FunctionFragment;
+    "isModerator(address)": FunctionFragment;
+    "updateScores()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "balanceOf"
-      | "provideMembership"
-      | "revokeMembership"
+    nameOrSignatureOrTopic: "addContribution" | "isModerator" | "updateScores"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "balanceOf",
+    functionFragment: "addContribution",
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isModerator",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "provideMembership",
-    values: [PromiseOrValue<string>[], PromiseOrValue<string>[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "revokeMembership",
-    values: [PromiseOrValue<string>[]]
+    functionFragment: "updateScores",
+    values?: undefined
   ): string;
 
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "provideMembership",
+    functionFragment: "addContribution",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "revokeMembership",
+    functionFragment: "isModerator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateScores",
     data: BytesLike
   ): Result;
 
   events: {};
 }
 
-export interface IMembership extends BaseContract {
+export interface IForum extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IMembershipInterface;
+  interface: IForumInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -89,91 +90,84 @@ export interface IMembership extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    balanceOf(
+    addContribution(
       user: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    provideMembership(
-      users: PromiseOrValue<string>[],
-      tokenURIs: PromiseOrValue<string>[],
+      score: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    revokeMembership(
-      users: PromiseOrValue<string>[],
+    isModerator(
+      user: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    updateScores(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
-  balanceOf(
+  addContribution(
     user: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  provideMembership(
-    users: PromiseOrValue<string>[],
-    tokenURIs: PromiseOrValue<string>[],
+    score: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  revokeMembership(
-    users: PromiseOrValue<string>[],
+  isModerator(
+    user: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  updateScores(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    balanceOf(
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    isModerator(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<boolean>;
 
-    provideMembership(
-      users: PromiseOrValue<string>[],
-      tokenURIs: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    revokeMembership(
-      users: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
+    updateScores(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {};
 
   estimateGas: {
-    balanceOf(
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    isModerator(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    provideMembership(
-      users: PromiseOrValue<string>[],
-      tokenURIs: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    revokeMembership(
-      users: PromiseOrValue<string>[],
+    updateScores(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    balanceOf(
+    addContribution(
+      user: PromiseOrValue<string>,
+      score: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    isModerator(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    provideMembership(
-      users: PromiseOrValue<string>[],
-      tokenURIs: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    revokeMembership(
-      users: PromiseOrValue<string>[],
+    updateScores(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

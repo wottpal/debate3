@@ -33,6 +33,7 @@
     "@supabase/gotrue-js": "^1.22.20",
     "@supabase/supabase-js": "^1.35.4",
     "axios": "^0.27.2",
+    "blockies-ts": "^1.0.0",
     "cookies-next": "^2.1.1",
     "copy-to-clipboard": "^3.3.1",
     "dayjs": "^1.11.3",
