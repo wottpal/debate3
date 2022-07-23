@@ -2,6 +2,6 @@
 **/package-lock.json
 **/node_modules/*
 **/.next/*
-**/src/public/*
+**/public/*
 **/src/types/typechain/*
 **/src/artifacts/*

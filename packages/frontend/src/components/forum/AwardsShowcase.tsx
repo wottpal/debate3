@@ -10,9 +10,9 @@ import { Badges as BadgesType, Forum as ForumType } from 'src/types/typechain'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
 import { useAccount, useSigner } from 'wagmi'
-import badgeBronzeImg from '/src/public/badges/badge-bronze.png'
-import badgeGoldImg from '/src/public/badges/badge-gold.png'
-import badgeSilverImg from '/src/public/badges/badge-silver.png'
+import badgeBronzeImg from '/public/badges/badge-bronze.png'
+import badgeGoldImg from '/public/badges/badge-gold.png'
+import badgeSilverImg from '/public/badges/badge-silver.png'
 
 export interface AwardsShowcaseProps {
   forum: ForumModel
