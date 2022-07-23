@@ -13,11 +13,15 @@ check --> ``` https://github.com/vyperlang/vyper/pull/2979 ``` for more details 
 
 `truffle unbox vyper-example`
 
-3. Truffle Console :
+3. Install dependencies 
+
+``` npm install @truffle/hdwallet-provider ``` 
+
+4. Truffle Console :
 
 `truffle develop`
 
-4. Compile your contracts, run :
+5. Compile your contracts, run :
 
 `truffle compile / migrate`
 
