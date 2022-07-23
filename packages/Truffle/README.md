@@ -17,6 +17,19 @@
 
 ``` Truffle compile / migrate ``` 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### Vyper ABI & Bytecode :
+
+1. Run : 
+
+``` vyper -f json,bytecode FILENAME.vy ``` 
+
+Output : ``` ABI ; BYTECODE ``` 
+
+2. Create in the ``` dir ``` a file ``` X.json ``` and fill it with : ```  {[ ABI, BYTECODE ]} ``` 
+
+
 
 
 
