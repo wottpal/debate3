@@ -12,72 +12,91 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers'
-import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi'
-import type { Listener, Provider } from '@ethersproject/providers'
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common'
+} from "ethers";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type {
+  TypedEventFilter,
+  TypedEvent,
+  TypedListener,
+  OnEvent,
+  PromiseOrValue,
+} from "./common";
 
 export interface BadgesInterface extends utils.Interface {
   functions: {
-    'BRONZE()': FunctionFragment
-    'GOLD()': FunctionFragment
-    'SILVER()': FunctionFragment
-    'balanceOf(address,uint256)': FunctionFragment
-    'balanceOfBatch(address[],uint256[])': FunctionFragment
-    'isApprovedForAll(address,address)': FunctionFragment
-    'mint(address,uint256,uint256)': FunctionFragment
-    'owner()': FunctionFragment
-    'renounceOwnership()': FunctionFragment
-    'safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)': FunctionFragment
-    'safeTransferFrom(address,address,uint256,uint256,bytes)': FunctionFragment
-    'setApprovalForAll(address,bool)': FunctionFragment
-    'supportsInterface(bytes4)': FunctionFragment
-    'transferOwnership(address)': FunctionFragment
-    'uri(uint256)': FunctionFragment
-  }
+    "BRONZE()": FunctionFragment;
+    "GOLD()": FunctionFragment;
+    "SILVER()": FunctionFragment;
+    "balanceOf(address,uint256)": FunctionFragment;
+    "balanceOfBatch(address[],uint256[])": FunctionFragment;
+    "isApprovedForAll(address,address)": FunctionFragment;
+    "mint(address,uint256,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "upgrade(uint256,uint256,address)": FunctionFragment;
+    "uri(uint256)": FunctionFragment;
+  };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | 'BRONZE'
-      | 'GOLD'
-      | 'SILVER'
-      | 'balanceOf'
-      | 'balanceOfBatch'
-      | 'isApprovedForAll'
-      | 'mint'
-      | 'owner'
-      | 'renounceOwnership'
-      | 'safeBatchTransferFrom'
-      | 'safeTransferFrom'
-      | 'setApprovalForAll'
-      | 'supportsInterface'
-      | 'transferOwnership'
-      | 'uri'
-  ): FunctionFragment
+      | "BRONZE"
+      | "GOLD"
+      | "SILVER"
+      | "balanceOf"
+      | "balanceOfBatch"
+      | "isApprovedForAll"
+      | "mint"
+      | "owner"
+      | "renounceOwnership"
+      | "safeBatchTransferFrom"
+      | "safeTransferFrom"
+      | "setApprovalForAll"
+      | "supportsInterface"
+      | "transferOwnership"
+      | "upgrade"
+      | "uri"
+  ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'BRONZE', values?: undefined): string
-  encodeFunctionData(functionFragment: 'GOLD', values?: undefined): string
-  encodeFunctionData(functionFragment: 'SILVER', values?: undefined): string
+  encodeFunctionData(functionFragment: "BRONZE", values?: undefined): string;
+  encodeFunctionData(functionFragment: "GOLD", values?: undefined): string;
+  encodeFunctionData(functionFragment: "SILVER", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'balanceOf',
+    functionFragment: "balanceOf",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'balanceOfBatch',
+    functionFragment: "balanceOfBatch",
     values: [PromiseOrValue<string>[], PromiseOrValue<BigNumberish>[]]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'isApprovedForAll',
+    functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'mint',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string
-  encodeFunctionData(functionFragment: 'owner', values?: undefined): string
-  encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string
+    functionFragment: "mint",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'safeBatchTransferFrom',
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeBatchTransferFrom",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -85,9 +104,9 @@ export interface BadgesInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>[],
       PromiseOrValue<BytesLike>
     ]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'safeTransferFrom',
+    functionFragment: "safeTransferFrom",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -95,169 +114,211 @@ export interface BadgesInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BytesLike>
     ]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'setApprovalForAll',
+    functionFragment: "setApprovalForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'supportsInterface',
+    functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
-  ): string
+  ): string;
   encodeFunctionData(
-    functionFragment: 'transferOwnership',
+    functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
-  ): string
-  encodeFunctionData(functionFragment: 'uri', values: [PromiseOrValue<BigNumberish>]): string
+  ): string;
+  encodeFunctionData(
+    functionFragment: "upgrade",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "uri",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
-  decodeFunctionResult(functionFragment: 'BRONZE', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'GOLD', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'SILVER', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'balanceOfBatch', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'isApprovedForAll', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'safeBatchTransferFrom', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'safeTransferFrom', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'setApprovalForAll', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result
-  decodeFunctionResult(functionFragment: 'uri', data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "BRONZE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "GOLD", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "SILVER", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOfBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "safeBatchTransferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "safeTransferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "upgrade", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "uri", data: BytesLike): Result;
 
   events: {
-    'ApprovalForAll(address,address,bool)': EventFragment
-    'OwnershipTransferred(address,address)': EventFragment
-    'TransferBatch(address,address,address,uint256[],uint256[])': EventFragment
-    'TransferSingle(address,address,address,uint256,uint256)': EventFragment
-    'URI(string,uint256)': EventFragment
-  }
+    "ApprovalForAll(address,address,bool)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "TransferBatch(address,address,address,uint256[],uint256[])": EventFragment;
+    "TransferSingle(address,address,address,uint256,uint256)": EventFragment;
+    "URI(string,uint256)": EventFragment;
+  };
 
-  getEvent(nameOrSignatureOrTopic: 'ApprovalForAll'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'TransferBatch'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'TransferSingle'): EventFragment
-  getEvent(nameOrSignatureOrTopic: 'URI'): EventFragment
+  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransferBatch"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TransferSingle"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "URI"): EventFragment;
 }
 
 export interface ApprovalForAllEventObject {
-  account: string
-  operator: string
-  approved: boolean
+  account: string;
+  operator: string;
+  approved: boolean;
 }
-export type ApprovalForAllEvent = TypedEvent<[string, string, boolean], ApprovalForAllEventObject>
+export type ApprovalForAllEvent = TypedEvent<
+  [string, string, boolean],
+  ApprovalForAllEventObject
+>;
 
-export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>
+export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
 export interface OwnershipTransferredEventObject {
-  previousOwner: string
-  newOwner: string
+  previousOwner: string;
+  newOwner: string;
 }
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string],
   OwnershipTransferredEventObject
->
+>;
 
-export type OwnershipTransferredEventFilter = TypedEventFilter<OwnershipTransferredEvent>
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface TransferBatchEventObject {
-  operator: string
-  from: string
-  to: string
-  ids: BigNumber[]
-  values: BigNumber[]
+  operator: string;
+  from: string;
+  to: string;
+  ids: BigNumber[];
+  values: BigNumber[];
 }
 export type TransferBatchEvent = TypedEvent<
   [string, string, string, BigNumber[], BigNumber[]],
   TransferBatchEventObject
->
+>;
 
-export type TransferBatchEventFilter = TypedEventFilter<TransferBatchEvent>
+export type TransferBatchEventFilter = TypedEventFilter<TransferBatchEvent>;
 
 export interface TransferSingleEventObject {
-  operator: string
-  from: string
-  to: string
-  id: BigNumber
-  value: BigNumber
+  operator: string;
+  from: string;
+  to: string;
+  id: BigNumber;
+  value: BigNumber;
 }
 export type TransferSingleEvent = TypedEvent<
   [string, string, string, BigNumber, BigNumber],
   TransferSingleEventObject
->
+>;
 
-export type TransferSingleEventFilter = TypedEventFilter<TransferSingleEvent>
+export type TransferSingleEventFilter = TypedEventFilter<TransferSingleEvent>;
 
 export interface URIEventObject {
-  value: string
-  id: BigNumber
+  value: string;
+  id: BigNumber;
 }
-export type URIEvent = TypedEvent<[string, BigNumber], URIEventObject>
+export type URIEvent = TypedEvent<[string, BigNumber], URIEventObject>;
 
-export type URIEventFilter = TypedEventFilter<URIEvent>
+export type URIEventFilter = TypedEventFilter<URIEvent>;
 
 export interface Badges extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this
-  attach(addressOrName: string): this
-  deployed(): Promise<this>
+  connect(signerOrProvider: Signer | Provider | string): this;
+  attach(addressOrName: string): this;
+  deployed(): Promise<this>;
 
-  interface: BadgesInterface
+  interface: BadgesInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>
+  ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
     eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>
-  listeners(eventName?: string): Array<Listener>
-  removeAllListeners<TEvent extends TypedEvent>(eventFilter: TypedEventFilter<TEvent>): this
-  removeAllListeners(eventName?: string): this
-  off: OnEvent<this>
-  on: OnEvent<this>
-  once: OnEvent<this>
-  removeListener: OnEvent<this>
+  ): Array<TypedListener<TEvent>>;
+  listeners(eventName?: string): Array<Listener>;
+  removeAllListeners<TEvent extends TypedEvent>(
+    eventFilter: TypedEventFilter<TEvent>
+  ): this;
+  removeAllListeners(eventName?: string): this;
+  off: OnEvent<this>;
+  on: OnEvent<this>;
+  once: OnEvent<this>;
+  removeListener: OnEvent<this>;
 
   functions: {
-    BRONZE(overrides?: CallOverrides): Promise<[BigNumber]>
+    BRONZE(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    GOLD(overrides?: CallOverrides): Promise<[BigNumber]>
+    GOLD(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    SILVER(overrides?: CallOverrides): Promise<[BigNumber]>
+    SILVER(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>
+    ): Promise<[BigNumber]>;
 
     balanceOfBatch(
       accounts: PromiseOrValue<string>[],
       ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
-    ): Promise<[BigNumber[]]>
+    ): Promise<[BigNumber[]]>;
 
     isApprovedForAll(
       account: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[boolean]>
+    ): Promise<[boolean]>;
 
     mint(
       receiver: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
-    owner(overrides?: CallOverrides): Promise<[string]>
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     safeBatchTransferFrom(
       from: PromiseOrValue<string>,
@@ -266,7 +327,7 @@ export interface Badges extends BaseContract {
       amounts: PromiseOrValue<BigNumberish>[],
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     safeTransferFrom(
       from: PromiseOrValue<string>,
@@ -275,63 +336,73 @@ export interface Badges extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<[boolean]>
+    ): Promise<[boolean]>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>
+    ): Promise<ContractTransaction>;
 
-    uri(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[string]>
-  }
+    upgrade(
+      from_id: PromiseOrValue<BigNumberish>,
+      to_id: PromiseOrValue<BigNumberish>,
+      _from: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
-  BRONZE(overrides?: CallOverrides): Promise<BigNumber>
+    uri(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+  };
 
-  GOLD(overrides?: CallOverrides): Promise<BigNumber>
+  BRONZE(overrides?: CallOverrides): Promise<BigNumber>;
 
-  SILVER(overrides?: CallOverrides): Promise<BigNumber>
+  GOLD(overrides?: CallOverrides): Promise<BigNumber>;
+
+  SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
   balanceOf(
     account: PromiseOrValue<string>,
     id: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<BigNumber>
+  ): Promise<BigNumber>;
 
   balanceOfBatch(
     accounts: PromiseOrValue<string>[],
     ids: PromiseOrValue<BigNumberish>[],
     overrides?: CallOverrides
-  ): Promise<BigNumber[]>
+  ): Promise<BigNumber[]>;
 
   isApprovedForAll(
     account: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<boolean>
+  ): Promise<boolean>;
 
   mint(
     receiver: PromiseOrValue<string>,
     id: PromiseOrValue<BigNumberish>,
     amount: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
-  owner(overrides?: CallOverrides): Promise<string>
+  owner(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   safeBatchTransferFrom(
     from: PromiseOrValue<string>,
@@ -340,7 +411,7 @@ export interface Badges extends BaseContract {
     amounts: PromiseOrValue<BigNumberish>[],
     data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   safeTransferFrom(
     from: PromiseOrValue<string>,
@@ -349,61 +420,71 @@ export interface Badges extends BaseContract {
     amount: PromiseOrValue<BigNumberish>,
     data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   setApprovalForAll(
     operator: PromiseOrValue<string>,
     approved: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
-  ): Promise<boolean>
+  ): Promise<boolean>;
 
   transferOwnership(
     newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>
+  ): Promise<ContractTransaction>;
 
-  uri(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>
+  upgrade(
+    from_id: PromiseOrValue<BigNumberish>,
+    to_id: PromiseOrValue<BigNumberish>,
+    _from: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  uri(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   callStatic: {
-    BRONZE(overrides?: CallOverrides): Promise<BigNumber>
+    BRONZE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    GOLD(overrides?: CallOverrides): Promise<BigNumber>
+    GOLD(overrides?: CallOverrides): Promise<BigNumber>;
 
-    SILVER(overrides?: CallOverrides): Promise<BigNumber>
+    SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     balanceOfBatch(
       accounts: PromiseOrValue<string>[],
       ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
-    ): Promise<BigNumber[]>
+    ): Promise<BigNumber[]>;
 
     isApprovedForAll(
       account: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<boolean>
+    ): Promise<boolean>;
 
     mint(
       receiver: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
-    owner(overrides?: CallOverrides): Promise<string>
+    owner(overrides?: CallOverrides): Promise<string>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     safeBatchTransferFrom(
       from: PromiseOrValue<string>,
@@ -412,7 +493,7 @@ export interface Badges extends BaseContract {
       amounts: PromiseOrValue<BigNumberish>[],
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     safeTransferFrom(
       from: PromiseOrValue<string>,
@@ -421,189 +502,132 @@ export interface Badges extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
       overrides?: CallOverrides
-    ): Promise<void>
+    ): Promise<void>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<boolean>
+    ): Promise<boolean>;
 
-    transferOwnership(newOwner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    uri(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>
-  }
+    upgrade(
+      from_id: PromiseOrValue<BigNumberish>,
+      to_id: PromiseOrValue<BigNumberish>,
+      _from: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    uri(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+  };
 
   filters: {
-    'ApprovalForAll(address,address,bool)'(
+    "ApprovalForAll(address,address,bool)"(
       account?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
       approved?: null
-    ): ApprovalForAllEventFilter
+    ): ApprovalForAllEventFilter;
     ApprovalForAll(
       account?: PromiseOrValue<string> | null,
       operator?: PromiseOrValue<string> | null,
       approved?: null
-    ): ApprovalForAllEventFilter
+    ): ApprovalForAllEventFilter;
 
-    'OwnershipTransferred(address,address)'(
+    "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter
+    ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter
+    ): OwnershipTransferredEventFilter;
 
-    'TransferBatch(address,address,address,uint256[],uint256[])'(
+    "TransferBatch(address,address,address,uint256[],uint256[])"(
       operator?: PromiseOrValue<string> | null,
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       ids?: null,
       values?: null
-    ): TransferBatchEventFilter
+    ): TransferBatchEventFilter;
     TransferBatch(
       operator?: PromiseOrValue<string> | null,
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       ids?: null,
       values?: null
-    ): TransferBatchEventFilter
+    ): TransferBatchEventFilter;
 
-    'TransferSingle(address,address,address,uint256,uint256)'(
+    "TransferSingle(address,address,address,uint256,uint256)"(
       operator?: PromiseOrValue<string> | null,
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       id?: null,
       value?: null
-    ): TransferSingleEventFilter
+    ): TransferSingleEventFilter;
     TransferSingle(
       operator?: PromiseOrValue<string> | null,
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
       id?: null,
       value?: null
-    ): TransferSingleEventFilter
+    ): TransferSingleEventFilter;
 
-    'URI(string,uint256)'(value?: null, id?: PromiseOrValue<BigNumberish> | null): URIEventFilter
-    URI(value?: null, id?: PromiseOrValue<BigNumberish> | null): URIEventFilter
-  }
+    "URI(string,uint256)"(
+      value?: null,
+      id?: PromiseOrValue<BigNumberish> | null
+    ): URIEventFilter;
+    URI(value?: null, id?: PromiseOrValue<BigNumberish> | null): URIEventFilter;
+  };
 
   estimateGas: {
-    BRONZE(overrides?: CallOverrides): Promise<BigNumber>
+    BRONZE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    GOLD(overrides?: CallOverrides): Promise<BigNumber>
+    GOLD(overrides?: CallOverrides): Promise<BigNumber>;
 
-    SILVER(overrides?: CallOverrides): Promise<BigNumber>
+    SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(
       account: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     balanceOfBatch(
       accounts: PromiseOrValue<string>[],
       ids: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       account: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
     mint(
       receiver: PromiseOrValue<string>,
       id: PromiseOrValue<BigNumberish>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
+    ): Promise<BigNumber>;
 
-    owner(overrides?: CallOverrides): Promise<BigNumber>
-
-    renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>
-
-    safeBatchTransferFrom(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      ids: PromiseOrValue<BigNumberish>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-
-    safeTransferFrom(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      data: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-
-    setApprovalForAll(
-      operator: PromiseOrValue<string>,
-      approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-
-    supportsInterface(
-      interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>
-
-    uri(arg0: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>
-  }
-
-  populateTransaction: {
-    BRONZE(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    GOLD(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    SILVER(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    balanceOf(
-      account: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
-
-    balanceOfBatch(
-      accounts: PromiseOrValue<string>[],
-      ids: PromiseOrValue<BigNumberish>[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
-
-    isApprovedForAll(
-      account: PromiseOrValue<string>,
-      operator: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
-
-    mint(
-      receiver: PromiseOrValue<string>,
-      id: PromiseOrValue<BigNumberish>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     safeBatchTransferFrom(
       from: PromiseOrValue<string>,
@@ -612,7 +636,7 @@ export interface Badges extends BaseContract {
       amounts: PromiseOrValue<BigNumberish>[],
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     safeTransferFrom(
       from: PromiseOrValue<string>,
@@ -621,27 +645,119 @@ export interface Badges extends BaseContract {
       amount: PromiseOrValue<BigNumberish>,
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>
+    ): Promise<BigNumber>;
+
+    upgrade(
+      from_id: PromiseOrValue<BigNumberish>,
+      to_id: PromiseOrValue<BigNumberish>,
+      _from: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     uri(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>
-  }
+    ): Promise<BigNumber>;
+  };
+
+  populateTransaction: {
+    BRONZE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    GOLD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    SILVER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      account: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    balanceOfBatch(
+      accounts: PromiseOrValue<string>[],
+      ids: PromiseOrValue<BigNumberish>[],
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isApprovedForAll(
+      account: PromiseOrValue<string>,
+      operator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    mint(
+      receiver: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    safeBatchTransferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      ids: PromiseOrValue<BigNumberish>[],
+      amounts: PromiseOrValue<BigNumberish>[],
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    safeTransferFrom(
+      from: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
+      id: PromiseOrValue<BigNumberish>,
+      amount: PromiseOrValue<BigNumberish>,
+      data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setApprovalForAll(
+      operator: PromiseOrValue<string>,
+      approved: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceId: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    upgrade(
+      from_id: PromiseOrValue<BigNumberish>,
+      to_id: PromiseOrValue<BigNumberish>,
+      _from: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    uri(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+  };
 }
