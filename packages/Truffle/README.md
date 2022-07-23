@@ -1,37 +1,29 @@
-### Setup Truffle x Vyper : 
+### Setup Truffle x Vyper :
 
+1. Install Truffle globally.
 
-1. Install Truffle globally. 
+`npm install -g truffle`
 
-``` npm install -g truffle ``` 
+2. Box with necessary dependencies
 
-2. Box with necessary dependencies 
+`truffle unbox vyper-example`
 
-``` truffle unbox vyper-example ```
+3. Truffle Console :
 
-3. Truffle Console : 
+`truffle develop`
 
-``` truffle develop ```
+4. Compile your contracts, run :
 
-4. Compile your contracts, run : 
+`truffle compile / migrate`
 
-``` Truffle compile / migrate ``` 
-
--------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 ### Vyper ABI & Bytecode :
 
-1. Run : 
+1. Run :
 
-``` vyper -f json,bytecode FILENAME.vy ``` 
+`vyper -f json,bytecode FILENAME.vy`
 
-Output : ``` ABI ; BYTECODE ``` 
+Output : `ABI ; BYTECODE`
 
-2. Create in the ``` dir ``` a file ``` X.json ``` and fill it with : ```  {[ ABI, BYTECODE ]} ``` 
-
-
-
-
-
-
-
+2. Create in the `dir` a file `X.json` and fill it with : ` {[ ABI, BYTECODE ]}`

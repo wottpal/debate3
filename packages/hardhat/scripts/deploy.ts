@@ -4,7 +4,7 @@ import { saveFrontendAddressFiles } from '../shared/saveFrontendAddressFiles'
 
 async function main() {
   const cfVault = await ethers.getContractFactory('Vault')
-  const cVault = await cfVault.deploy()
+  const cVault = await cfVault.deploy(0)
   await cVault.deployed()
 
   saveFrontendAddressFiles({
