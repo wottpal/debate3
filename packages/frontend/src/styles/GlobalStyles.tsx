@@ -16,7 +16,7 @@ const customStyles = css`
     ${tw`h-full relative flex flex-col`}
   }
   #nprogress > .bar {
-    ${tw`bg-white`}
+    ${tw`bg-black`}
   }
   #nprogress > .spinner {
     ${tw`hidden!`}

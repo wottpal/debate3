@@ -39,8 +39,8 @@ import { Forum as ForumType } from 'src/types/typechain'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
 import { useAccount, useSigner } from 'wagmi'
-import emptyImg from '/src/public/illustrations/post_01.svg'
-import unlockImg from '/src/public/illustrations/unlock_01.svg'
+import emptyImg from '/public/illustrations/post_01.svg'
+import unlockImg from '/public/illustrations/unlock_01.svg'
 
 export interface ForumPageProps extends SingleForumProps {}
 export default function ForumPage({ forumData }: ForumPageProps) {

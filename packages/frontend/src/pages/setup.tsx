@@ -25,7 +25,7 @@ import { ForumCreatedEvent } from 'src/types/typechain/Vault'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
 import { useAccount, useSigner } from 'wagmi'
-import welcomeImg from '/src/public/illustrations/welcome_01.svg'
+import welcomeImg from '/public/illustrations/welcome_01.svg'
 
 const SetupPage: NextPage = () => {
   const isSsr = useIsSSR()

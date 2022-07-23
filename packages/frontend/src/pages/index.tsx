@@ -1,24 +1,28 @@
+import { ArrowForwardIcon } from '@chakra-ui/icons'
 import { Button } from '@chakra-ui/react'
 import { Wrapper } from '@components/layout/Wrapper'
+import { BadgeCheckIcon, LockClosedIcon, RefreshIcon } from '@heroicons/react/outline'
 import { Forum } from '@models/Forum.model'
 import { AllForumsProps, getAllForums } from '@shared/getAllForums'
+import { chains } from '@shared/wagmiClient'
+import axios from 'axios'
 import type { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import 'twin.macro'
-import cronosImg from '/src/public/partners/cronos.svg'
-import gnosisImg from '/src/public/partners/gnosis.svg'
-import celoImg from '/src/public/partners/celo.svg'
-import polygonImg from '/src/public/partners/polygon.svg'
-import orbisImg from '/src/public/partners/orbis.svg'
-import vyperImg from '/src/public/partners/vyper.svg'
-import truffleImg from '/src/public/partners/truffle.svg'
-import infuraImg from '/src/public/partners/infura.svg'
-import privyImg from '/src/public/partners/privy.svg'
-import background from '/src/public/bg/landing_bg.svg'
-import neonImg from '/src/public/partners/neon.svg'
-import { LockClosedIcon, RefreshIcon, BadgeCheckIcon } from '@heroicons/react/outline'
+import useAsyncEffect from 'use-async-effect'
+import background from '/public/bg/landing_bg.svg'
+import celoImg from '/public/partners/celo.svg'
+import cronosImg from '/public/partners/cronos.svg'
+import gnosisImg from '/public/partners/gnosis.svg'
+import infuraImg from '/public/partners/infura.svg'
+import neonImg from '/public/partners/neon.svg'
+import orbisImg from '/public/partners/orbis.svg'
+import polygonImg from '/public/partners/polygon.svg'
+import privyImg from '/public/partners/privy.svg'
+import truffleImg from '/public/partners/truffle.svg'
+import vyperImg from '/public/partners/vyper.svg'
 
 const features = [
   {
@@ -58,7 +62,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
       <Wrapper>
         <nav tw="flex items-center justify-between">
           <div tw="font-display font-bold tracking-tight text-4xl">Debate3</div>
-          <Link href="/setup" prefetch={true} passHref>
+          <Link href="/setup" passHref>
             <Button variant="solid">Create a Forum</Button>
           </Link>
         </nav>
@@ -88,7 +92,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
           A token-gated, decentralized discussion platform with an <br />
           inbuilt reputation system and moderation.
         </p>
-        <Link href="/setup" prefetch={true} passHref>
+        <Link href="/setup" passHref>
           <Button
             tw="mt-10"
             variant="solid"
@@ -102,7 +106,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
       {/* Sponsors */}
       <Wrapper>
-        <div tw="flex flex-col items-center mt-12 bg-white">
+        <div tw="flex flex-col items-center mt-12">
           {/* <p tw="font-bold text-xl tracking-tight mb-8">
             Built with the help of amazing sponsors at EthCC
           </p> */}
@@ -183,7 +187,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
       {/* Features */}
       <Wrapper>
-        <div tw="relative bg-white py-12 sm:py-12 lg:py-12">
+        <div tw="relative py-12 sm:py-12 lg:py-12">
           <div tw="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
             <h2 tw="text-base font-semibold uppercase tracking-wider" style={{ color: '#385897' }}>
               Build community
@@ -220,31 +224,14 @@ export default function HomePage({ forumsData }: HomePageProps) {
       </Wrapper>
 
       {/* All Forums */}
-      {/* TODO */}
       <Wrapper>
-        <div tw="relative bg-white py-8 sm:py-16 lg:py-8">
+        <div tw="relative py-8 sm:py-16 lg:py-8">
           <h1 tw="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
-            Join Forum Now
+            Join a Forum now
           </h1>
           <div className="forums-container">
             {allForums.map((f) => (
-              <a className="landing-forum-card" key={f.forumAddress}>
-                <img
-                  src="https://images.unsplash.com/photo-1658251216561-077bf584633a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
-                  className="forum-image"
-                ></img>
-                <div className="forum-content">
-                  <p onClick={() => console.log(f)} tw="text-2xl font-bold mt-4">
-                    {f.forumName}
-                  </p>
-                  <button
-                    style={{ backgroundColor: '#2F43FF', color: 'white' }}
-                    className="join-forum"
-                  >
-                    Join
-                  </button>
-                </div>
-              </a>
+              <ForumCard forum={f} key={f.forumAddress} />
             ))}
           </div>
         </div>
@@ -267,3 +254,52 @@ export default function HomePage({ forumsData }: HomePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = getAllForums
+
+export interface ForumCardProps {
+  forum: Forum
+}
+export const ForumCard: FC<ForumCardProps> = ({ forum }) => {
+  const [nftLogoUrl, setNftLogoUrl] = useState<string | null>(null)
+  const chain = chains.find((c) => c.id === parseInt(forum.forumChain))
+  // fetch nft logo
+  useAsyncEffect(async () => {
+    if (!forum) {
+      setNftLogoUrl(null)
+      return
+    }
+    const ipfsUri = forum.forumLogoUri.slice(7)
+    const { data } = await axios.get(`https://ipfs.io/ipfs/${ipfsUri}`)
+    const imageUri = data?.image
+    if (!imageUri) {
+      setNftLogoUrl(null)
+      return
+    }
+    const imageIpfsUri = `https://ipfs.io/ipfs/${imageUri.slice(7)}`
+    setNftLogoUrl(imageIpfsUri)
+  }, [forum])
+
+  return (
+    <>
+      <div tw="flex flex-col bg-white rounded-lg shadow-xl overflow-hidden p-4 m-6 w-[20rem]">
+        <div tw="flex items-center  mb-4">
+          {nftLogoUrl && (
+            <div tw="w-[3rem] h-[3rem] relative mr-3.5 overflow-hidden shadow-lg rounded-full bg-gray-200 shrink-0">
+              <Image src={nftLogoUrl} alt="logo" layout="fill" />
+            </div>
+          )}
+          <div tw="flex flex-col">
+            <h1 tw="font-display text-xl font-bold tracking-tight mb-0.5 break-all">
+              {forum.forumName}
+            </h1>
+            {chain && <p tw="text-xs text-gray-500">Deployed on {chain.name}</p>}
+          </div>
+        </div>
+        <Link href={`/forum/${forum.forumSlug}`} passHref>
+          <Button tw="mt-auto">
+            Join <ArrowForwardIcon tw="ml-2" />
+          </Button>
+        </Link>
+      </div>
+    </>
+  )
+}

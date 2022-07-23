@@ -32,8 +32,8 @@ body {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.315);
 }
 .landing-forum-card {
-  width: 17vw;
-  height: 20vw;
+  width: 20rem;
+  height: 18rem;
   margin: 1vw 2vw 0 2vw;
   padding: 0.7vw;
   border-radius: 10px;
