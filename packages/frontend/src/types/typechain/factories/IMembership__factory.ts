@@ -2,50 +2,72 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from 'ethers'
-import type { Provider } from '@ethersproject/providers'
-import type { IMembership, IMembershipInterface } from '../IMembership'
+import { Contract, Signer, utils } from "ethers";
+import type { Provider } from "@ethersproject/providers";
+import type { IMembership, IMembershipInterface } from "../IMembership";
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: 'users',
-        type: 'address[]',
-      },
-      {
-        internalType: 'string[]',
-        name: 'tokenURIs',
-        type: 'string[]',
+        internalType: "address",
+        name: "user",
+        type: "address",
       },
     ],
-    name: 'provideMembership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: 'users',
-        type: 'address[]',
+        internalType: "address[]",
+        name: "users",
+        type: "address[]",
+      },
+      {
+        internalType: "string[]",
+        name: "tokenURIs",
+        type: "string[]",
       },
     ],
-    name: 'revokeMembership',
+    name: "provideMembership",
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
   },
-]
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "users",
+        type: "address[]",
+      },
+    ],
+    name: "revokeMembership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
 
 export class IMembership__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
   static createInterface(): IMembershipInterface {
-    return new utils.Interface(_abi) as IMembershipInterface
+    return new utils.Interface(_abi) as IMembershipInterface;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): IMembership {
-    return new Contract(address, _abi, signerOrProvider) as IMembership
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): IMembership {
+    return new Contract(address, _abi, signerOrProvider) as IMembership;
   }
 }

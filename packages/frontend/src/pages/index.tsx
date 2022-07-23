@@ -56,7 +56,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
       <Wrapper>
         <nav tw="flex items-center justify-between">
           <div tw="font-display font-bold tracking-tight text-4xl">Debate3</div>
-          <Link href="/setup" passHref>
+          <Link href="/setup" prefetch={true} passHref>
             <Button variant="solid">Create a Forum</Button>
           </Link>
         </nav>
@@ -86,7 +86,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
           A token-gated, decentralized discussion platform with an <br />
           inbuilt reputation system and moderation.
         </p>
-        <Link href="/setup" passHref>
+        <Link href="/setup" prefetch={true} passHref>
           <Button tw="mt-10" colorScheme="facebook" variant="solid" size="lg">
             Create a Forum
           </Button>

@@ -6,6 +6,7 @@
  **/
 const nextConfig = {
   images: {
+    domains: ['localhost', 'ipfs.io', 'gateway.ipfs.io', 'cdn-icons-png.flaticon.com'],
     dangerouslyAllowSVG: true,
   },
 }

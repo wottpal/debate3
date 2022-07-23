@@ -1,13 +1,13 @@
 import { Forum } from '@models/Forum.model'
 import { PrivyClient } from '@privy-io/privy-node'
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { env } from './environment'
 
 export type SingleForumProps = {
   forumData: object
 }
 
-export const getSingleForum: GetStaticProps = async ({ params }) => {
+export const getSingleForum: GetServerSideProps = async ({ params }) => {
   const slug = ((params?.forumSlug as string) || '').toLowerCase()
   if (!slug) return { notFound: true }
 
