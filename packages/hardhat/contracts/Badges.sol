@@ -13,7 +13,7 @@ contract Badges is ERC1155, Ownable {
   uint256 public constant GOLD = 2;
   bool private _isInit;
 
-  constructor() ERC1155('https://ipfs.infura.io/ipfs/QmcB4d7WzHtJ8qbBCVXfz5ACghx3uxj1v8QQSyoCgi5Cye') {}
+  constructor() ERC1155('https://ipfs.infura.io/ipfs/QmSm2GiuSsMMxe9k6xQ9cqVYnTqzPG9czeHAsUppWiR1Ed') {}
 
 //   function init() public onlyOwner {
 //     require(!_isInit, 'Collective: init - already in initialized');

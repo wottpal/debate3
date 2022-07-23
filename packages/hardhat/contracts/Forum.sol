@@ -91,7 +91,7 @@ contract Forum is Ownable{
     }
     function allowedForCaller() external view returns(bool){
         uint256 curr_balance = IMembership(membershipNFT).balanceOf(msg.sender);
-        return(curr_balance > 0);
+        return(curr_balance > 0 || _isModerator[msg.sender]);
     }
 
 }
