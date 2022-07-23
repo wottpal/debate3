@@ -1,11 +1,9 @@
-import Forum from '@artifacts/contracts/Forum.sol/Forum.json'
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   FormLabel,
   HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,13 +15,9 @@ import {
   useRadioGroup,
 } from '@chakra-ui/react'
 import { Forum as ForumModel } from '@models/Forum.model'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { ethers } from 'ethers'
 import Image from 'next/image'
 import { FC, PropsWithChildren, useState } from 'react'
-import { Forum as ForumType } from 'src/types/typechain'
 import 'twin.macro'
-import useAsyncEffect from 'use-async-effect'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import badgeBronzeImg from '/src/public/badges/badge-bronze.png'
 import badgeGoldImg from '/src/public/badges/badge-gold.png'
@@ -32,27 +26,21 @@ import badgeSilverImg from '/src/public/badges/badge-silver.png'
 export interface AwardBadgeDialogProps {
   isOpen?: boolean
   forum: ForumModel
+  address: string
   onClose?: () => void
 }
-export const AwardBadgeDialog: FC<AwardBadgeDialogProps> = ({ isOpen, onClose, forum }) => {
+export const AwardBadgeDialog: FC<AwardBadgeDialogProps> = ({
+  isOpen,
+  address: memberAddress,
+  onClose,
+  forum,
+}) => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
-  const [isModerator, setIsModerator] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [selectedBadge, setSelectedBadge] = useState<'bronze' | 'silver' | 'gold'>('bronze')
   const { connect } = useConnect()
-
-  useAsyncEffect(async () => {
-    if (!signer || !address) return
-    try {
-      const isModerator = true // await contract.isModerator(address)
-      setIsModerator(isModerator)
-      const contract = new ethers.Contract(forum.address, Forum.abi, signer) as ForumType
-    } catch (e) {
-      console.error(e)
-    }
-  }, [signer, address, forum])
 
   const awardBadge = async () => {
     if (!signer || !address) return
@@ -126,71 +114,46 @@ export const AwardBadgeDialog: FC<AwardBadgeDialogProps> = ({ isOpen, onClose, f
           <ModalHeader>Award Reputation Badge</ModalHeader>
           <ModalCloseButton />
 
-          {/* No Address connected  */}
-          {(!signer || !address) && (
-            <ModalBody>
-              <Alert status="warning" tw="mb-2">
-                <AlertIcon />
-                You are not connected to a wallet or not on a supported chain.
-              </Alert>
-              <div tw="text-center my-6">
-                <ConnectButton />
-              </div>
-            </ModalBody>
-          )}
-
-          {/* No valid moderator */}
-          {address && signer && !isModerator && (
-            <ModalBody>
-              <Alert status="error" tw="mb-2">
-                <AlertIcon />
-                You are no moderator and therefore not allowed to perform this action.
-              </Alert>
-            </ModalBody>
-          )}
-
           {/* Provide Membership Form */}
-          {isModerator && (
-            <>
-              <ModalBody>
-                <FormLabel>Select Badge-Level</FormLabel>
-                <HStack {...group}>
-                  {badgeOptions.map((value) => {
-                    const radio = getRadioProps({ value })
-                    return (
-                      <RadioBadgeCard key={`badge-${value}`} {...radio}>
-                        <Image
-                          src={
-                            {
-                              bronze: badgeBronzeImg,
-                              silver: badgeSilverImg,
-                              gold: badgeGoldImg,
-                            }[value] as any
-                          }
-                          width="200"
-                          height="200"
-                          alt="Badge"
-                        />
-                      </RadioBadgeCard>
-                    )
-                  })}
-                </HStack>
-              </ModalBody>
+          <ModalBody>
+            <FormLabel>Address of Member</FormLabel>
+            <Input readOnly={true} tw="grow mb-4" size="sm" disabled={true} value={address} />
 
-              <ModalFooter>
-                <Button
-                  colorScheme="facebook"
-                  variant="solid"
-                  disabled={isLoading}
-                  size="lg"
-                  isLoading={isLoading}
-                  onClick={awardBadge}
-                >
-                  Award Badge
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+            <FormLabel>Select Badge-Level</FormLabel>
+            <HStack {...group}>
+              {badgeOptions.map((value) => {
+                const radio = getRadioProps({ value })
+                return (
+                  <RadioBadgeCard key={`badge-${value}`} {...radio}>
+                    <Image
+                      src={
+                        {
+                          bronze: badgeBronzeImg,
+                          silver: badgeSilverImg,
+                          gold: badgeGoldImg,
+                        }[value] as any
+                      }
+                      width="200"
+                      height="200"
+                      alt="Badge"
+                    />
+                  </RadioBadgeCard>
+                )
+              })}
+            </HStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="facebook"
+              variant="solid"
+              disabled={isLoading}
+              size="lg"
+              isLoading={isLoading}
+              onClick={awardBadge}
+            >
+              Award Badge
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

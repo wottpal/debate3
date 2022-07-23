@@ -1,5 +1,5 @@
 import Forum from '@artifacts/contracts/Forum.sol/Forum.json'
-import { ChatIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { ChatIcon, ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -58,7 +58,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   const [accessIsAllowed, setAccessIsAllowed] = useState(false)
   const [provideMembershipDialogIsOpen, setProvideMembershipDialogIsOpen] = useState(false)
   const [revokeMembershipDialogIsOpen, setRevokeMembershipDialogIsOpen] = useState(false)
-  const [awardBadgeDialogIsOpen, setAwardBadgeDialogIsOpen] = useState(false)
+  const [awardBadgeDialogData, setAwardBadgeDialogData] = useState<any>({ isOpen: false })
   const [nftLogoUrl, setNftLogoUrl] = useState<string | null>(null)
 
   // fetch nft logo
@@ -263,14 +263,31 @@ export default function ForumPage({ forumData }: ForumPageProps) {
                           truncateHash(post.creator_details?.metadata?.address)}
                       </div>
                     </div>
-                    <Button
-                      leftIcon={<ChatIcon />}
-                      size="sm"
-                      onClick={() => openComments(post.content?.body, post.stream_id)}
-                      tw="ml-auto"
-                    >
-                      Full Thread
-                    </Button>
+
+                    <div tw="ml-auto space-x-2">
+                      {isModerator && (
+                        <Button
+                          leftIcon={<StarIcon />}
+                          size="sm"
+                          onClick={() => {
+                            setAwardBadgeDialogData({
+                              isOpen: true,
+                              address: post.creator_details?.metadata?.address,
+                            })
+                          }}
+                          colorScheme="yellow"
+                        >
+                          Award Badge
+                        </Button>
+                      )}
+                      <Button
+                        leftIcon={<ChatIcon />}
+                        size="sm"
+                        onClick={() => openComments(post.content?.body, post.stream_id)}
+                      >
+                        Full Thread
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -350,11 +367,11 @@ export default function ForumPage({ forumData }: ForumPageProps) {
         forum={forum}
       />
       <AwardBadgeDialog
-        isOpen={awardBadgeDialogIsOpen}
         onClose={() => {
-          setAwardBadgeDialogIsOpen(false)
+          setAwardBadgeDialogData({ isOpen: false })
         }}
         forum={forum}
+        {...awardBadgeDialogData}
       />
     </>
   )
