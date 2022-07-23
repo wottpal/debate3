@@ -1,7 +1,7 @@
 const HDWallet = require('truffle-hdwallet-provider');
 //const infuraKey = "";
 
-const mnemonic ="alone visit curtain bus wise pistol man guess give edit hood accident"
+const mnemonic =""
 
 module.exports = {
     networks: {
