@@ -10,9 +10,13 @@ import 'hardhat-gas-reporter'
 import path from 'path'
 import 'solidity-coverage'
 
+// require("dotenv").config();
+
 const mnemonic = 'replace hover unaware super where filter stone fine garlic address matrix basic'
 
 const privateKeys = []
+
+console.log(process.env.MUMBAI_PROVIDER_URL)
 
 //creates the list of private keys from the mnemonic
 const derivePath = "m/44'/60'/0'/0/"
@@ -82,8 +86,8 @@ module.exports = {
     polygonMumbai: {
       url: `${process.env.MUMBAI_PROVIDER_URL}`,
       accounts: [
-        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[2],
-        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[1],
+        process.env.GOVERNOR_PRIVATE_KEY || privateKeys[2],
+        process.env.DEPLOYER_PRIVATE_KEY || privateKeys[1],
       ],
       chainId: 80001,
     },

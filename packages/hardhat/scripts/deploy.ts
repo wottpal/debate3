@@ -8,9 +8,11 @@ async function main() {
   const cfVault = await ethers.getContractFactory('Vault')
   const cVault = await cfVault.deploy(units)
   await cVault.deployed()
+  console.log(cVault.address)
   const cfBadges = await ethers.getContractFactory('Badges')
   const cBadges = await cfBadges.deploy()
   await cBadges.deployed()
+  console.log(cBadges.address)
   await cVault['setBadgesAddr'](cBadges.address)
   await cBadges['transferOwnership'](cVault.address)
 

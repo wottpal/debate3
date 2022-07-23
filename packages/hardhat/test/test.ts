@@ -415,4 +415,33 @@ describe('Test', function () {
     expect(newBalance - oldBalance).to.equal(1)
     expect(URI).to.equal('trial2')
   })
+
+  it('provide membership', async function () {
+    const { cVault, carlos, ykc, peter } = await loadFixture(baseFixture)
+
+    await cVault.connect(carlos)['createForum']('Cohort1', [peter.address], 'trial2')
+    const cMyForum = await ethers.getContractAt('Forum', await cVault['forumAddresses'](0))
+    const cMembership = await ethers.getContractAt(
+      'Membership',
+      await cVault['MembershipAddresses'](0)
+    )
+    const cForum = await ethers.getContractAt(
+      'Forum',
+      (
+        await cVault['getForumsForAddress'](carlos.address)
+      )[0]
+    )
+
+    const isAllowed = await cForum.connect(ykc)['allowedForCaller']()
+    expect(isAllowed).to.equal(false)
+    await cMyForum.connect(carlos)['provideMembership']([ykc.address.toLocaleLowerCase()], [])
+    const isAllowedNew = await cForum.connect(ykc)['allowedForCaller']()
+    expect(isAllowedNew).to.equal(true)
+    // const newBalance = await cMembership['balanceOf'](ykc.address)
+    // const tokenOfOwnerByIndex = await cMembership['tokenOfOwnerByIndex'](ykc.address, 0)
+    // const URI = await cMembership['tokenURI'](tokenOfOwnerByIndex)
+
+    // expect(newBalance - oldBalance).to.equal(1)
+    // expect(URI).to.equal('trial2')
+  })
 })
