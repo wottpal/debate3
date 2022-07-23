@@ -45,13 +45,13 @@ require("dotenv").config();
     }
 }
 ``` 
-### Deployed contracts on Goerli : 
+## Deployed contracts on Goerli : 
 
-Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
+#### Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
 
-ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
-Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0xAA5201479713a4bF4214B548a7bA7D9EAc2791Df)
-Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x853fcAEDff1650F8FC2E9810BC22B055F167d921)
+#### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
+#### Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0xAA5201479713a4bF4214B548a7bA7D9EAc2791Df)
+#### Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x853fcAEDff1650F8FC2E9810BC22B055F167d921)
 
 
 
