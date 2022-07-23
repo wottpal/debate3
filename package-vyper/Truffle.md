@@ -47,6 +47,8 @@ module.exports = {
 ``` 
 ## Deployed contracts on Goerli : 
 
+------- USING ``` truffle migrate --network goerli ``` ---------- 
+
 #### Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
 
 #### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
