@@ -3,6 +3,13 @@ Before using our contracts, please verify the version of your vyper using : ``` 
 check --> ``` https://github.com/vyperlang/vyper/pull/2979 ``` for more details about using certain functions. 
 
 
+### Setup APE-VYPER : 
+
+1. Install Ape Vyper via pip : 
+
+``` pip install ape-vyper ``` 
+
+
 ### Setup Truffle x Vyper :
 
 1. Install Truffle globally.
