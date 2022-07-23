@@ -55,8 +55,9 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
   return (
     <>
-      <div className="landing-background">
+      <div className="landing-background" tw="overflow-hidden">
         <Image src={background} style={{ width: '100%' }} alt="Background" />
+        <div tw="absolute inset-0 bg-gradient-to-t from-white via-transparent" />
       </div>
       {/* Navbar */}
       <Wrapper>
@@ -69,7 +70,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
       </Wrapper>
 
       {/* Hero */}
-      <div tw="flex flex-col justify-center items-center text-center mt-28">
+      <div tw="flex flex-col justify-center items-center text-center mt-24">
         <h1 tw="mx-auto max-w-4xl font-display font-semibold text-6xl leading-[1.2] tracking-tight text-slate-900 z-10">
           <span tw="relative whitespace-nowrap" style={{ color: '#2F43FF' }}>
             <svg
@@ -105,85 +106,84 @@ export default function HomePage({ forumsData }: HomePageProps) {
       </div>
 
       {/* Sponsors */}
-      <Wrapper>
-        <div tw="flex flex-col items-center mt-12">
-          {/* <p tw="font-bold text-xl tracking-tight mb-8">
-            Built with the help of amazing sponsors at EthCC
-          </p> */}
-          <div tw="flex flex-wrap space-x-10 justify-center">
-            <a
-              href="https://cronos.org/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={cronosImg} width={150} height={75} alt="Cronos" />
-            </a>
-            <a
-              href="https://gnosis.io/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={gnosisImg} width={150} height={75} alt="Gnosis" />
-            </a>
-            <a
-              href="https://celo.org/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={celoImg} width={150} height={75} alt="Celo" />
-            </a>
-            <a
-              href="https://polygon.technology/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={polygonImg} width={150} height={75} alt="Polygon" />
-            </a>
-            <a
-              href="https://www.privy.io/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
-            >
-              <Image src={privyImg} width={150} height={75} alt="Privy" />
-            </a>
-            <a
-              href="https://orbis.club/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={orbisImg} width={150} height={75} alt="Orbis" />
-            </a>
-            <a
-              href="https://vyper.readthedocs.io/en/stable/toctree.html#"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={vyperImg} width={100} height={75} alt="Vyper" />
-            </a>
-            <a
-              href="https://trufflesuite.com/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) "
-            >
-              <Image src={truffleImg} width={100} height={75} alt="Truffle" />
-            </a>
-            <a
-              href="https://neon-labs.org/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={neonImg} width={150} height={75} alt="Neon" />
-            </a>
-            <a
-              href="https://infura.io/"
-              target="_blank"
-              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
-            >
-              <Image src={infuraImg} width={150} height={75} alt="Infura" />
-            </a>
+      <div tw="bg-white">
+        <Wrapper>
+          <div tw="flex flex-col items-center mt-10 mb-5">
+            <div tw="flex flex-wrap space-x-10 justify-center">
+              <a
+                href="https://cronos.org/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={cronosImg} width={150} height={75} alt="Cronos" />
+              </a>
+              <a
+                href="https://gnosis.io/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={gnosisImg} width={150} height={75} alt="Gnosis" />
+              </a>
+              <a
+                href="https://celo.org/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={celoImg} width={150} height={75} alt="Celo" />
+              </a>
+              <a
+                href="https://www.privy.io/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+              >
+                <Image src={privyImg} width={150} height={75} alt="Privy" />
+              </a>
+              <a
+                href="https://orbis.club/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={orbisImg} width={150} height={75} alt="Orbis" />
+              </a>
+              <a
+                href="https://polygon.technology/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={polygonImg} width={150} height={75} alt="Polygon" />
+              </a>
+              <a
+                href="https://vyper.readthedocs.io/en/stable/toctree.html#"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={vyperImg} width={100} height={75} alt="Vyper" />
+              </a>
+              <a
+                href="https://trufflesuite.com/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) "
+              >
+                <Image src={truffleImg} width={100} height={75} alt="Truffle" />
+              </a>
+              <a
+                href="https://neon-labs.org/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={neonImg} width={150} height={75} alt="Neon" />
+              </a>
+              <a
+                href="https://infura.io/"
+                target="_blank"
+                tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+              >
+                <Image src={infuraImg} width={150} height={75} alt="Infura" />
+              </a>
+            </div>
           </div>
-        </div>
-      </Wrapper>
+        </Wrapper>
+      </div>
 
       {/* Features */}
       <Wrapper>
