@@ -1,3 +1,4 @@
+import Vault from '@artifacts/contracts/Vault.sol/Vault.json'
 import {
   Box,
   Button,
@@ -15,8 +16,12 @@ import {
   useRadioGroup,
 } from '@chakra-ui/react'
 import { Forum as ForumModel } from '@models/Forum.model'
+import { useContracts } from '@shared/useContracts'
+import { ethers } from 'ethers'
 import Image from 'next/image'
 import { FC, PropsWithChildren, useState } from 'react'
+import toast from 'react-hot-toast'
+import { Vault as VaultType } from 'src/types/typechain'
 import 'twin.macro'
 import { useAccount, useConnect, useSigner } from 'wagmi'
 import badgeBronzeImg from '/src/public/badges/badge-bronze.png'
@@ -39,33 +44,40 @@ export const AwardBadgeDialog: FC<AwardBadgeDialogProps> = ({
   const { address } = useAccount()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [selectedBadge, setSelectedBadge] = useState<'bronze' | 'silver' | 'gold'>('bronze')
+  const [selectedBadge, setSelectedBadge] = useState<0 | 1 | 2>(0)
   const { connect } = useConnect()
+  const { contracts } = useContracts()
 
   const awardBadge = async () => {
-    if (!signer || !address) return
-    // setIsLoading(true)
-    // setIsSuccess(false)
+    if (!signer || !address || !memberAddress || ![0, 1, 2].includes(selectedBadge)) return
+    setIsLoading(true)
 
-    // const contract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
-    // let receipt
-    // try {
-    //   const tsx = await contract.createForum(forumName, forumModerators, nftMetadata.url)
-    //   receipt = await tsx.wait()
-    // } catch (e) {
-    //   console.error(e)
-    //   toast.error('Error while providing membership. Please try again!')
-    // } finally {
-    //   setIsLoading(false)
-    // }
+    let receipt
+    try {
+      const vaultContract = new ethers.Contract(contracts.Vault, Vault.abi, signer) as VaultType
+      let tsx
+      if (selectedBadge === 2)
+        tsx = await vaultContract.giveGold(memberAddress, 1, forum.forumAddress)
+      else if (selectedBadge === 1)
+        tsx = await vaultContract.giveSilver(memberAddress, 1, forum.forumAddress)
+      else tsx = await vaultContract.giveBronze(memberAddress, 1, forum.forumAddress)
+      receipt = await tsx.wait()
+    } catch (e) {
+      console.error(e)
+      toast.error('Error while rewarding badge. Please try again!')
+    } finally {
+      toast.success(`Successfully rewarded badge!`)
+      setIsLoading(false)
+      onClose?.()
+    }
   }
 
   const badgeOptions = ['bronze', 'silver', 'gold']
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'badge',
-    defaultValue: selectedBadge,
+    defaultValue: 'bronze',
     onChange: (badgeLevel: any) => {
-      setSelectedBadge(badgeLevel)
+      setSelectedBadge((['bronze', 'silver', 'gold'].indexOf(badgeLevel) as 0 | 1 | 2) || 0)
     },
   })
   const group = getRootProps()

@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { BlockiesAvatar } from '@components/BlockiesAvatar'
 import { AwardBadgeDialog } from '@components/forum/AwardBadgeDialog'
+import { AwardsShowcase } from '@components/forum/AwardsShowcase'
 import { ProvideMembershipDialog } from '@components/forum/ProvideMembershipDialog'
 import { RevokeMembershipDialog } from '@components/forum/RevokeMembershipDialog'
 import { Wrapper } from '@components/layout/Wrapper'
@@ -162,7 +163,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
       <Wrapper tw="flex flex-col grow relative">
         <div tw="grow w-full flex flex-col my-20">
           {/* Top Bar */}
-          <div tw="flex justify-between items-center mb-4">
+          <div tw="flex justify-between items-center mb-5">
             {/* Logo & Name */}
             <div tw="flex items-center">
               {nftLogoUrl && (
@@ -296,13 +297,16 @@ export default function ForumPage({ forumData }: ForumPageProps) {
 
           {/* Share new Post */}
           {accessIsAllowed && (
-            <div tw="mt-2 flex flex-col w-full border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
-              <Share
-                context={forum.forumName}
-                orbisUser={orbisUser}
-                connectOrbis={connectOrbis}
-                refetchPosts={loadPosts}
-              />
+            <div tw="mt-2 flex w-full space-x-2">
+              <div tw="grow w-1/2 flex flex-col border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
+                <Share
+                  context={forum.forumName}
+                  orbisUser={orbisUser}
+                  connectOrbis={connectOrbis}
+                  refetchPosts={loadPosts}
+                />
+              </div>
+              <AwardsShowcase forum={forum} />
             </div>
           )}
         </div>

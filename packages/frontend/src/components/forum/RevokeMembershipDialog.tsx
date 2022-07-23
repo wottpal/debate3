@@ -41,9 +41,9 @@ export const RevokeMembershipDialog: FC<RevokeMembershipDialogProps> = ({
     if (!signer || !address || !isValid) return
     setIsLoading(true)
 
-    const forumContract = new ethers.Contract(forum.address, Forum.abi, signer) as ForumType
     let receipt
     try {
+      const forumContract = new ethers.Contract(forum.forumAddress, Forum.abi, signer) as ForumType
       const tsx = await forumContract.revokeMembership([memberAddress])
       receipt = await tsx.wait()
     } catch (e) {
