@@ -434,7 +434,7 @@ describe('Test', function () {
 
     const isAllowed = await cForum.connect(ykc)['allowedForCaller']()
     expect(isAllowed).to.equal(false)
-    await cMyForum.connect(carlos)['provideMembership']([ykc.address.toLocaleLowerCase()], [])
+    await cMyForum.connect(carlos)['provideMembership']([ykc.address], [])
     const isAllowedNew = await cForum.connect(ykc)['allowedForCaller']()
     expect(isAllowedNew).to.equal(true)
     // const newBalance = await cMembership['balanceOf'](ykc.address)
