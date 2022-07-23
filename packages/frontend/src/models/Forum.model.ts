@@ -42,6 +42,10 @@ export class Forum {
     )
   }
 
+  static allFields(): string[] {
+    return ['forum-name', 'forum-slug', 'forum-address', 'forum-chain', 'forum-logo-uri']
+  }
+
   toJson(): object {
     return {
       address: this.address,
