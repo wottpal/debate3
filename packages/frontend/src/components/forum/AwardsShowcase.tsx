@@ -3,6 +3,7 @@ import Forum from '@artifacts/contracts/Forum.sol/Forum.json'
 import { Forum as ForumModel } from '@models/Forum.model'
 import { useContracts } from '@shared/useContracts'
 import { ethers } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import Image from 'next/image'
 import { FC, useState } from 'react'
 import { Badges as BadgesType, Forum as ForumType } from 'src/types/typechain'
@@ -36,16 +37,16 @@ export const AwardsShowcase: FC<AwardsShowcaseProps> = ({ forum }) => {
         signer
       ) as BadgesType
       const bronze = await badgesContract.balanceOf(address, 0)
-      setAmountBronzeAwards(bronze.toNumber())
+      setAmountBronzeAwards(parseInt(formatEther(bronze)))
       const silver = await badgesContract.balanceOf(address, 1)
-      setAmountSilverAwards(silver.toNumber())
+      setAmountSilverAwards(parseInt(formatEther(silver)))
       const gold = await badgesContract.balanceOf(address, 2)
-      setAmountGoldAwards(gold.toNumber())
+      setAmountGoldAwards(parseInt(formatEther(gold)))
 
       // fetch reputation score
       const forumContract = new ethers.Contract(forum.forumAddress, Forum.abi, signer) as ForumType
       const score = await forumContract.getScore(address)
-      setScore(score.toNumber())
+      setScore(parseInt(formatEther(score)))
     } catch (e) {
       console.error('Error while fetching award balances', e)
     }
