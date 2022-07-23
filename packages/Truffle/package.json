@@ -6,5 +6,7 @@
     "develop": "truffle develop",
     "compile": "truffle compile"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "dotenv": "^16.0.1"
+  }
 }

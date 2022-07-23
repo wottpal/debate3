@@ -7,6 +7,7 @@
   background-color: rgba(255, 255, 255, 0.211);
   backdrop-filter: blur(5px);
   width: 100%;
+  z-index: 5;
 }
 
 .posts-container {
@@ -38,7 +39,7 @@
   right: 3.5rem;
   width: 10rem;
   cursor: pointer;
-  z-index: 100;
+  z-index: 2;
 }
 .forum-textarea {
   width: 40rem;

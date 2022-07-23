@@ -4,7 +4,7 @@ import { Forum } from '@models/Forum.model'
 import { PrivyClient } from '@privy-io/privy-node'
 import { env } from '@shared/environment'
 import type { GetServerSideProps } from 'next'
-import { FC, MouseEvent, useEffect, useState } from 'react'
+import { FC, MouseEvent, useEffect, useState, SetStateAction } from 'react'
 import 'twin.macro'
 
 function classNames(...classes: any[]) {
@@ -16,8 +16,41 @@ export interface ForumPageProps {
 export default function ForumPage({ forumData }: ForumPageProps) {
   const forum = Forum.fromObject(forumData)
   const [user, setUser] = useState()
-  const [openCommentModal, setOpenCommentModal] = useState(true)
+  const [openCommentModal, setOpenCommentModal] = useState(false)
+  const [selectedDebateContent, setSelectedDebateContent] = useState('')
+  const [selectedDebateId, setSelectedDebateId] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [posts, setPosts] = useState<any[]>([])
+  const [comments, setComments] = useState<any[]>([])
   const { orbis } = useOrbisContext()
+
+  useEffect(() => {
+    loadPosts()
+  }, [orbis])
+
+  useEffect(() => {
+    const loadComments = async () => {
+      setLoading(true)
+      if (selectedDebateId) {
+        const { data } = await orbis.getPosts({ context: selectedDebateId })
+        setComments(data)
+        setLoading(false)
+      }
+    }
+    loadComments()
+  }, [selectedDebateId])
+
+  async function loadPosts() {
+    setLoading(true)
+    if (orbis) {
+      const { data, error, status } = await orbis.getPosts({ context: forum?.forumName })
+
+      if (data && orbis) {
+        setPosts(data)
+        setLoading(false)
+      }
+    }
+  }
 
   async function connect() {
     const res = await orbis.connect()
@@ -31,20 +64,85 @@ export default function ForumPage({ forumData }: ForumPageProps) {
     }
   }
 
+  const openComments = async (debate: SetStateAction<string>, id: SetStateAction<string>) => {
+    setOpenCommentModal(true)
+    setSelectedDebateContent(debate)
+    setSelectedDebateId(id)
+  }
+
   if (!forum) return null
   return (
     <>
       {/* <div>Deployer Address / Admin: {forum.address}</div> */}
       <h2 className="forum-header">{forum.forumName}</h2>
       <div className="debates-feed">
-        <Posts context={forum.forumName} />
+        {posts.map((post, key) => {
+          return (
+            <div
+              key={key}
+              style={{ cursor: 'auto' }}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container"
+            >
+              <div className="debate">
+                <div tw="flex-shrink-0">
+                  {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
+                </div>
+                <div tw="flex-1 min-w-0">
+                  <div tw="focus:outline-none">
+                    <span tw="absolute inset-0" aria-hidden="true" />
+                    {/* <p><b>Shared by: {post.creator}</b></p> */}
+                    <p tw="text-sm text-gray-900 ">{post.content?.body}</p>
+                  </div>
+                </div>
+                <div tw="flex">
+                  <button
+                    style={{ zIndex: '1' }}
+                    onClick={() => openComments(post.content?.body, post.stream_id)}
+                  >
+                    <ChatAltIcon tw="h-6 w-6 mt-2" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
       {openCommentModal && (
         <div className="modal-dim" onClick={() => setOpenCommentModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="close-comments-btn" onClick={() => setOpenCommentModal(false)}>
+            <div
+              className="close-comments-btn"
+              style={{ zIndex: '10' }}
+              onClick={() => setOpenCommentModal(false)}
+            >
               <XIcon className="h-5 w-5" aria-hidden="true" />
             </div>
+            <div className="comments-debate">{selectedDebateContent}</div>
+            <div>
+              {comments.map((comment, key) => {
+                return (
+                  <div
+                    key={key}
+                    style={{ cursor: 'auto' }}
+                    className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container"
+                  >
+                    <div className="debate">
+                      <div tw="flex-shrink-0">
+                        {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
+                      </div>
+                      <div tw="flex-1 min-w-0">
+                        <div tw="focus:outline-none">
+                          <span tw="absolute inset-0" aria-hidden="true" />
+                          {/* <p><b>Shared by: {post.creator}</b></p> */}
+                          <p tw="text-sm text-gray-900 ">{comment.content?.body}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <ShareComment context={selectedDebateId} />
           </div>
         </div>
       )}
@@ -98,7 +196,7 @@ function Share({ context }: any) {
   }
 
   return (
-    <div className="share-container">
+    <div className="share-container" style={{ zIndex: '2' }}>
       <div tw="flex items-start space-x-4">
         <div tw="flex-shrink-0">
           <img
@@ -121,7 +219,7 @@ function Share({ context }: any) {
                 value={text}
                 style={{ padding: '0.5rem', borderRadius: '10px' }}
                 tw="block w-full border-0 border-b border-transparent p-0 pb-2 resize-none focus:ring-0 focus:border-indigo-600 sm:text-sm"
-                placeholder="Comment..."
+                placeholder="Debate..."
                 defaultValue={''}
               />
             </div>
@@ -155,71 +253,70 @@ function Share({ context }: any) {
   )
 }
 
-interface PostsProps {
-  context: any
-}
-export const Posts: FC<PostsProps> = ({ context }) => {
+function ShareComment({ context }: any) {
   const [loading, setLoading] = useState(false)
-  const [posts, setPosts] = useState<any[]>([])
+  const [text, setText] = useState<string>('')
   const { orbis } = useOrbisContext()
 
-  useEffect(() => {
-    console.log(context)
-    console.log(orbis)
-    loadPosts()
-  }, [orbis])
-
-  async function loadPosts() {
+  async function share(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+    e.preventDefault()
     setLoading(true)
-    if (orbis) {
-      const { data, error, status } = await orbis.getPosts({ context: context })
+    const res = await orbis.createPost({
+      body: text,
+      context: context,
+    })
 
-      if (data && orbis) {
-        setPosts(data)
-        setLoading(false)
-      }
+    if (res.status == 200) {
+      console.log('Shared post with stream_id: ', res.doc)
+    } else {
+      console.log('Error sharing post: ', res)
+      console.log(context)
+      alert('Error sharing post.')
     }
+    setLoading(false)
   }
 
-  if (loading) {
-    return <p>Loading posts...</p>
-  }
-
-  if (posts && posts.length > 0) {
-    return (
-      <>
-        {posts.map((post, key) => {
-          return (
-            <div
-              key={key}
-              style={{ cursor: 'auto' }}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 posts-container"
-            >
-              <div className="debate">
-                <div tw="flex-shrink-0">
-                  {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
-                </div>
-                <div tw="flex-1 min-w-0">
-                  <div tw="focus:outline-none">
-                    <span tw="absolute inset-0" aria-hidden="true" />
-                    {/* <p><b>Shared by: {post.creator}</b></p> */}
-                    <p tw="text-sm text-gray-900 ">{post.content?.body}</p>
-                  </div>
-                </div>
-                <div tw="flex">
-                  <button>
-                    <ChatAltIcon tw="h-6 w-6 mt-2" aria-hidden="true" />
-                  </button>
-                </div>
+  return (
+    <div className="share-container comment-share-container" style={{ zIndex: '2' }}>
+      <div tw="flex items-start space-x-4">
+        <div tw="flex-shrink-0">
+          <img
+            tw="inline-block h-10 w-10 rounded-full"
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            alt=""
+          />
+        </div>
+        <div tw="min-w-0 flex-1">
+          <form action="#">
+            <div tw="border-b border-gray-200 focus-within:border-indigo-600">
+              <textarea
+                rows={3}
+                name="comment"
+                id="comment"
+                onChange={(e) => setText(e.target.value)}
+                value={text}
+                style={{ padding: '0.5rem', borderRadius: '10px' }}
+                tw="block w-full border-0 border-b border-transparent p-0 pb-2 resize-none focus:ring-0 focus:border-indigo-600 sm:text-sm"
+                placeholder="Comment..."
+                defaultValue={''}
+              />
+            </div>
+            <div className="new-debate-background" tw="pt-2 flex justify-between">
+              <div tw="flex-shrink-0">
+                <button
+                  type="submit"
+                  onClick={(e) => share(e)}
+                  tw="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Comment
+                </button>
               </div>
             </div>
-          )
-        })}
-      </>
-    )
-  } else {
-    return <p>No posts shared in this context.</p>
-  }
+          </form>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
