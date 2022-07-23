@@ -8,6 +8,36 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import 'twin.macro'
 import cronosImg from '/src/public/partners/cronos.svg'
+import gnosisImg from '/src/public/partners/gnosis.svg'
+import celoImg from '/src/public/partners/celo.svg'
+import polygonImg from '/src/public/partners/polygon.svg'
+import orbisImg from '/src/public/partners/orbis.svg'
+import vyperImg from '/src/public/partners/vyper.svg'
+import truffleImg from '/src/public/partners/truffle.svg'
+import background from '/src/public/bg/landing_bg.svg'
+import neonImg from '/src/public/partners/neon.svg'
+import { LockClosedIcon, RefreshIcon, BadgeCheckIcon } from '@heroicons/react/outline'
+
+const features = [
+  {
+    name: 'Reputation Badges',
+    description:
+      'Reward community with ERC-1155 NFT badges. User points will disappear after longer inactivity',
+    icon: BadgeCheckIcon,
+  },
+  {
+    name: 'Token Gated',
+    description:
+      'Create your own token gated forum. Only authorised users will have access your private debates.',
+    icon: LockClosedIcon,
+  },
+  {
+    name: 'Fading Reputation',
+    description:
+      'Keep your community engaged. Inactive users start losing reputation points after some period of time.',
+    icon: RefreshIcon,
+  },
+]
 
 interface HomePageProps extends AllForumsProps {}
 export default function HomePage({ forumsData }: HomePageProps) {
@@ -19,10 +49,13 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
   return (
     <>
+      <div className="landing-background">
+        <Image src={background} style={{ width: '100%' }} alt="Background" />
+      </div>
       {/* Navbar */}
       <Wrapper>
         <nav tw="flex items-center justify-between">
-          <div tw="font-display font-bold tracking-tight text-lg">Debate3.xyz</div>
+          <div tw="font-display font-bold tracking-tight text-4xl">Debate3</div>
           <Link href="/setup" passHref>
             <Button variant="solid">Create a Forum</Button>
           </Link>
@@ -31,7 +64,7 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
       {/* Hero */}
       <div tw="flex flex-col justify-center items-center text-center mt-28">
-        <h1 tw="mx-auto max-w-4xl font-display font-semibold text-6xl leading-[1.2] tracking-tight text-slate-900">
+        <h1 tw="mx-auto max-w-4xl font-display font-semibold text-6xl leading-[1.2] tracking-tight text-slate-900 z-10">
           <span tw="relative whitespace-nowrap text-brandblue">
             <svg
               aria-hidden="true"
@@ -46,7 +79,10 @@ export default function HomePage({ forumsData }: HomePageProps) {
           <br />
           discussions for DAOs
         </h1>
-        <p tw="mx-auto mt-6 max-w-2xl text-xl tracking-tight text-slate-700">
+        <p
+          tw="mx-auto mt-6 max-w-2xl text-xl tracking-tight text-slate-700"
+          style={{ zIndex: '1' }}
+        >
           A token-gated, decentralized discussion platform with an <br />
           inbuilt reputation system and moderation.
         </p>
@@ -59,11 +95,11 @@ export default function HomePage({ forumsData }: HomePageProps) {
 
       {/* Sponsors */}
       <Wrapper>
-        <div tw="flex flex-col items-center mt-20">
+        <div tw="flex flex-col items-center mt-12 bg-white">
           {/* <p tw="font-bold text-xl tracking-tight mb-8">
             Built with the help of amazing sponsors at EthCC
           </p> */}
-          <div tw="flex flex-wrap space-x-6 justify-center">
+          <div tw="flex flex-wrap space-x-10 justify-center">
             <a
               href="https://cronos.org/"
               target="_blank"
@@ -72,26 +108,92 @@ export default function HomePage({ forumsData }: HomePageProps) {
               <Image src={cronosImg} width={150} height={75} alt="Cronos" />
             </a>
             <a
-              href="https://cronos.org/"
+              href="https://gnosis.io/"
               target="_blank"
               tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
             >
-              <Image src={cronosImg} width={150} height={75} alt="Cronos" />
+              <Image src={gnosisImg} width={150} height={75} alt="Gnosis" />
             </a>
             <a
-              href="https://cronos.org/"
+              href="https://celo.org/"
               target="_blank"
               tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
             >
-              <Image src={cronosImg} width={150} height={75} alt="Cronos" />
+              <Image src={celoImg} width={150} height={75} alt="Celo" />
             </a>
             <a
-              href="https://cronos.org/"
+              href="https://polygon.technology/"
               target="_blank"
               tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
             >
-              <Image src={cronosImg} width={150} height={75} alt="Cronos" />
+              <Image src={polygonImg} width={150} height={75} alt="Polygon" />
             </a>
+            <a
+              href="https://orbis.club/"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0)"
+            >
+              <Image src={orbisImg} width={150} height={75} alt="Orbis" />
+            </a>
+            <a
+              href="https://vyper.readthedocs.io/en/stable/toctree.html#"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+            >
+              <Image src={vyperImg} width={100} height={75} alt="Vyper" />
+            </a>
+            <a
+              href="https://trufflesuite.com/"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+            >
+              <Image src={truffleImg} width={100} height={75} alt="Truffle" />
+            </a>
+            <a
+              href="https://neon-labs.org/"
+              target="_blank"
+              tw="cursor-pointer grayscale opacity-80 hover:(opacity-100 grayscale-0) mt-2"
+            >
+              <Image src={neonImg} width={150} height={75} alt="Neon" />
+            </a>
+          </div>
+        </div>
+      </Wrapper>
+
+      {/* Features */}
+      <Wrapper>
+        <div tw="relative bg-white py-12 sm:py-12 lg:py-12">
+          <div tw="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
+            <h2 tw="text-base font-semibold uppercase tracking-wider" style={{ color: '#385897' }}>
+              Build community
+            </h2>
+            <p tw="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              Everything you need to keep community engaged.
+            </p>
+            <div tw="mt-16">
+              <div tw="grid grid-cols-1 gap-24 sm:grid-cols-2 lg:grid-cols-3">
+                {features.map((feature) => (
+                  <div key={feature.name} className="feature-card">
+                    <div tw="flow-root rounded-lg bg-gray-50 px-6 pb-8">
+                      <div tw="-mt-6">
+                        <div>
+                          <span
+                            tw="inline-flex items-center justify-center rounded-md p-3 shadow-lg"
+                            style={{ backgroundColor: '#385897' }}
+                          >
+                            <feature.icon tw="h-6 w-6 text-white" aria-hidden="true" />
+                          </span>
+                        </div>
+                        <h3 tw="mt-8 text-lg font-medium tracking-tight text-gray-900">
+                          {feature.name}
+                        </h3>
+                        <p tw="mt-5 text-base text-gray-500">{feature.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </Wrapper>
@@ -99,11 +201,26 @@ export default function HomePage({ forumsData }: HomePageProps) {
       {/* All Forums */}
       {/* TODO */}
       <Wrapper>
-        <p tw="font-bold text-xl tracking-tight mb-8">List of all Forums:</p>
-        <div tw="flex flex-col space-y-4">
-          {allForums.map((f) => (
-            <div key={f.forumAddress}>Forum Name: {f.forumName}</div>
-          ))}
+        <div tw="relative bg-white py-12 sm:py-16 lg:py-12">
+          <h1 tw="mt-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl text-center">
+            Join a Forum
+          </h1>
+          <div className="forums-container">
+            {allForums.map((f) => (
+              <a className="landing-forum-card" key={f.forumAddress}>
+                <img
+                  src="https://images.unsplash.com/photo-1658251216561-077bf584633a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+                  className="forum-image"
+                ></img>
+                <div className="forum-content">
+                  <p onClick={() => console.log(f)} tw="text-2xl font-bold">
+                    {f.forumName}
+                  </p>
+                  <button className="join-forum">Join</button>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </Wrapper>
 
