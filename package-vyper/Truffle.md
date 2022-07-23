@@ -49,11 +49,11 @@ require("dotenv").config();
 
 Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
 
-ERC721 : [0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
+ERC721 : [address](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
 Utils : [0xAA5201479713a4bF4214B548a7bA7D9EAc2791Df](https://goerli.etherscan.io/address/0xAA5201479713a4bF4214B548a7bA7D9EAc2791Df)
 Vault : [0x853fcAEDff1650F8FC2E9810BC22B055F167d921](https://goerli.etherscan.io/address/0x853fcAEDff1650F8FC2E9810BC22B055F167d921)
 
-
+[screencast walking through the project](https://www.youtube.com/watch?v=ktGePpe3lNw)
 
 
 
