@@ -4,7 +4,7 @@ import { Wrapper } from '@components/layout/Wrapper'
 import { BadgeCheckIcon, LockClosedIcon, RefreshIcon } from '@heroicons/react/outline'
 import { Forum } from '@models/Forum.model'
 import { AllForumsProps, getAllForums } from '@shared/getAllForums'
-import { chains } from '@shared/wagmiClient'
+import { chains, supportedChains } from '@shared/wagmiClient'
 import axios from 'axios'
 import type { GetServerSideProps } from 'next'
 import Image from 'next/image'
@@ -20,10 +20,10 @@ import infuraImg from '/public/partners/infura.svg'
 import neonImg from '/public/partners/neon.svg'
 import orbisImg from '/public/partners/orbis.svg'
 import polygonImg from '/public/partners/polygon.svg'
-import ipfsImg from '/src/public/partners/ipfs.svg'
 import privyImg from '/public/partners/privy.svg'
 import truffleImg from '/public/partners/truffle.svg'
 import vyperImg from '/public/partners/vyper.svg'
+import ipfsImg from '/src/public/partners/ipfs.svg'
 
 const features = [
   {
@@ -50,7 +50,12 @@ interface HomePageProps extends AllForumsProps {}
 export default function HomePage({ forumsData }: HomePageProps) {
   const [allForums, setAllForums] = useState<Forum[]>([])
   useEffect(() => {
-    const forums = (forumsData || []).map((f) => Forum.fromObject(f)).filter(Boolean) as Forum[]
+    const forums = (
+      (forumsData || []).map((f) => Forum.fromObject(f)).filter(Boolean) as Forum[]
+    ).filter((f) => {
+      return supportedChains.map((c) => c.id).includes(parseInt(f.forumChain))
+    })
+
     setAllForums(forums)
   }, forumsData)
 

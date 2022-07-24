@@ -1,6 +1,8 @@
 import Forum from '@artifacts/contracts/Forum.sol/Forum.json'
 import { ChatIcon, ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Drawer,
@@ -38,7 +40,7 @@ import toast from 'react-hot-toast'
 import { Forum as ForumType } from 'src/types/typechain'
 import 'twin.macro'
 import useAsyncEffect from 'use-async-effect'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from 'wagmi'
 import emptyImg from '/public/illustrations/post_01.svg'
 import unlockImg from '/public/illustrations/unlock_01.svg'
 
@@ -47,10 +49,12 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   const { data: signer } = useSigner()
   const { address } = useAccount()
   const forum = ForumModel.fromObject(forumData)
-  const [orbisUser, setOrbisUser] = useState()
-  const [openCommentModal, setOpenCommentModal] = useState(false)
+  const [orbisUser, setOrbisUser] = useState<string>()
+  const [orbisUserAddress, setOrbisUserAddress] = useState<string>()
   const [loading, setLoading] = useState(false)
   const [posts, setPosts] = useState<any[]>([])
+  const { chain } = useNetwork()
+  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const [comments, setComments] = useState<any[]>([])
   const { orbis } = useOrbisContext()
   const { contracts } = useContracts()
@@ -113,7 +117,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   const loadPosts = async () => {
     if (orbis) {
       setLoading(true)
-      const { data, error, status } = await orbis.getPosts({ context: forum?.forumName })
+      const { data, error, status } = await orbis.getPosts({ context: forum?.forumAddress })
 
       if (data && orbis) {
         setPosts(data)
@@ -130,11 +134,16 @@ export default function ForumPage({ forumData }: ForumPageProps) {
     const res = await orbis.connect()
 
     if (res.status == 200) {
+      console.log('res.details.metadata.address', res?.details?.metadata?.address)
       console.log('Connected to Ceramic with: ', res.did)
       setOrbisUser(res.did)
+      setOrbisUserAddress(res?.details?.metadata?.address)
+      toast.success('Successfully connected to Ceramic!')
     } else {
       console.log('Error connecting to Ceramic: ', res)
-      alert('Error connecting to Ceramic.')
+      setOrbisUser(undefined)
+      setOrbisUserAddress(undefined)
+      toast.error('Error connecting to Ceramic')
     }
   }
 
@@ -208,6 +217,35 @@ export default function ForumPage({ forumData }: ForumPageProps) {
 
           {/* Body */}
           <main tw="grow flex flex-col w-full border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
+            {/* Switch Chain Banner */}
+            {!isSsr && chain && chain.id !== parseInt(forum.forumChain) && (
+              <Alert status="warning">
+                <AlertIcon />
+                {!!chains.find((c) => c.id === parseInt(forum.forumChain)) ? (
+                  <>
+                    <div>
+                      This forum contract is delployed on{' '}
+                      <strong>
+                        {chains.find((c) => c.id === parseInt(forum.forumChain))?.name}
+                      </strong>
+                      .
+                    </div>
+                    <Button
+                      onClick={() => {
+                        switchNetwork?.(parseInt(forum.forumChain))
+                      }}
+                      colorScheme="yellow"
+                      tw="ml-auto"
+                    >
+                      Switch Chain
+                    </Button>
+                  </>
+                ) : (
+                  <div>This forum contract is delployed on a different, but unsupported chain.</div>
+                )}
+              </Alert>
+            )}
+
             {/* Locked State */}
             {!accessIsAllowed && !isSsr && (
               <div tw="flex flex-col items-center justify-center h-full my-10">
@@ -224,6 +262,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
               </div>
             )}
 
+            {/* Empty State */}
             {accessIsAllowed && !posts?.length && (
               <div tw="flex flex-col items-center justify-center h-full my-10">
                 <div tw="text-center mb-8">
@@ -236,6 +275,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
               </div>
             )}
 
+            {/* Posts */}
             {accessIsAllowed && !!posts?.length && (
               <div tw="grow flex flex-col divide-y-2 divide-gray-200">
                 {posts.map((post, key) => (
@@ -293,8 +333,9 @@ export default function ForumPage({ forumData }: ForumPageProps) {
             <div tw="mt-2 flex w-full space-x-2">
               <div tw="grow w-2/3 flex flex-col border-4 border-gray-200 rounded-lg bg-white shadow-2xl shadow-gray-200 overflow-hidden">
                 <Share
-                  context={forum.forumName}
+                  context={forum?.forumAddress}
                   orbisUser={orbisUser}
+                  orbisUserAddress={orbisUserAddress}
                   connectOrbis={connectOrbis}
                   refetchPosts={loadPosts}
                 />
@@ -302,6 +343,11 @@ export default function ForumPage({ forumData }: ForumPageProps) {
               <AwardsShowcase forum={forum} />
             </div>
           )}
+        </div>
+
+        {/* Footer */}
+        <div tw="text-center text-xs text-gray-400">
+          Forum Contract: {forum.forumAddress} ({forum.forumChain}) • Deployer: {forum.address}
         </div>
       </Wrapper>
 
@@ -372,6 +418,7 @@ export default function ForumPage({ forumData }: ForumPageProps) {
                 <Share
                   context={selectedPost?.stream_id}
                   orbisUser={orbisUser}
+                  orbisUserAddress={orbisUserAddress}
                   connectOrbis={connectOrbis}
                   refetchPosts={() => {
                     refetchComments()
@@ -409,10 +456,18 @@ export default function ForumPage({ forumData }: ForumPageProps) {
   )
 }
 
-function Share({ context, orbisUser, connectOrbis, refetchPosts, ...props }: any) {
+function Share({
+  context,
+  orbisUser,
+  connectOrbis,
+  orbisUserAddress,
+  refetchPosts,
+  ...props
+}: any) {
   const [loading, setLoading] = useState(false)
   const { orbis } = useOrbisContext()
   const [value, setValue] = useState('')
+  const { address } = useAccount()
 
   const handleInputChange = (e: any) => {
     const inputValue = e.target.value
@@ -421,7 +476,13 @@ function Share({ context, orbisUser, connectOrbis, refetchPosts, ...props }: any
 
   async function share() {
     setLoading(true)
-    if (!orbisUser) await connectOrbis()
+    if (
+      !orbisUser ||
+      (address && ethers.utils.getAddress(orbisUserAddress) !== ethers.utils.getAddress(address))
+    ) {
+      await connectOrbis()
+    }
+
     console.log('Sharing with context ', context)
     const res = await orbis.createPost({
       body: value,
