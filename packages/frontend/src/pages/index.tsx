@@ -17,13 +17,13 @@ import celoImg from '/public/partners/celo.svg'
 import cronosImg from '/public/partners/cronos.svg'
 import gnosisImg from '/public/partners/gnosis.svg'
 import infuraImg from '/public/partners/infura.svg'
+import ipfsImg from '/public/partners/ipfs.svg'
 import neonImg from '/public/partners/neon.svg'
 import orbisImg from '/public/partners/orbis.svg'
 import polygonImg from '/public/partners/polygon.svg'
 import privyImg from '/public/partners/privy.svg'
 import truffleImg from '/public/partners/truffle.svg'
 import vyperImg from '/public/partners/vyper.svg'
-import ipfsImg from '/src/public/partners/ipfs.svg'
 
 const features = [
   {

@@ -7,7 +7,7 @@ import { env } from './environment'
 /**
  * Custom Chains
  */
-const customChains: Chain[] = [
+const customChains: (Chain & { iconUrl?: string })[] = [
   {
     id: 77,
     network: 'sokol',
@@ -24,6 +24,7 @@ const customChains: Chain[] = [
       default: { name: 'Blockscout', url: 'https://blockscout.com/poa/sokol' },
     },
     testnet: true,
+    iconUrl: '/chains/gnosis.png',
   },
   {
     id: 338,
@@ -41,6 +42,7 @@ const customChains: Chain[] = [
       default: { name: 'Cronos', url: 'https://testnet.cronoscan.com/tx/' },
     },
     testnet: true,
+    iconUrl: '/chains/cronos.png',
   },
   {
     id: 44787,
@@ -58,6 +60,7 @@ const customChains: Chain[] = [
       default: { name: 'Celo', url: 'https://docs.celo.org/' },
     },
     testnet: true,
+    iconUrl: '/chains/celo.png',
   },
   {
     id: 245022926,
@@ -75,6 +78,7 @@ const customChains: Chain[] = [
       default: { name: 'Neon', url: 'https://devnet.explorer.neon-labs.org' },
     },
     testnet: true,
+    iconUrl: '/chains/neon.jpg',
   },
 ]
 
