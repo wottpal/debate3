@@ -28,7 +28,7 @@ pnpm dev
 
 ## Kleros Proof of Equilibrium Proposal  (Kleros - PoH) : 
 
-You can take a look at our [Proof of Equilibrium Proposal](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://skynetfree.net/HAFNnp5eudA2V_1Q1F_auQLgglw-ZoLBwM5Db0v-XO38IA)
+You can take a look at our [Proof of Equilibrium Proposal](https://skynetfree.net/HAFNnp5eudA2V_1Q1F_auQLgglw-ZoLBwM5Db0v-XO38IA)
 
 
 ## Twitter :  [debate3](https://twitter.com/debate3_) 
