@@ -61,7 +61,7 @@ pnpm dev
 ```
 
 
-## Kleros Proof of Equilibrium Proposal  (Kleros - PoH) : 
+## Kleros Proof of Equilibrium Proposal  : 
 
 You can take a look at our [Proof of Equilibrium Proposal](Proposal_Kleros.pdf)
 
