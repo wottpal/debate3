@@ -24,7 +24,7 @@ We have chosen to use privy to store the details of each forum. We also wanted t
 
 Those deployments were done using Hardhat and Truffle. A detailed SetUp for the deployment with Truffle is available in the [Truffle.md](https://github.com/wottpal/debate3/blob/main/package-vyper/Truffle.md) repository. 
 
-## TL;DR How it Works
+## How it Works
 
 1. Create a Forum minted as an NFT in IPFS and selecting up to 5 moderators. 
 2. Moderators can provide membership or revoke membership to users, assert badges to users with a Proof of Contribution. 
@@ -35,7 +35,7 @@ Those deployments were done using Hardhat and Truffle. A detailed SetUp for the 
 
 We are planning to add many features such as : 
 - Fund Distribution Support : random airdrops done by moderators based on reputation scores. 
-- 
+- Proof Of Humanity using Kleros Technology : reality.eth
 
 
 ## Getting Started
@@ -73,10 +73,11 @@ You can take a look at our [Proof of Equilibrium Proposal](Proposal_Kleros.pdf)
 
 ## Contact Information :
 
-- You can contact the team on the address : 
+Preferred contact information : You can contact the team on the address : rhouzm@gmail.com 
 
-## Video link :
+## Video Link : 
 
+[Debate3 Video](https://www.loom.com/share/eceff0a8233d4c47aa2cdbc4f5f8333d) 
 
 
 
