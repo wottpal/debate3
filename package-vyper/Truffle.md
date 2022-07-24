@@ -51,11 +51,11 @@ module.exports = {
 
 - Mumbai Testnet : [Mumbai PolygonScan](https://mumbai.polygonscan.com/)
 
-#### Badges : [Badges Contract Address]()
-#### ERC721 : [ERC721 Contract Address]()
-#### ERC1155 : [ERC1155 Contract Address]()
-#### PoM : [PoM Contract Address]()
-#### Utils : [Utils Contract Address]()
+#### Badges : [Badges Contract Address](https://mumbai.polygonscan.com/address/0xdE2C80f7B58d0D6Aec27c81c102894C893152A0D)
+#### ERC721 : [ERC721 Contract Address](https://mumbai.polygonscan.com/address/0xdC66bc5350899e7Ffb2b4912f63e0F63FE9E2fc7)
+#### ERC1155 : [ERC1155 Contract Address](https://mumbai.polygonscan.com/address/0x8806936B652e4A87127a7C7ac3efd320eb8D86A5)
+#### PoM : [PoM Contract Address](https://mumbai.polygonscan.com/address/0x637F7E9dE41Cf4d3ccfd5E43792c68390047eF11)
+#### Utils : [Utils Contract Address](https://mumbai.polygonscan.com/address/0x86FcDcB1D5819835b790dD7feC89Ae8c890E2fF2)
 
 - Cronos Testnet : [Cronos Scan](https://testnet.cronoscan.com/)
 
