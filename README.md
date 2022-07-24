@@ -2,7 +2,7 @@
 # ETHCC Hackathon 2022 -- Debate3
 
 This is the official ETHCC Hackathon 2022 submission for our project Debate3. 
-Debate 3 is a Decentralized, embeddable, commentary section token-gated discussion platform for DAOs 🌈
+- Debate 3 is a Decentralized, embeddable, commentary section token-gated discussion platform for DAOs 🌈
 
 
 
