@@ -67,11 +67,11 @@ module.exports = {
 
 - Alfajores (CeloTesnet)  : [Algajores](https://alfajores-blockscout.celo-testnet.org/) 
 
-#### Badges : [Badges Contract Address]()
-#### ERC721 : [ERC721 Contract Address]()
-#### ERC1155 : [ERC1155 Contract Address]()
-#### PoM : [PoM Contract Address]()
-#### Utils : [Utils Contract Address]()
+#### Badges : [Badges Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0x607D325f415993E223C1cb7EF4110d9B5CB7F03E/transactions)
+#### ERC721 : [ERC721 Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0xB350E0d679A7A1Cd024f9fE733Df5fB78ddAFfdB/transactions)
+#### ERC1155 : [ERC1155 Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0xFdbEc5048022ba8783C150dcC3507Ee3463c29d8/transactions)
+#### PoM : [PoM Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0x7090C7259bE669b170871908B6a88Ad81b63ba52/transactions)
+#### Utils : [Utils Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0xbCf0a3687ADf00d217627Bf83ff863d908904671/transactions)
 
 
 ### Truffle via dashboard : 
