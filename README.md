@@ -18,8 +18,8 @@ We have used [Orbis SDK](https://orbis.club/developers) to build the scoped comm
 We have chosed to use privy to store the details of each forum. We also wanted to secure our batch mint for the ERC1155, we have used Vyper who provides contracts less prone to attacks. For deployment we decided to let an overall choice for the user to create his Forum in a multi-chain world of possibilities. We offer : 
 - [PolygonMumbai](https://mumbai.polygonscan.com/) 
 - [CronosTestnet](https://cronos.org/docs/getting-started/cronos-testnet.html) 
-- [https://blockscout.com/xdai/testnet](https://blockscout.com/xdai/testnet) 
-- [CeloTesnet](https://alfajores-blockscout.celo-testnet.org/) 
+- [GnosisTesnet (sokol)](https://blockscout.com/xdai/testnet) 
+- [CeloTesnet (Alfajores)](https://alfajores-blockscout.celo-testnet.org/) 
 - [NeonTestnet](https://neon-labs.org/)
 
 
