@@ -256,9 +256,6 @@ export default function ForumPage({ forumData }: ForumPageProps) {
                   </p>
                 </div>
                 <Image src={unlockImg} alt="Unlock" width="250px" height="250px"></Image>
-                <div tw="mt-10">
-                  <ConnectButton label="Connect your Wallet" />
-                </div>
               </div>
             )}
 
