@@ -11,16 +11,18 @@ Similarly, this badges are used for claiming certain membership or having some p
 
 ## Features 
 
-We have used [Orbis SDK] as the backend provider for forums(https://orbis.club/developers) to build the scoped commentary sections / comments with a decentralized Forum Factory created as NFTs (for this time we also allow moderators to mint nfts using the baseURI instead of customized URIs) and that allow the members who have verified the Proof Of Membership (hold at least one type of NFT for this specific Forum) to get Badges (Bronze , Silver and Gold) stored in [IPFS](https://ipfs.io/) as 1155s minted as tokens. The Badges are upgreadble in that sense :
+We have used [Orbis SDK] as the backend provider for forums(https://orbis.club/developers) to build the scoped commentary sections / comments with a decentralized Forum Factory created as NFTs (for this time we also allow moderators to mint nfts using the baseURI instead of customized URIs) and that allow the members who have verified the Proof Of Membership (hold at least one type of NFT for this specific Forum) to get Badges (Bronze , Silver and Gold) stored in [IPFS](https://ipfs.io/) as 1155s minted as tokens. The Badges are upgreadble : 
+
 - 5 Silver Badges can be upgreadable into 1 Bronze Badge (utility : In case someone opens a discussion or a forum for people who hold a silver badge or better, you would be able to access this). 
-We have chosed to use privy to store the details of each forum. We also wanted to secure our batch mint for the ERC1155, we have used Vyper who provides contracts less prone to attacks. For deployment we decided to let an overall choice for the user to create his Forum in a multi-chain world of possibilities. We offer : 
+
+We have chosen to use privy to store the details of each forum. We also wanted to secure our batch mint for the ERC1155, we have used [Vyper](https://vyper.readthedocs.io/en/stable/) who provides contracts less prone to attacks. For deployment we decided to let an overall choice for the user to create his Forum in a multi-chain world of possibilities. We offer : 
 - [PolygonMumbai](https://mumbai.polygonscan.com/) 
 - [CronosTestnet](https://cronos.org/docs/getting-started/cronos-testnet.html) 
 - [GnosisTesnet (sokol)](https://blockscout.com/xdai/testnet) 
 - [CeloTesnet (Alfajores)](https://alfajores-blockscout.celo-testnet.org/) 
 - [NeonTestnet](https://neon-labs.org/)
 
-
+Those deployments were done using Hardhat and Truffle. A detailed SetUp for the deployment with Truffle is available in the [Truffle.md](https://github.com/wottpal/debate3/blob/main/package-vyper/Truffle.md) repository. 
 
 ## TL;DR How it Works
 
