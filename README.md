@@ -29,12 +29,13 @@ Those deployments were done using Hardhat and Truffle. A detailed SetUp for the 
 1. Create a Forum minted as an NFT in IPFS and selecting up to 5 moderators. 
 2. Moderators can provide membership or revoke membership to users, assert badges to users with a Proof of Contribution. 
 3. Users will have their contribution score updated, this contribution score is stored only in the forum contract, so contribution score inside a forum is not related to the number of badges they have inside the protocol. 
-4. 
-
---> Add contribution score here 
 
 
+## What's next for Debate3 ? 
 
+We are planning to add many features such as : 
+- Fund Distribution Support : random airdrops done by moderators based on reputation scores. 
+- 
 
 
 ## Getting Started
