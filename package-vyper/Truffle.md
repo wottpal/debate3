@@ -37,25 +37,41 @@ module.exports = {
         network_id: "*" // Match any network id
         
       },
-      goerli: {
+      NAME_OF_NETWORK: {
         provider: () =>
         new HDWalletProvider("YOUR_MEMONIAC", "YOUR_INFURA_URL"),
-        network_id: '5',
+        network_id: 'NETWORD_ID',
       }
     }
 }
 ``` 
-## Deployed contracts on Goerli : 
+## Deployed contracts on : 
 
-### Truflle via terminal : 
+1. run ``` truffle migrate --network NETWORK_NAME ``` 
 
-1. run ``` truffle migrate --network goerli ``` 
+- Mumbai Testnet : [Mumbai PolygonScan](https://mumbai.polygonscan.com/)
 
-#### Contract addresses available here : [Goerli Etherscan](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
+#### Badges : [Badges Contract Address]()
+#### ERC721 : [ERC721 Contract Address]()
+#### ERC1155 : [ERC1155 Contract Address]()
+#### PoM : [PoM Contract Address]()
+#### Utils : [Utils Contract Address]()
 
-#### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0xae8Cf2241562dA2453CbC77e408cfb52BBa0897e)
-#### Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0xAA5201479713a4bF4214B548a7bA7D9EAc2791Df)
-#### Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x853fcAEDff1650F8FC2E9810BC22B055F167d921)
+- Cronos Testnet : [Cronos Scan](https://testnet.cronoscan.com/)
+
+#### Badges : [Badges Contract Address]()
+#### ERC721 : [ERC721 Contract Address]()
+#### ERC1155 : [ERC1155 Contract Address]()
+#### PoM : [PoM Contract Address]()
+#### Utils : [Utils Contract Address]()
+
+- Alfajores (CeloTesnet)  : [Algajores](https://alfajores-blockscout.celo-testnet.org/) 
+
+#### Badges : [Badges Contract Address]()
+#### ERC721 : [ERC721 Contract Address]()
+#### ERC1155 : [ERC1155 Contract Address]()
+#### PoM : [PoM Contract Address]()
+#### Utils : [Utils Contract Address]()
 
 
 ### Truffle via dashboard : 
@@ -73,8 +89,6 @@ dashboard: {
 
 4. run : ``` truffle migrate --network dashboard ``` 
 
-#### ERC721 : [ERC721 Contract Address](https://goerli.etherscan.io/address/0x5420Ad5a0D61312f9DC531810E7961ea2643A36C)
-#### Utils : [Utils Contract Address](https://goerli.etherscan.io/address/0x882cb75E2f4391E835Ecb998e8c5901F70E89A0F)
-#### Vault : [Vault Contract Address](https://goerli.etherscan.io/address/0x1fdB4294da88B9F9bAc1D7B109ACa8b1B89CF429)
+
 
 
