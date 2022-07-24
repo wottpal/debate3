@@ -65,7 +65,7 @@ module.exports = {
 #### PoM : [PoM Contract Address]()
 #### Utils : [Utils Contract Address]()
 
-- Alfajores (CeloTesnet)  : [Algajores](https://alfajores-blockscout.celo-testnet.org/) 
+- Alfajores (CeloTesnet)  : [Alfajores](https://alfajores-blockscout.celo-testnet.org/) 
 
 #### Badges : [Badges Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0x607D325f415993E223C1cb7EF4110d9B5CB7F03E/transactions)
 #### ERC721 : [ERC721 Contract Address](https://alfajores-blockscout.celo-testnet.org/address/0xB350E0d679A7A1Cd024f9fE733Df5fB78ddAFfdB/transactions)
