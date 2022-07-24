@@ -9,8 +9,7 @@ def _digitToString(digit: uint256) -> String[1]:
     digit_bytes32: bytes32 = convert(digit + 48, bytes32)  # ASCII `0` is 0x30 (48 in decimal)
     digit_bytes1: Bytes[1] = slice(digit_bytes32, 31, 1)  # Remove padding bytes
     return convert(digit_bytes1, String[1])                                                   
-                                                                                
-                                           
+                                                                                                   
 @view             
 @internal                                     
 def _tokenIdToString(tokenId: uint256) -> String[4]:
