@@ -35,7 +35,9 @@ We are using Kleros library to handle Content Moderation by managing disputes be
 
 
 
+## Twitter :  [debate3](https://twitter.com/debate3_) 
 
+- Twitter survey : https://twitter.com/debate3_/status/1551063166485921793
 
 
 
