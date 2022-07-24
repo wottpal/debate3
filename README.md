@@ -26,19 +26,14 @@ pnpm dev
 ```
 
 
-## Kleros Proof of Moderation 
+## Kleros Proof of Equilibrium Proposal  (Kleros - PoH) : 
 
-We are using Kleros library to handle Content Moderation by managing disputes between users and limiting access bots to our Forum by using PoH. 
-
-
-## Policy 
-
+You can take a look at our [Proof of Equilibrium Proposal](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://skynetfree.net/HAFNnp5eudA2V_1Q1F_auQLgglw-ZoLBwM5Db0v-XO38IA)
 
 
 ## Twitter :  [debate3](https://twitter.com/debate3_) 
 
 - Twitter survey : https://twitter.com/debate3_/status/1551063166485921793
-
 
 
 ## Contact Information :
