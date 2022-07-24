@@ -1,20 +1,18 @@
 
 # ETHCC Hackathon 2022 -- Debate3
 
-This is the official ETHCC Hackathon 2022 submission for our project Debate3. 
-- Debate 3 is a Decentralized, embeddable, commentary section token-gated discussion platform for DAOs 🌈
-
-
+This is the official ETHCC Hackathon 2022 submission for our project Debate3 🌈. 
 
 ## Project Description 
 
-Debate3 has a Proof of Membership for it Forum Factory, stating that for a user to access a forum they must hold at least one type of NFT for this specific Forum. Each user of a Forum receieves 1155s Badges (Bronze , Silver and Gold) minted as tokens, in batches summed up to a reputation score. 
-Those badges are given by moderators of the forum that are selected by the creator of the Forum itself.  
+Debate 3 is a Decentralized, gated forum generator , where owners/moderators of DAOs and protocols can come and open their forums. Each forum is nft-gated, when a moderator opens a forum, an NFT contract is deployed and where moderators can give Badges to members of a specific forum. The reputation score is relative to the ownership of these Badges that are are displayed in the UI to show the “trustworthy” level of each member. 
+Similarly, this badges are used for claiming certain membership or having some privileges in our main protocol.
 
 
 ## Features 
 
-We have used [Orbis SDK](https://orbis.club/developers) to build the scoped commentary sections / comments with a decentralized Forum Factory created as NFTs and allow the members to get Badges stored in [IPFS](https://ipfs.io/) as 1155s minted as tokens. 
+We have used [Orbis SDK] as the backend provider for forums(https://orbis.club/developers) to build the scoped commentary sections / comments with a decentralized Forum Factory created as NFTs (for this time we also allow moderators to mint nfts using the baseURI instead of customized URIs) and that allow the members who have verified the Proof Of Membership (hold at least one type of NFT for this specific Forum) to get Badges (Bronze , Silver and Gold) stored in [IPFS](https://ipfs.io/) as 1155s minted as tokens. The Badges are upgreadble in that sense :
+- 5 Silver Badges can be upgreadable into 1 Bronze Badge (utility : In case someone opens a discussion or a forum for people who hold a silver badge or better, you would be able to access this). 
 We have chosed to use privy to store the details of each forum. We also wanted to secure our batch mint for the ERC1155, we have used Vyper who provides contracts less prone to attacks. For deployment we decided to let an overall choice for the user to create his Forum in a multi-chain world of possibilities. We offer : 
 - [PolygonMumbai](https://mumbai.polygonscan.com/) 
 - [CronosTestnet](https://cronos.org/docs/getting-started/cronos-testnet.html) 
@@ -29,6 +27,7 @@ We have chosed to use privy to store the details of each forum. We also wanted t
 1. Create a Forum minted as an NFT in IPFS and selecting up to 5 moderators. 
 2. Moderators can provide membership or revoke membership to users, assert badges to users with a Proof of Contribution. 
 3. Users will have their contribution score updated, this contribution score is stored only in the forum contract, so contribution score inside a forum is not related to the number of badges they have inside the protocol. 
+4. 
 
 --> Add contribution score here 
 
